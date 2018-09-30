@@ -1,4 +1,4 @@
-package riskgame;
+package RiskPackage;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;

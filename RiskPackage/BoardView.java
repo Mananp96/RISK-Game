@@ -1,4 +1,4 @@
-package riskgame;
+package RiskPackage;
 
 import javax.swing.JFrame;
 
