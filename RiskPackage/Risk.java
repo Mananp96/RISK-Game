@@ -157,7 +157,6 @@ public class Risk implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		 
 		String actionName = ae.getActionCommand();
-		BoardView boardView = new BoardView();
 		if(actionName.equalsIgnoreCase(newBtnName)){
 			System.out.println("New Game");
 			frame.setContentPane(playerMenu());
@@ -173,7 +172,6 @@ public class Risk implements ActionListener {
 		}
 		else if(actionName.equals(twoPlayersBtnName)){
 			System.out.println("Two Player Game");
-			boardView.initialize(frame);
 		}
 		else if(actionName.equals(threePlayersBtnName)){
 			System.out.println("Three Player Game");
