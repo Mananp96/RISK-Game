@@ -5,16 +5,35 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class InitializeData {
 	
 	String filePath;
 	int playerCount;
-	public InitializeData(String filePath, int playerCount) {
-		
+	int armies;
+	ArrayList<String> currentPlayers;
+	public InitializeData(String filePath, int playerCount, int armies, ArrayList<String> currentPlayers) {
 		this.filePath = filePath;
-		this.playerCount =playerCount;
+		this.playerCount = playerCount;
+		this.armies = armies;
+		this.currentPlayers = currentPlayers;
 		System.out.println("FilePath ------------- : "+filePath);
+		System.out.println("Player Playing ------------- : "+playerCount);
+		System.out.println("Armies for Each Player ------------- : "+armies);
+		System.out.println("No. of Player ------------- : "+currentPlayers);
+	}
+	public ArrayList<String> getCurrentPlayers() {
+		return currentPlayers;
+	}
+	public void setCurrentPlayers(ArrayList<String> currentPlayers) {
+		this.currentPlayers = currentPlayers;
+	}
+	public int getArmies() {
+		return armies;
+	}
+	public void setArmies(int armies) {
+		this.armies = armies;
 	}
 	public String getFilePath() {
 		return filePath;

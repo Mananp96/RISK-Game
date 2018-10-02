@@ -34,6 +34,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultCaret;
 
+import com.risk.controller.ArmiesSelection;
 import com.risk.controller.InitializeData;
 
 public class Risk implements ActionListener {
@@ -90,7 +91,6 @@ public class Risk implements ActionListener {
 	private JScrollPane logScrollPane;
 	private DefaultCaret caret;
 	private JPanel userPanel;
-	private JTextField[] playerNames;
 	private JButton startGameBtn;
 	private int playerCount = 0;
 	private ArrayList<String> playerNameList;
@@ -99,6 +99,9 @@ public class Risk implements ActionListener {
 	private JButton editButton;
 	private JRadioButton mapOptA;
 	private JRadioButton mapOptB;
+	
+	private boolean randomMap = false;
+	private boolean previousEditMap = false;
 	/**
 	 * Launch the application.
 	 */
@@ -236,8 +239,6 @@ public class Risk implements ActionListener {
 			});
 		mapOptA.addItemListener(new ItemListener() {
 			
-			
-
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
@@ -245,10 +246,22 @@ public class Risk implements ActionListener {
 					int retVal = chooseMap.showOpenDialog(frame);
 					System.out.println("File Path : " + chooseMap.getSelectedFile().getPath());
 					mapFilePath = chooseMap.getSelectedFile().getPath();
+					randomMap = true;
 				}
 			}
 		});
+		
 		mapOptB = new JRadioButton("Choose Previously Edited Map");
+		mapOptB.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(mapOptB.isSelected()) {
+					
+				}
+			}
+		});
 		ButtonGroup buttonGrp = new ButtonGroup();
 		buttonGrp.add(mapOptA);
 		buttonGrp.add(mapOptB);
@@ -547,16 +560,25 @@ public class Risk implements ActionListener {
 			System.exit(0);
 		}
 		else if(actionName.equals("Start Game")){
-			InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying);
 			try {
-				initializeData.generateData();
+				if(randomMap) {
+					ArrayList<String> currentPlayers = new ArrayList<>();
+					for(int i = 0; i< playerPlaying; i++)
+						currentPlayers.add(playerNameList.get(i));
+					ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
+					InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), currentPlayers);
+					initializeData.generateData();
+					frame.setContentPane(gameView());
+					frame.invalidate();
+					frame.validate();
+				} else {
+					// previously Edited Map
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			frame.setContentPane(gameView());
-			frame.invalidate();
-			frame.validate();
+			
 		}
 		else if(actionName.equals(twoPlayersBtnName)){
 			System.out.println("Two Player Game");
