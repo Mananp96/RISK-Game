@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.risk.validate.MapValidator;
+
 
 /**
  * @author Manan
@@ -33,8 +35,6 @@ public class RiskLoadMap {
 	HashMap<String, HashMap<String, ArrayList<String>>> userOwnedTerr;	//for storing [User] and it's owned [Continents] [Territories].
 
 	private BufferedReader reader;
-
-	
 	
 	/**
 	 * This is the constructor to set File path.
@@ -121,6 +121,12 @@ public class RiskLoadMap {
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean mapValidate() {
+		MapValidator mapValidator = new MapValidator(contTerr,contValue,adjcentTerr);
+		boolean isMapValid = mapValidator.validateMap();
+		return isMapValid;
 	}
 
 
