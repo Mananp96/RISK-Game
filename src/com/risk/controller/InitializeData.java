@@ -71,7 +71,6 @@ public class InitializeData {
 		contTerr = boardData.contTerr;
 		contValue = boardData.contValue;
 		adjcentTerr = boardData.adjcentTerr;
-		
 		Reinforcement reinforcement = new Reinforcement(currentPlayers,contTerr,contValue,adjcentTerr);
 		
 		return false;
