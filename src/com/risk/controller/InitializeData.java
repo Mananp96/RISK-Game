@@ -6,10 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import com.risk.validate.MapValidator;
+
 public class InitializeData {
 	
 	String filePath;
 	int playerCount;
+	
 	public InitializeData(String filePath, int playerCount) {
 		
 		this.filePath = filePath;
@@ -41,6 +44,8 @@ public class InitializeData {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 
 }

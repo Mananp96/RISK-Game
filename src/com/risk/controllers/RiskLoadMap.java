@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.risk.exception.InvalidMapException;
+import com.risk.validate.MapValidator;
+
 
 /**
  * @author Manan
@@ -33,8 +36,6 @@ public class RiskLoadMap {
 	HashMap<String, HashMap<String, ArrayList<String>>> userOwnedTerr;	//for storing [User] and it's owned [Continents] [Territories].
 
 	private BufferedReader reader;
-
-	
 	
 	/**
 	 * This is the constructor to set File path.
@@ -47,8 +48,9 @@ public class RiskLoadMap {
 	 * method to read .map file and assign the 
 	 * value to HashMap.
 	 * @throws FileNotFoundException 
+	 * @throws InvalidMapException 
 	 */
-	public void initializeData() throws FileNotFoundException {
+	public void initializeData() throws FileNotFoundException, InvalidMapException {
 		
 		String currentLine;
 		contValue = new HashMap<>();
@@ -117,10 +119,23 @@ public class RiskLoadMap {
 			System.out.println("Continents--&--Territories");
 			System.out.println(contTerr); 
 			
-			
+			boolean isValid = this.mapValidate();
+			System.out.println(isValid);
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean mapValidate() throws InvalidMapException {
+		MapValidator mapValidator = new MapValidator(contTerr,contValue,adjcentTerr);
+		boolean isMapValid = false;
+		try {
+			isMapValid = mapValidator.validateMap();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isMapValid;
 	}
 
 
