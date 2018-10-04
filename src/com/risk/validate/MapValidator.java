@@ -2,7 +2,9 @@ package com.risk.validate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.Map.Entry;
+
 import com.risk.exception.InvalidMapException;
 
 /**
@@ -99,10 +101,12 @@ public class MapValidator {
 		}else {
 			this.isMapValid = false;
 			throw new InvalidMapException("Territories should not be null");
+
 		}
 		
 		return isMapValid;
 	}
+
 	
 	/**
 	 * Validate Territories. It should have atleast one adjacent territory.
@@ -127,4 +131,5 @@ public class MapValidator {
 		return isMapValid;
 	}
 	
+
 }

@@ -1,6 +1,5 @@
 package com.risk.view;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
@@ -11,12 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,12 +24,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultCaret;
 
+import com.risk.controller.ArmiesSelection;
 import com.risk.controller.InitializeData;
 
 public class Risk implements ActionListener {
@@ -90,15 +85,16 @@ public class Risk implements ActionListener {
 	private JScrollPane logScrollPane;
 	private DefaultCaret caret;
 	private JPanel userPanel;
-	private JTextField[] playerNames;
 	private JButton startGameBtn;
-	private int playerCount = 0;
 	private ArrayList<String> playerNameList;
 	private String editMapBtnName = "Edit Button";
 	private String mapFilePath;
 	private JButton editButton;
 	private JRadioButton mapOptA;
 	private JRadioButton mapOptB;
+	
+	private boolean randomMap = false;
+	private boolean previousEditMap = false;
 	/**
 	 * Launch the application.
 	 */
@@ -215,7 +211,7 @@ public class Risk implements ActionListener {
 	
 
 	protected JPanel userInfoPanel(int count){
-		playerCount = count;
+		int playerCount = count;
 		userPanel = new JPanel();
 		userPanel.setLayout(new GridLayout(6 + count, 1, 5, 5));
 		System.out.println("No. of Players : " + playerCount);
@@ -236,8 +232,6 @@ public class Risk implements ActionListener {
 			});
 		mapOptA.addItemListener(new ItemListener() {
 			
-			
-
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
@@ -245,10 +239,22 @@ public class Risk implements ActionListener {
 					int retVal = chooseMap.showOpenDialog(frame);
 					System.out.println("File Path : " + chooseMap.getSelectedFile().getPath());
 					mapFilePath = chooseMap.getSelectedFile().getPath();
+					randomMap = true;
 				}
 			}
 		});
+		
 		mapOptB = new JRadioButton("Choose Previously Edited Map");
+		mapOptB.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(mapOptB.isSelected()) {
+					
+				}
+			}
+		});
 		ButtonGroup buttonGrp = new ButtonGroup();
 		buttonGrp.add(mapOptA);
 		buttonGrp.add(mapOptB);
@@ -547,16 +553,23 @@ public class Risk implements ActionListener {
 			System.exit(0);
 		}
 		else if(actionName.equals("Start Game")){
-			InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying);
-			try {
-				initializeData.generateData();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(randomMap) {
+				ArrayList<String> currentPlayers = new ArrayList<>();
+				for(int i = 0; i< playerPlaying; i++)
+					currentPlayers.add(playerNameList.get(i));
+				ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
+				InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), currentPlayers);
+				boolean isMapValid = initializeData.generateData();
+				System.out.println("Continent with Value : " + initializeData.getContValue());
+				System.out.println("Continent with Territory : " + initializeData.getContTerr());
+				System.out.println("Adjacent  Territory : " + initializeData.getAdjcentTerr());
+				frame.setContentPane(gameView());
+				frame.invalidate();
+				frame.validate();
+			} else {
+				// previously Edited Map
 			}
-			frame.setContentPane(gameView());
-			frame.invalidate();
-			frame.validate();
+			
 		}
 		else if(actionName.equals(twoPlayersBtnName)){
 			System.out.println("Two Player Game");

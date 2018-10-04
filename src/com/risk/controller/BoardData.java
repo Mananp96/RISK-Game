@@ -1,26 +1,14 @@
- package com.risk.controllers;
+package com.risk.controller;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.risk.exception.InvalidMapException;
+public class BoardData {
 
-import com.risk.validate.MapValidator;
-
-
-/**
- * @author Manan
- * @version 1.0
- * This class is used to load .map file content.
- * 
- */
-public class RiskLoadMap {
-
-	String mapFile;
+	private String filePath;
 	StringBuilder stringBuilder;
 	boolean contFlag = false; 							//Continents flag
 	boolean terrFlag = false;							//Territories flag
@@ -35,24 +23,14 @@ public class RiskLoadMap {
 	HashMap<String, Integer> contValue; 								//for storing [Continents] and it's [Winning Value].
 	HashMap<String, ArrayList<String>> adjcentTerr;						//for storing [Territories] and it's [Adjacent Territories].
 	HashMap<String, HashMap<String, ArrayList<String>>> userOwnedTerr;	//for storing [User] and it's owned [Continents] [Territories].
-
 	private BufferedReader reader;
-	
-	/**
-	 * This is the constructor to set File path.
-	 */
-	RiskLoadMap(String fileName) {
-		this.mapFile = fileName;
+
+	public BoardData(String filePath) {
+		super();
+		this.filePath = filePath;
 	}
-	
-	/**
-	 * method to read .map file and assign the 
-	 * value to HashMap.
-	 * @throws FileNotFoundException 
-	 * @throws InvalidMapException 
-	 */
-	public void initializeData() throws FileNotFoundException, InvalidMapException {
-		
+	public void generateBoardData(String path) {
+
 		String currentLine;
 		contValue = new HashMap<>();
 		contTerr = new HashMap<>();
@@ -60,7 +38,7 @@ public class RiskLoadMap {
 		
 		try 
 		{
-			reader = new BufferedReader(new FileReader(mapFile));
+			reader = new BufferedReader(new FileReader(filePath));
 			stringBuilder = new StringBuilder();
 			
 			while((currentLine = reader.readLine()) != null) {
@@ -112,34 +90,24 @@ public class RiskLoadMap {
 				
 			}
 			
-			
+			/*
 			System.out.println("Continents--&--Value");
 			System.out.println(contValue); 
 			System.out.println("Territories--&--Adjacent Territories");
 			System.out.println(adjcentTerr); 
 			System.out.println("Continents--&--Territories");
 			System.out.println(contTerr); 
+			*/
 			
-			boolean isValid = this.mapValidate();
-			System.out.println(isValid);
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-
-	public boolean mapValidate() throws InvalidMapException {
-		MapValidator mapValidator = new MapValidator(contTerr,contValue,adjcentTerr);
-		boolean isMapValid = false;
-		try {
-			isMapValid = mapValidator.validateMap();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return isMapValid;
+	public String getFilePath() {
+		return filePath;
 	}
 
-
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 }
