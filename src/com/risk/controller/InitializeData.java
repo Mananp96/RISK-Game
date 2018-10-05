@@ -3,7 +3,6 @@ package com.risk.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.risk.validate.MapValidator;
 
 public class InitializeData {
 	

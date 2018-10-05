@@ -1,4 +1,4 @@
-package com.risk.controller;
+package com.risk.models;
 
 public class ArmiesSelection {
 
