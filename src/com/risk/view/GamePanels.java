@@ -11,7 +11,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map.Entry;
+
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -23,15 +26,24 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultCaret;
 
 import com.risk.controller.InitializeData;
 import com.risk.models.ArmiesSelection;
+import com.risk.models.Continent;
+import com.risk.models.Players;
+import com.risk.models.Territory;
 
-public class GamePanels implements ActionListener {
+public class GamePanels implements ActionListener, ListSelectionListener {
 
 	private JFrame frame;
+	Players players;
+	Territory territory;
+	Continent continent;
+	int playerTurn = 0;
 	private JPanel menuPanel;
 	private JPanel playerPanel;
 	private JPanel gamePanel;
@@ -71,9 +83,9 @@ public class GamePanels implements ActionListener {
 	private JButton turnInBtn;
 	private JLabel selectedLabel;
 	private JLabel targetLabel;
-	private JList cardsList;
-	private JList countryAList;
-	private JList countryBList;
+	private JList<String> cardsList;
+	private JList<String> countryList;
+	private JList<String> territoryList;
 	private JScrollPane countryAScrollPane;
 	private JScrollPane countryBScrollPane;
 	private GridBagConstraints c;
@@ -84,7 +96,6 @@ public class GamePanels implements ActionListener {
 	private DefaultCaret caret;
 	private JPanel userPanel;
 	private JButton startGameBtn;
-	private ArrayList<String> playerNameList;
 	private String editMapBtnName = "Edit Button";
 	private String mapFilePath;
 	private JButton editButton;
@@ -93,6 +104,8 @@ public class GamePanels implements ActionListener {
 	
 	private boolean randomMap = false;
 	private boolean previousEditMap = false;
+	private DefaultListModel<String> countryModel;
+	private DefaultListModel<String> territoryModel;
 	
 	public JPanel playerMenu(){
 		// Creates the panel
@@ -235,22 +248,44 @@ public class GamePanels implements ActionListener {
 		model.addObserver((RiskListModel)countryAListModel);
 		model.addObserver((RiskListModel)countryBListModel);
 		*/
-		cardsList = new JList();
+		cardsList = new JList<>();
 		cardsList.setLayoutOrientation(JList.VERTICAL_WRAP);
 		cardsList.setVisibleRowCount(6);
+		countryModel = new DefaultListModel<>();
+		countryList = new JList<>(countryModel);
+		for (Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
+			if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn))) {
+				countryModel.addElement(entry.getKey() +"---" +territory.getTerritoryArmy().get(entry.getKey()));
+			}
+		}
 		
-		countryAList = new JList();
-		countryAList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		countryAList.setLayoutOrientation(JList.VERTICAL_WRAP);
-		countryAList.setVisibleRowCount(42);
+		countryList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		countryList.setLayoutOrientation(JList.VERTICAL_WRAP);
+		countryList.setVisibleRowCount(42);
+		territoryModel = new DefaultListModel<>();
+		territoryList = new JList<>(territoryModel);
+		territoryList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		territoryList.setLayoutOrientation(JList.VERTICAL_WRAP);
+		territoryList.setVisibleRowCount(6);
 		
-		countryBList = new JList();
-		countryBList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		countryBList.setLayoutOrientation(JList.VERTICAL_WRAP);
-		countryBList.setVisibleRowCount(6);
-		
-		countryAScrollPane = new JScrollPane(countryAList);
-		countryBScrollPane = new JScrollPane(countryBList);
+		countryAScrollPane = new JScrollPane(countryList);
+		countryBScrollPane = new JScrollPane(territoryList);
+		countryList.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+				territoryModel.removeAllElements();
+				String[] territorySelected = countryList.getSelectedValue().split("---");
+				ArrayList<String> tempAdjacentTerritory = territory.getAdjacentTerritory().get(territorySelected[0]);
+				
+				for(int i=0;i<tempAdjacentTerritory.size();i++) {
+					territoryModel.addElement(tempAdjacentTerritory.get(i)+ "---" +territory.getTerritoryArmy().get(tempAdjacentTerritory.get(i)));
+				}
+				
+			}
+		});
+		territoryList.addListSelectionListener(this);
 		
 		c = new GridBagConstraints();
 		
@@ -395,10 +430,9 @@ public class GamePanels implements ActionListener {
 	*/		return logPanel;
 	}
 
-	protected JPanel mainMenu(JFrame frame, ArrayList<String> playerNameList){
-		
+	protected JPanel mainMenu(JFrame frame, Players players){
+		this.players = players;
 		this.frame = frame;
-		this.playerNameList = playerNameList;
 		// Creates the panel
 		menuPanel = new JPanel();
 		// Sets Layout
@@ -475,7 +509,7 @@ public class GamePanels implements ActionListener {
 		userPanel.add(mapOptB);
 		userPanel.add(new JLabel("Player Names are"));
 		for (int i = 0; i < count; i++) {
-			userPanel.add(new JLabel("Player " + (i+1) + " : " + playerNameList.get(i))); 
+			userPanel.add(new JLabel("Player " + (i+1) + " : " + players.getPlayers(i))); 
 		}
 		playerPlaying = count;
 		startGameBtn = new JButton("Start Game");
@@ -510,15 +544,13 @@ public class GamePanels implements ActionListener {
 		}
 		else if(actionName.equals("Start Game")){
 			if(randomMap) {
-				ArrayList<String> currentPlayers = new ArrayList<>();
-				for(int i = 0; i< playerPlaying; i++)
-					currentPlayers.add(playerNameList.get(i));
+	
 				ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
-				InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), currentPlayers);
+				InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
 				boolean isMapValid = initializeData.generateData();
-				System.out.println("Continent with Value : " + initializeData.getContValue());
-				System.out.println("Continent with Territory : " + initializeData.getContTerr());
-				System.out.println("Adjacent  Territory : " + initializeData.getAdjcentTerr());
+				continent = initializeData.getContinent();
+				players = initializeData.getPlayers();
+				territory = initializeData.getTerritory();
 				frame.setContentPane(gameView());
 				frame.invalidate();
 				frame.validate();
@@ -555,11 +587,18 @@ public class GamePanels implements ActionListener {
 			System.out.println("Six Player Game");
 		}*/
 		else if(actionName.equals(backBtnName)){
-			frame.setContentPane(mainMenu(frame,playerNameList));
+			frame.setContentPane(mainMenu(frame,players));
 			frame.invalidate();
 			frame.validate();
 		}
 	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 

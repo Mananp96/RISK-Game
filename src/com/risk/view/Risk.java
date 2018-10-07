@@ -2,18 +2,17 @@ package com.risk.view;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.util.ArrayList;
 import javax.swing.JFrame;
-import com.risk.view.GamePanels;;
+
+import com.risk.models.Players;
+import com.risk.view.GamePanels;
 
 
 public class Risk {
 
 	private JFrame frame;
-	
+	Players players;
 	GamePanels gamePanels;
-
-	private ArrayList<String> playerNameList;
 	/**
 	 * Launch the application.
 	 */
@@ -41,13 +40,12 @@ public class Risk {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
-		playerNameList = new ArrayList<>();
-		playerNameList.add("Manan");
-		playerNameList.add("Shalin");
-		playerNameList.add("Khyati");
-		playerNameList.add("Vaishakhi");
-		playerNameList.add("Himen");
+		players = new Players();
+		players.addPlayers("Manan");
+		players.addPlayers("Shalin");
+		players.addPlayers("Khyati");
+		players.addPlayers("Vaishakhi");
+		players.addPlayers("Himen");		
 		gamePanels = new GamePanels();
 		frame = new JFrame();
 		frame.setTitle("Risk");
@@ -56,7 +54,7 @@ public class Risk {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.setResizable(false);
-		frame.add(gamePanels.mainMenu(frame,playerNameList));
+		frame.add(gamePanels.mainMenu(frame,players));
 		frame.pack();
 		
 	}

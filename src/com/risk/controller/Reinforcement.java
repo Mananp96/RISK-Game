@@ -1,27 +1,75 @@
 package com.risk.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import com.risk.models.ArmiesSelection;
+import com.risk.models.Continent;
+import com.risk.models.Players;
+import com.risk.models.Territory;
 
 public class Reinforcement {
 	
-	private ArrayList<String> currentPlayers;
-	private HashMap<String, ArrayList<String>> contTerr; 						//for storing [Continents] and it's [Territories].
-	private HashMap<String, Integer> contValue; 								//for storing [Continents] and it's [Winning Value].
-	private HashMap<String, ArrayList<String>> adjcentTerr;		
+	Players players;
+	Continent continent;
+	Territory territory;
+	ArmiesSelection armies;
 	
-
-	public Reinforcement(ArrayList<String> currentPlayers, HashMap<String, ArrayList<String>> contTerr,
-			HashMap<String, Integer> contValue, HashMap<String, ArrayList<String>> adjcentTerr) {
-		super();
-		this.currentPlayers = currentPlayers;
-		this.contTerr = contTerr;
-		this.contValue = contValue;
-		this.adjcentTerr = adjcentTerr;
+	public Reinforcement(Players players, Continent continent, Territory territory) {
+		// TODO Auto-generated constructor stub
+		this.continent = continent;
+		this.territory = territory;
+		this.players = players;
 	}
 
 
 	public void initialReinforcement() {
+		int playerSize = players.getPlayerPlaying().size();
+		armies = new ArmiesSelection(playerSize);
+		System.out.println("Initial Reinforcement Started");
+		System.out.println("Player in Game : " +playerSize);
+		for(int i = 0 ; i < playerSize ; i++ ) {
+			String playerName = players.getPlayers(i);
+			players.addPlayerContinent(playerName,new Continent());
+			players.initialArmy(playerName, armies.getPlayerArmies());
+			System.out.println(playerName +" Assigned with Continent Object");
+			System.out.println(playerName +" Assigned with Initial Army of " + players.getPlayerArmy(playerName));		
+		}
+		Map<String, String> territoryContinent = territory.getTerritoryCont();
+		int playerCount = 0;
+		for(int i=0;i< territory.getTerritoryList().size();i++) {
+	    	String playerName = players.getPlayers(playerCount);
+	    	
+			// Retrieve Random Territory
+			Object randomTerritory = territoryContinent.keySet().toArray()[new Random().nextInt(territoryContinent.keySet().toArray().length)];
+	    	if(players.getPlayerArmy(playerName) >= 1) {
+		    	Continent tempContinent = players.getPlayerContinent(playerName);
+		    	//System.out.println("Reinforcemtn " + playerName);
+		    	//System.out.println(territoryContinent.get(randomTerritory)+ " Reinforcemtn " + randomTerritory.toString());
+		    	tempContinent.addContinentOwnedTerritory(territoryContinent.get(randomTerritory),randomTerritory.toString(), true); 	
+		    	territoryContinent.remove(randomTerritory);
+		    	territory.updateTerritoryArmy(randomTerritory.toString(), 1, "ADD");
+		    	territory.updateTerritoryUser(playerName, randomTerritory.toString());
+		    	players.updateArmy(playerName, 1, "Remove");
+		    	players.updatePlayerContinent(playerName, tempContinent);
+		    	playerCount++;
+		    	if(playerCount >= playerSize)
+		    		playerCount = 0;
+			} else {
+				territory.updateTerritoryArmy(randomTerritory.toString(), 0, "ADD");
+		    	territory.updateTerritoryUser("No Player", randomTerritory.toString());
+
+			}
+		}
+		
+		for(int i = 0 ; i < playerSize ; i++ ) {
+			String playerName = players.getPlayers(i);
+			System.out.println(playerName +" Assigned with Continent Object");
+			System.out.println(playerName +" Total  Army of " + players.getPlayerArmy(playerName));		
+		}
+		
+		
+		
 		
 	}
 }

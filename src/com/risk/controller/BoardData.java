@@ -50,8 +50,7 @@ public class BoardData {
 			reader = new BufferedReader(new FileReader(filePath));
 			stringBuilder = new StringBuilder();
 			
-			while((currentLine = reader.readLine()) != null) {
-				
+			while((currentLine = reader.readLine()) != null) {		
 				if(currentLine.equals("[Continents]")) {
 					contFlag = true;
 					terrFlag = false;
