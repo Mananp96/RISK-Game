@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.risk.models.Continent;
+import com.risk.models.Territory;
+
 public class BoardData {
 
 	private String filePath;
@@ -24,13 +27,19 @@ public class BoardData {
 	HashMap<String, ArrayList<String>> adjcentTerr;						//for storing [Territories] and it's [Adjacent Territories].
 	HashMap<String, HashMap<String, ArrayList<String>>> userOwnedTerr;	//for storing [User] and it's owned [Continents] [Territories].
 	private BufferedReader reader;
+	
+	Continent continentObject;
+	Territory territoryObject;
+	
 
 	public BoardData(String filePath) {
 		super();
 		this.filePath = filePath;
 	}
-	public void generateBoardData(String path) {
+	public void generateBoardData() {
 
+		continentObject = new Continent();
+		territoryObject = new Territory();
 		String currentLine;
 		contValue = new HashMap<>();
 		contTerr = new HashMap<>();
@@ -41,8 +50,7 @@ public class BoardData {
 			reader = new BufferedReader(new FileReader(filePath));
 			stringBuilder = new StringBuilder();
 			
-			while((currentLine = reader.readLine()) != null) {
-				
+			while((currentLine = reader.readLine()) != null) {		
 				if(currentLine.equals("[Continents]")) {
 					contFlag = true;
 					terrFlag = false;
@@ -57,25 +65,32 @@ public class BoardData {
 				if(contFlag && ! (currentLine.isEmpty()) && ! currentLine.equalsIgnoreCase("[Continents]")) {
 					
 					continentsArray = currentLine.split("=");
-					contValue.put(continentsArray[0], Integer.parseInt(continentsArray[1]));
+					continentObject.setContinentValue(continentsArray[0], Integer.parseInt(continentsArray[1]));
+					//contValue.put(continentsArray[0], Integer.parseInt(continentsArray[1]));
 				}
 				
 				//assign Territories List.
 				if(terrFlag && ! (currentLine.isEmpty() || currentLine.equals("[Territories]"))) {
 					territoriesList = new ArrayList<>();
-					ArrayList<String> tempList = new ArrayList<>(); 
+					//ArrayList<String> tempList = new ArrayList<>(); 
 					
 					territoriesArray = currentLine.split(",");
 					
 					//to assign Adjacent Territories HashMap
 					for(int i = 4; i < territoriesArray.length ; i++) {
-						tempList.add(territoriesArray[i]);
+						territoryObject.addAdjacentTerritory(territoriesArray[0], territoriesArray[i]);
+						//	tempList.add(territoriesArray[i]);
 					}
-					adjcentTerr.put(territoriesArray[0], tempList);
+					//System.out.println(territoryObject.getAdjacentTerritory());
+				//	adjcentTerr.put(territoriesArray[0], tempList);
 					
 					//to assign Continent Territories HashMap
-					territoriesList.add(territoriesArray[0]);
-					if(contTerr.get(territoriesArray[3]) == null) {
+					//territoriesList.add(territoriesArray[0]);
+					
+					territoryObject.addTerritory(territoriesArray[0]);
+					territoryObject.addTerritoryCont(territoriesArray[0], territoriesArray[3]);
+					continentObject.addContinentTerritory(territoriesArray[3], territoriesArray[0]);
+					/*if(contTerr.get(territoriesArray[3]) == null) {
 						ArrayList<String> tempArr1= new ArrayList<>();
 						tempArr1.add(territoriesArray[0]);
 						contTerr.put(territoriesArray[3], tempArr1);
@@ -84,7 +99,7 @@ public class BoardData {
 						ArrayList<String> tempArr2 = contTerr.get(territoriesArray[3]);
 						tempArr2.add(territoriesArray[0]);
 						contTerr.put(territoriesArray[3], tempArr2);
-					}
+					}*/
 					
 				}
 				
