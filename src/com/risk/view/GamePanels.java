@@ -1,6 +1,7 @@
 package com.risk.view;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -209,7 +210,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		mapPanel.setLayout(mapLayout);
 		ImageIcon mapImageIcon = new ImageIcon("D:\\eclipse-workspace\\RiskGame\\src\\riskpackage\\Map.jpg");
 		JScrollPane mapScrollPane = new JScrollPane(new JLabel(mapImageIcon));
-		mapScrollPane.setPreferredSize(new Dimension(450, 600));
+		mapScrollPane.setPreferredSize(new Dimension(300, 600));
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(5, 5, 5, 5);
@@ -381,13 +382,38 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	}
 	
 	protected JPanel countryScreen(){
-		countryPanel = new JPanel();
-		countryPanel.setPreferredSize(new Dimension(550, 600));
-		countryPanel.setLayout(new GridBagLayout());
-		ImageIcon mapImageIcon = new ImageIcon("D:\\eclipse-workspace\\RiskGame\\src\\riskpackage\\Map.jpg");
+
+		countryPanel = new JPanel();		
+		countryPanel.setPreferredSize(new Dimension(600, 600));
+		c = new GridBagConstraints();
+		int index = 0;
+		for (Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
+			JPanel tempPanel = new JPanel();
+			ArrayList<String> tempTerritory = continent.getContinentTerritory().get(entry.getKey());
+			tempPanel.setPreferredSize(new Dimension(550, 100));
+			tempPanel.setLayout(new GridLayout(tempTerritory.size()/2, 2, 2, 2));
+			JLabel countryLabel = new JLabel(entry.getKey());	
+			countryLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.insets = new Insets(2, 2, 2, 2);
+			c.weightx = 0.5;
+			c.weighty = 0;
+			c.gridx = index;
+			c.gridy = 0;
+			tempPanel.add(countryLabel, c);
+			for(int i =0;i< tempTerritory.size(); i++) {
+				JLabel territoryLabel = new JLabel(tempTerritory.get(i) + " : " + territory.getTerritoryUser().get(tempTerritory.get(i)));
+				territoryLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+				tempPanel.add(territoryLabel);
+			}
+			index++;
+			countryPanel.setLayout(new GridLayout(index, 2));
+			countryPanel.add(tempPanel);
+		}
+		/*ImageIcon mapImageIcon = new ImageIcon("D:\\eclipse-workspace\\RiskGame\\src\\riskpackage\\Map.jpg");
 		JScrollPane countryScrollPane = new JScrollPane(new JLabel(mapImageIcon));
 		countryScrollPane.setPreferredSize(new Dimension(450, 600));
-		countryPanel.add(countryScrollPane);
+		countryPanel.add(countryScrollPane);*/
 		return countryPanel;
 	}
 	protected JPanel logScreen(){
