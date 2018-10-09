@@ -1,25 +1,23 @@
-package com.risk.controllers;
+package com.risk.controller;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.risk.exception.InvalidMapException;
+import com.risk.models.Continent;
+import com.risk.models.Territory;
+import com.risk.validate.MapValidator;
 
-/**
- * @author Manan
- * @version 1.0
- * This class is used to load .map file content.
- * 
- */
-public class RiskLoadMap {
+public class BoardData {
 
-	String mapFile;
+	private String filePath;
 	StringBuilder stringBuilder;
-	boolean contFlag = false; 							//Continents flag
-	boolean terrFlag = false;							//Territories flag
+	boolean contFlag = false; 	//Continents flag
+	boolean terrFlag = false;	//Territories flag
+	boolean isMapValid = false;
 	
 	String[] continentsArray;
 	String[] territoriesArray;
@@ -31,25 +29,19 @@ public class RiskLoadMap {
 	HashMap<String, Integer> contValue; 								//for storing [Continents] and it's [Winning Value].
 	HashMap<String, ArrayList<String>> adjcentTerr;						//for storing [Territories] and it's [Adjacent Territories].
 	HashMap<String, HashMap<String, ArrayList<String>>> userOwnedTerr;	//for storing [User] and it's owned [Continents] [Territories].
-
 	private BufferedReader reader;
-
 	
+	Continent continentObject;
+	Territory territoryObject;
 	
-	/**
-	 * This is the constructor to set File path.
-	 */
-	RiskLoadMap(String fileName) {
-		this.mapFile = fileName;
+	public BoardData(String filePath) {
+		super();
+		this.filePath = filePath;
 	}
-	
-	/**
-	 * method to read .map file and assign the 
-	 * value to HashMap.
-	 * @throws FileNotFoundException 
-	 */
-	public void initializeData() throws FileNotFoundException {
-		
+	public boolean generateBoardData() {
+
+		continentObject = new Continent();
+		territoryObject = new Territory();
 		String currentLine;
 		contValue = new HashMap<>();
 		contTerr = new HashMap<>();
@@ -57,11 +49,10 @@ public class RiskLoadMap {
 		
 		try 
 		{
-			reader = new BufferedReader(new FileReader(mapFile));
+			reader = new BufferedReader(new FileReader(filePath));
 			stringBuilder = new StringBuilder();
 			
-			while((currentLine = reader.readLine()) != null) {
-				
+			while((currentLine = reader.readLine()) != null) {		
 				if(currentLine.equals("[Continents]")) {
 					contFlag = true;
 					terrFlag = false;
@@ -76,25 +67,32 @@ public class RiskLoadMap {
 				if(contFlag && ! (currentLine.isEmpty()) && ! currentLine.equalsIgnoreCase("[Continents]")) {
 					
 					continentsArray = currentLine.split("=");
-					contValue.put(continentsArray[0], Integer.parseInt(continentsArray[1]));
+					continentObject.setContinentValue(continentsArray[0], Integer.parseInt(continentsArray[1]));
+					//contValue.put(continentsArray[0], Integer.parseInt(continentsArray[1]));
 				}
 				
 				//assign Territories List.
 				if(terrFlag && ! (currentLine.isEmpty() || currentLine.equals("[Territories]"))) {
 					territoriesList = new ArrayList<>();
-					ArrayList<String> tempList = new ArrayList<>(); 
+					//ArrayList<String> tempList = new ArrayList<>(); 
 					
 					territoriesArray = currentLine.split(",");
 					
 					//to assign Adjacent Territories HashMap
 					for(int i = 4; i < territoriesArray.length ; i++) {
-						tempList.add(territoriesArray[i]);
+						territoryObject.addAdjacentTerritory(territoriesArray[0], territoriesArray[i]);
+						//	tempList.add(territoriesArray[i]);
 					}
-					adjcentTerr.put(territoriesArray[0], tempList);
+					//System.out.println(territoryObject.getAdjacentTerritory());
+				//	adjcentTerr.put(territoriesArray[0], tempList);
 					
 					//to assign Continent Territories HashMap
-					territoriesList.add(territoriesArray[0]);
-					if(contTerr.get(territoriesArray[3]) == null) {
+					//territoriesList.add(territoriesArray[0]);
+					
+					territoryObject.addTerritory(territoriesArray[0]);
+					territoryObject.addTerritoryCont(territoriesArray[0], territoriesArray[3]);
+					continentObject.addContinentTerritory(territoriesArray[3], territoriesArray[0]);
+					/*if(contTerr.get(territoriesArray[3]) == null) {
 						ArrayList<String> tempArr1= new ArrayList<>();
 						tempArr1.add(territoriesArray[0]);
 						contTerr.put(territoriesArray[3], tempArr1);
@@ -103,25 +101,30 @@ public class RiskLoadMap {
 						ArrayList<String> tempArr2 = contTerr.get(territoriesArray[3]);
 						tempArr2.add(territoriesArray[0]);
 						contTerr.put(territoriesArray[3], tempArr2);
-					}
+					}*/
 					
 				}
 				
 			}
+			MapValidator mapValidator = new MapValidator();
+			mapValidator.validateMap();
 			
 			
-			System.out.println("Continents--&--Value");
-			System.out.println(contValue); 
-			System.out.println("Territories--&--Adjacent Territories");
-			System.out.println(adjcentTerr); 
-			System.out.println("Continents--&--Territories");
-			System.out.println(contTerr); 
-			
-			
-		}catch(IOException e) {
+		}catch(IOException | InvalidMapException e) {
 			e.printStackTrace();
 		}
+		System.out.println("isMapValid--------------"+isMapValid);
+		return isMapValid;
+		
+		
+	}
+	
+	
+	public String getFilePath() {
+		return filePath;
 	}
 
-
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 }
