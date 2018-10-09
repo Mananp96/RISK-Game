@@ -745,9 +745,38 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.validate();
 		}
 		else if(actionName.equals(editMapBtnName)){
-			System.out.println("Edit Map Game");
-		}
-		else if(actionName.equals(exitBtnName)){
+					
+			frame.setContentPane(editMapPanel());
+			frame.invalidate();
+			frame.validate();
+			
+		} else if (actionName.equals(editExistingMapBtnName)) {
+			
+			System.out.println("Editing Existing Map");
+			frame.setContentPane(editMapPanel());
+			frame.invalidate();
+			frame.validate();
+		
+		} else if (actionName.equals(createNewMapBtnName)) {
+			
+			System.out.println("Creating New Map");
+			frame.setContentPane(createMapPanel());
+			frame.invalidate();
+			frame.validate();
+		
+		} else if (actionName.equals(saveBtnName)) {
+			
+			System.out.println("Saving New Map");
+			String defaultMapTag = "[Map]\n"+
+					"author=Sean O'Connor\n"+
+					"warn=yes\n"+
+					"image=Africa.bmp\n"+
+					"wrap=no\n";
+			String finalMapData = String.format("%s\n[Continents]\n%s\n\n[Territories]\n%s", defaultMapTag, addContinentsArea.getText(),
+					addTerritoriesArea.getText());
+			CreateMapFile createMapFile = new CreateMapFile(finalMapData);
+			createMapFile.createMap();
+		}else if(actionName.equals(exitBtnName)){
 			System.out.println("Quit Game");
 			System.exit(0);
 		}
