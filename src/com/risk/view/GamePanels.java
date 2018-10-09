@@ -32,7 +32,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultCaret;
 
-import com.risk.controller.CreateMapFile;
 import com.risk.controller.InitializeData;
 import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
@@ -46,17 +45,12 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	Territory territory;
 	Continent continent;
 	int playerTurn = 0;
-	
 	private JPanel menuPanel;
 	private JPanel playerPanel;
 	private JPanel gamePanel;
 	private JPanel mapPanel;
 	private JPanel editMapPanel;
 	private JPanel createMapPanel;
-	private JPanel logPanel;
-	private JPanel eventPanel;
-	private JPanel countryPanel;
-
 	private String newBtnName = "New Game";
 	private String exitBtnName = "Quit";
 	private String twoPlayersBtnName = "twoPlayersBtn";
@@ -68,14 +62,17 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private String saveBtnName = "Save";
 	/* private String sixPlayersBtnName = "sixPlayersBtn"; */
 	private String backBtnName = "backBtn";
-	private int playerPlaying;
-
+	private int  playerPlaying; 
+	
 	private JLabel playerCountLabel;
+	
 
 	private GridLayout mainLayout;
 	private GridLayout playerLayout;
 	private GridLayout editMapLayout;
-
+	private JPanel logPanel;
+	private JPanel eventPanel;
+	private JPanel countryPanel;
 	private JButton reinforceBtn;
 	private JButton attackBtn;
 	private JButton fortifyBtn;
@@ -94,21 +91,21 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	/* private JButton sixPlayersBtn; */
 	private JButton backBtn;
 
-	private JTextArea logArea;
 	private JTextArea addContinentsArea;
 	private JTextArea addTerritoriesArea;
-
 	private JLabel selectedLabel;
 	private JLabel targetLabel;
 	private JList<String> cardsList;
-	private JList<String> countryList;
+	private JList<String> continentList;
 	private JList<String> territoryList;
-	private JScrollPane countryAScrollPane;
-	private JScrollPane countryBScrollPane;
+	private JList<String> continentInfoList;
+	private JList<String> territoryInfoList;
+	private JScrollPane continentScrollPane;
+	private JScrollPane territoryScrollPane;
 	private GridBagConstraints c;
 	private GridBagLayout mapLayout;
 	private GridBagLayout logLayout;
-
+	private JTextArea logArea;
 	private JScrollPane logScrollPane;
 	private DefaultCaret caret;
 	private JPanel userPanel;
@@ -118,11 +115,17 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JButton editButton;
 	private JRadioButton mapOptA;
 	private JRadioButton mapOptB;
-
+	
 	private boolean randomMap = false;
 	private boolean previousEditMap = false;
-	private DefaultListModel<String> countryModel;
+	private DefaultListModel<String> continentModel;
 	private DefaultListModel<String> territoryModel;
+	private DefaultListModel<String> continentInfoModel;
+	private DefaultListModel<String> territoryInfoModel;
+	private JScrollPane continentInfoScrollPane;
+	private JScrollPane territoryInfoScrollPane;
+	private JTextArea playerDetails;
+	private JTextArea territoryDetails;
 	
 	public JPanel playerMenu(){
 		// Creates the panel
@@ -212,7 +215,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		return createMapPanel;
 		
 	}
-	
 	protected JPanel gameView() {
 		
 		frame.setPreferredSize(new Dimension(900,800));
@@ -302,7 +304,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		attackBtn = new JButton("Attack!");
 		fortifyBtn = new JButton("Fortify");
 		endTurnBtn = new JButton("End Turn");
-		
+		menuBtn.setActionCommand(backBtnName);
+		menuBtn.addActionListener(this);
 		/*
 		cardsListModel = new RiskListModel(model, "cards");
 		countryAListModel = new RiskListModel(model, "countryA");
@@ -315,32 +318,32 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		cardsList = new JList<>();
 		cardsList.setLayoutOrientation(JList.VERTICAL_WRAP);
 		cardsList.setVisibleRowCount(6);
-		countryModel = new DefaultListModel<>();
-		countryList = new JList<>(countryModel);
+		continentModel = new DefaultListModel<>();
+		continentList = new JList<>(continentModel);
 		for (Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 			if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn))) {
-				countryModel.addElement(entry.getKey() +"---" +territory.getTerritoryArmy().get(entry.getKey()));
+				continentModel.addElement(entry.getKey() +"---" +territory.getTerritoryArmy().get(entry.getKey()));
 			}
 		}
 		
-		countryList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		countryList.setLayoutOrientation(JList.VERTICAL_WRAP);
-		countryList.setVisibleRowCount(42);
+		continentList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		continentList.setLayoutOrientation(JList.VERTICAL);
+		continentList.setVisibleRowCount(42);
 		territoryModel = new DefaultListModel<>();
 		territoryList = new JList<>(territoryModel);
 		territoryList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		territoryList.setLayoutOrientation(JList.VERTICAL_WRAP);
+		territoryList.setLayoutOrientation(JList.VERTICAL);
 		territoryList.setVisibleRowCount(6);
 		
-		countryAScrollPane = new JScrollPane(countryList);
-		countryBScrollPane = new JScrollPane(territoryList);
-		countryList.addListSelectionListener(new ListSelectionListener() {
+		continentScrollPane = new JScrollPane(continentList);
+		territoryScrollPane = new JScrollPane(territoryList);
+		continentList.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
 				territoryModel.removeAllElements();
-				String[] territorySelected = countryList.getSelectedValue().split("---");
+				String[] territorySelected = continentList.getSelectedValue().split("---");
 				ArrayList<String> tempAdjacentTerritory = territory.getAdjacentTerritory().get(territorySelected[0]);
 				
 				for(int i=0;i<tempAdjacentTerritory.size();i++) {
@@ -391,7 +394,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		c.weighty = 10;
 		c.gridx = 0;
 		c.gridy = 5;
-		eventPanel.add(countryAScrollPane, c);
+		eventPanel.add(continentScrollPane, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(5, 5, 5, 5);
@@ -415,7 +418,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		c.weighty = 10;
 		c.gridx = 0;
 		c.gridy = 8;
-		eventPanel.add(countryBScrollPane, c);
+		eventPanel.add(territoryScrollPane, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(5, 5, 5, 5);
@@ -448,7 +451,124 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 
 		countryPanel = new JPanel();		
 		countryPanel.setPreferredSize(new Dimension(600, 600));
+		GridBagLayout countryLayout = new GridBagLayout();
+		countryPanel.setLayout(countryLayout);
+		JLabel countryLabel = new JLabel("CONTINENTS");	
+		countryLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+		JLabel territoryLabel = new JLabel("TERRITORYS---PLAYER---ARMY");	
+		countryLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+		continentInfoModel = new DefaultListModel<>();
+		continentInfoList = new JList<>(continentInfoModel);
+		for (Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
+			    continentInfoModel.addElement(entry.getKey());
+		}
+		continentInfoList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		continentInfoList.setLayoutOrientation(JList.VERTICAL);
+		continentInfoList.setVisibleRowCount(42);
+		continentInfoList.setPreferredSize(new Dimension(150, 300));
+		continentInfoList.addListSelectionListener(new ListSelectionListener() {
+		    
+		    @Override
+		    public void valueChanged(ListSelectionEvent e) {
+			
+			territoryInfoModel.removeAllElements();
+			String continentSelected = continentInfoList.getSelectedValue().trim();
+			ArrayList<String> tempContinentTerritory = continent.getContinentTerritory().get(continentSelected);
+			
+			for(int i=0;i<tempContinentTerritory.size();i++) {
+			    	String territoryName = tempContinentTerritory.get(i).trim();
+				territoryInfoModel.addElement(territoryName.trim()+ "---" +territory.getTerritoryUser().get(territoryName));
+			}
+		    }
+		});
+		
+		territoryInfoModel = new DefaultListModel<>();
+		territoryInfoList = new JList<>(territoryInfoModel);
+		territoryInfoList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		territoryInfoList.setLayoutOrientation(JList.VERTICAL);
+		territoryInfoList.setVisibleRowCount(10);
+		territoryInfoList.setPreferredSize(new Dimension(150, 300));
+		territoryInfoList.addListSelectionListener(new ListSelectionListener() {
+		    
+		    @Override
+		    public void valueChanged(ListSelectionEvent e) {
+			// TODO Auto-generated method stub
+			try {
+			    territoryDetails.setText("");
+			    System.out.println("territoryInfoList.getSelectedValue() " +territoryInfoList.getSelectedValue());
+			    if(territoryInfoList.getSelectedValue() != null) {
+				String[] territoryName = territoryInfoList.getSelectedValue().split("---");
+				territoryDetails.append("Continent  : " + continentInfoList.getSelectedValue() + "\n");
+				territoryDetails.append("Territory  : " + territoryName[0]+"\n");
+				territoryDetails.append("Player     : " + territory.getTerritoryUser().get(territoryName[0].trim())+"\n");
+				territoryDetails.append("Army       : " + territory.getTerritoryArmy().get(territoryName[0].trim()));
+			    }
+			}
+			catch(Exception ex) {
+			    System.out.println("Handles Null Values");
+			}
+		    }
+		});
+		
+		continentInfoScrollPane = new JScrollPane(continentInfoList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		territoryInfoScrollPane = new JScrollPane(territoryInfoList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		territoryDetails = new JTextArea(4,2);
+		playerDetails = new JTextArea(5, 2);
+		
 		c = new GridBagConstraints();
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(5,2, 2, 5);
+		c.weightx = 0.5;
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		countryPanel.add(countryLabel, c);
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(5, 5, 5, 5);
+		c.weightx = 0.5;
+		c.weighty = 1;
+		c.gridx = 1;
+		c.gridy = 0;
+		countryPanel.add(territoryLabel, c);
+		
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(5, 5, 5, 5);
+		c.weightx = 0.5;
+		c.weighty = 3;
+		c.gridx = 0;
+		c.gridy = 1;
+		countryPanel.add(continentInfoScrollPane, c);
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(5, 5, 5, 5);
+		c.weightx = 0.5;
+		c.weighty = 3;
+		c.gridx = 1;
+		c.gridy = 1;
+		countryPanel.add(territoryInfoScrollPane, c);
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(5, 5, 5, 5);
+		c.weightx = 0.5;
+		c.weighty = 3;
+		c.gridx = 0;
+		c.gridy = 2;
+		countryPanel.add(territoryDetails, c);
+		
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(5, 5, 5, 5);
+		c.weightx = 0.5;
+		c.weighty = 3;
+		c.gridx = 0;
+		c.gridy = 2;
+		countryPanel.add(playerDetails, c);
+		
+		
+		/*c = new GridBagConstraints();
 		int index = 0;
 		for (Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
 			JPanel tempPanel = new JPanel();
@@ -472,7 +592,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			index++;
 			countryPanel.setLayout(new GridLayout(index, 2));
 			countryPanel.add(tempPanel);
-		}
+		}*/
 		/*ImageIcon mapImageIcon = new ImageIcon("D:\\eclipse-workspace\\RiskGame\\src\\riskpackage\\Map.jpg");
 		JScrollPane countryScrollPane = new JScrollPane(new JLabel(mapImageIcon));
 		countryScrollPane.setPreferredSize(new Dimension(450, 600));
@@ -625,45 +745,14 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.validate();
 		}
 		else if(actionName.equals(editMapBtnName)){
-			
-			frame.setContentPane(editMapPanel());
-			frame.invalidate();
-			frame.validate();
-			
-		} else if (actionName.equals(editExistingMapBtnName)) {
-			
-			System.out.println("Editing Existing Map");
-			frame.setContentPane(editMapPanel());
-			frame.invalidate();
-			frame.validate();
-		
-		} else if (actionName.equals(createNewMapBtnName)) {
-			
-			System.out.println("Creating New Map");
-			frame.setContentPane(createMapPanel());
-			frame.invalidate();
-			frame.validate();
-		
-		} else if (actionName.equals(saveBtnName)) {
-			
-			System.out.println("Saving New Map");
-			String defaultMapTag = "[Map]\n"+
-					"author=Sean O'Connor\n"+
-					"warn=yes\n"+
-					"image=Africa.bmp\n"+
-					"wrap=no\n";
-			String finalMapData = String.format("%s\n[Continents]\n%s\n\n[Territories]\n%s", defaultMapTag, addContinentsArea.getText(),
-					addTerritoriesArea.getText());
-			CreateMapFile createMapFile = new CreateMapFile(finalMapData);
-			createMapFile.createMap();
+			System.out.println("Edit Map Game");
 		}
 		else if(actionName.equals(exitBtnName)){
 			System.out.println("Quit Game");
 			System.exit(0);
 		}
 		else if(actionName.equals("Start Game")){
-			if(randomMap) {
-	
+		    if(randomMap) {
 				ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
 				InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
 				boolean isMapValid = initializeData.generateData();
@@ -673,9 +762,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 				frame.setContentPane(gameView());
 				frame.invalidate();
 				frame.validate();
-			} else {
+		    } else {
 				// previously Edited Map
-			}
+		    }
 			
 		}
 		else if(actionName.equals(twoPlayersBtnName)){
@@ -709,6 +798,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.setContentPane(mainMenu(frame,players));
 			frame.invalidate();
 			frame.validate();
+			
 		}
 	}
 
