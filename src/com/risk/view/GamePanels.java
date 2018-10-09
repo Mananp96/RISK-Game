@@ -32,6 +32,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultCaret;
 
+import com.risk.controller.CreateMapFile;
 import com.risk.controller.InitializeData;
 import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
@@ -45,43 +46,58 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	Territory territory;
 	Continent continent;
 	int playerTurn = 0;
+	
 	private JPanel menuPanel;
 	private JPanel playerPanel;
 	private JPanel gamePanel;
 	private JPanel mapPanel;
-	
+	private JPanel editMapPanel;
+	private JPanel createMapPanel;
+	private JPanel logPanel;
+	private JPanel eventPanel;
+	private JPanel countryPanel;
+
 	private String newBtnName = "New Game";
 	private String exitBtnName = "Quit";
 	private String twoPlayersBtnName = "twoPlayersBtn";
 	private String threePlayersBtnName = "threePlayersBtn";
 	private String fourPlayersBtnName = "fourPlayersBtn";
 	private String fivePlayersBtnName = "fivePlayersBtn";
-/*	private String sixPlayersBtnName = "sixPlayersBtn";*/
+	private String createNewMapBtnName = "Create New Map";
+	private String editExistingMapBtnName = "Edit Existing Map";
+	private String saveBtnName = "Save";
+	/* private String sixPlayersBtnName = "sixPlayersBtn"; */
 	private String backBtnName = "backBtn";
-	private int  playerPlaying; 
-	
+	private int playerPlaying;
+
 	private JLabel playerCountLabel;
-	
-	private JButton newButton;
-	private JButton exitButton;
-	private JButton twoPlayersBtn;
-	private JButton threePlayersBtn;
-	private JButton fourPlayersBtn;
-	private JButton fivePlayersBtn;
-/*	private JButton sixPlayersBtn;*/
-	private JButton backBtn;
-	
+
 	private GridLayout mainLayout;
 	private GridLayout playerLayout;
-	private JPanel logPanel;
-	private JPanel eventPanel;
-	private JPanel countryPanel;
+	private GridLayout editMapLayout;
+
 	private JButton reinforceBtn;
 	private JButton attackBtn;
 	private JButton fortifyBtn;
 	private JButton endTurnBtn;
 	private JButton menuBtn;
 	private JButton turnInBtn;
+	private JButton createNewMapBtn;
+	private JButton editExistingMapBtn;
+	private JButton saveMapBtn;
+	private JButton newButton;
+	private JButton exitButton;
+	private JButton twoPlayersBtn;
+	private JButton threePlayersBtn;
+	private JButton fourPlayersBtn;
+	private JButton fivePlayersBtn;
+	/* private JButton sixPlayersBtn; */
+	private JButton backBtn;
+
+	private JTextArea logArea;
+	private JTextArea addContinentsArea;
+	private JTextArea addTerritoriesArea;
+
 	private JLabel selectedLabel;
 	private JLabel targetLabel;
 	private JList<String> cardsList;
@@ -92,7 +108,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private GridBagConstraints c;
 	private GridBagLayout mapLayout;
 	private GridBagLayout logLayout;
-	private JTextArea logArea;
+
 	private JScrollPane logScrollPane;
 	private DefaultCaret caret;
 	private JPanel userPanel;
@@ -102,7 +118,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JButton editButton;
 	private JRadioButton mapOptA;
 	private JRadioButton mapOptB;
-	
+
 	private boolean randomMap = false;
 	private boolean previousEditMap = false;
 	private DefaultListModel<String> countryModel;
@@ -148,6 +164,53 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		/*sixPlayersBtn.setActionCommand(sixPlayersBtnName);*/
 		backBtn.setActionCommand(backBtnName);
 		return playerPanel;
+	}
+	
+	protected JPanel editMapPanel() {
+		
+		// Creates the panel
+		editMapPanel = new JPanel();
+		// Sets Layout
+		editMapLayout = new GridLayout(2, 1, 5, 5);
+		editMapPanel.setLayout(editMapLayout);
+		// Creates buttons
+		createNewMapBtn = new JButton("Create new map");
+		editExistingMapBtn = new JButton("Edit Existing map");
+		editMapPanel.add(createNewMapBtn);
+		editMapPanel.add(editExistingMapBtn);
+		createNewMapBtn.addActionListener(this);
+		editExistingMapBtn.addActionListener(this);
+		createNewMapBtn.setActionCommand(createNewMapBtnName);
+		editExistingMapBtn.setActionCommand(editExistingMapBtnName);
+		return editMapPanel;
+		
+	}
+	protected JPanel createMapPanel() {
+		
+		createMapPanel = new JPanel();
+		frame.setPreferredSize(new Dimension(300, 600));
+		frame.setVisible(true);
+		frame.setResizable(true);
+		JLabel l1 = new JLabel("Continents ", JLabel.CENTER);
+		JLabel l2 = new JLabel("Territories ", JLabel.CENTER);
+		addContinentsArea = new JTextArea(6, 20);
+		addTerritoriesArea = new JTextArea(6, 20);
+		addContinentsArea.setFocusable(true);
+		addTerritoriesArea.setFocusable(true);
+		addContinentsArea.setLineWrap(true);
+		addTerritoriesArea.setLineWrap(true);
+		addContinentsArea.setWrapStyleWord(true);
+		addTerritoriesArea.setWrapStyleWord(true);
+		createMapPanel.add(l1);
+		createMapPanel.add(addContinentsArea);
+		createMapPanel.add(l2);
+		createMapPanel.add(addTerritoriesArea);
+		saveMapBtn = new JButton("Save");
+		createMapPanel.add(saveMapBtn);
+		saveMapBtn.addActionListener(this);
+		saveMapBtn.setActionCommand(saveBtnName);
+		return createMapPanel;
+		
 	}
 	
 	protected JPanel gameView() {
@@ -562,7 +625,37 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.validate();
 		}
 		else if(actionName.equals(editMapBtnName)){
-			System.out.println("Edit Map Game");
+			
+			frame.setContentPane(editMapPanel());
+			frame.invalidate();
+			frame.validate();
+			
+		} else if (actionName.equals(editExistingMapBtnName)) {
+			
+			System.out.println("Editing Existing Map");
+			frame.setContentPane(editMapPanel());
+			frame.invalidate();
+			frame.validate();
+		
+		} else if (actionName.equals(createNewMapBtnName)) {
+			
+			System.out.println("Creating New Map");
+			frame.setContentPane(createMapPanel());
+			frame.invalidate();
+			frame.validate();
+		
+		} else if (actionName.equals(saveBtnName)) {
+			
+			System.out.println("Saving New Map");
+			String defaultMapTag = "[Map]\n"+
+					"author=Sean O'Connor\n"+
+					"warn=yes\n"+
+					"image=Africa.bmp\n"+
+					"wrap=no\n";
+			String finalMapData = String.format("%s\n[Continents]\n%s\n\n[Territories]\n%s", defaultMapTag, addContinentsArea.getText(),
+					addTerritoriesArea.getText());
+			CreateMapFile createMapFile = new CreateMapFile(finalMapData);
+			createMapFile.createMap();
 		}
 		else if(actionName.equals(exitBtnName)){
 			System.out.println("Quit Game");

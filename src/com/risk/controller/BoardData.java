@@ -6,15 +6,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
 import com.risk.models.Territory;
+import com.risk.validate.MapValidator;
 
 public class BoardData {
 
 	private String filePath;
 	StringBuilder stringBuilder;
-	boolean contFlag = false; 							//Continents flag
-	boolean terrFlag = false;							//Territories flag
+	boolean contFlag = false; 	//Continents flag
+	boolean terrFlag = false;	//Territories flag
+	boolean isMapValid = false;
 	
 	String[] continentsArray;
 	String[] territoriesArray;
@@ -31,12 +34,11 @@ public class BoardData {
 	Continent continentObject;
 	Territory territoryObject;
 	
-
 	public BoardData(String filePath) {
 		super();
 		this.filePath = filePath;
 	}
-	public void generateBoardData() {
+	public boolean generateBoardData() {
 
 		continentObject = new Continent();
 		territoryObject = new Territory();
@@ -104,20 +106,20 @@ public class BoardData {
 				}
 				
 			}
+			MapValidator mapValidator = new MapValidator();
+			mapValidator.validateMap();
 			
-			/*
-			System.out.println("Continents--&--Value");
-			System.out.println(contValue); 
-			System.out.println("Territories--&--Adjacent Territories");
-			System.out.println(adjcentTerr); 
-			System.out.println("Continents--&--Territories");
-			System.out.println(contTerr); 
-			*/
 			
-		}catch(IOException e) {
+		}catch(IOException | InvalidMapException e) {
 			e.printStackTrace();
 		}
+		System.out.println("isMapValid--------------"+isMapValid);
+		return isMapValid;
+		
+		
 	}
+	
+	
 	public String getFilePath() {
 		return filePath;
 	}

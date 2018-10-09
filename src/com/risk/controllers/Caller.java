@@ -1,5 +1,4 @@
 package com.risk.controllers;
-
 import java.io.FileNotFoundException;
 
 import com.risk.exception.InvalidMapException;
@@ -10,6 +9,5 @@ public class Caller {
 		RiskLoadMap rm = new RiskLoadMap("Africa.map");
 		rm.initializeData();
 		
+		}
 	}
-	 
-}
