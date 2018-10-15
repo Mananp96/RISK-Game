@@ -817,6 +817,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		/*else if(actionName.equals(sixPlayersBtnName)){
 			System.out.println("Six Player Game");
 		}*/
+		else if(actionName.equals("placeReinforcement")) {
+		openInputDialog(true);
+		}		
 		else if(actionName.equals(backBtnName)){
 			frame.setContentPane(mainMenu(frame,players));
 			frame.invalidate();
