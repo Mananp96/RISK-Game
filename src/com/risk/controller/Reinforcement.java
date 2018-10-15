@@ -39,13 +39,10 @@ public class Reinforcement {
 		int playerCount = 0;
 		for(int i=0;i< territory.getTerritoryList().size();i++) {
         	    	String playerName = players.getPlayerList().get(playerCount);
-        	    	
         			// Retrieve Random Territory
         		Object randomTerritory = territoryContinent.keySet().toArray()[new Random().nextInt(territoryContinent.keySet().toArray().length)];
         	    	if(players.getPlayerArmy(playerName) >= 1) {
         		    Continent tempContinent = players.getPlayerContinent(playerName);
-        		    	//System.out.println("Reinforcemtn " + playerName);
-        		    	//System.out.println(territoryContinent.get(randomTerritory)+ " Reinforcemtn " + randomTerritory.toString());
         		    tempContinent.addContinentOwnedTerritory(territoryContinent.get(randomTerritory),randomTerritory.toString(), true); 	
         		    territoryContinent.remove(randomTerritory);
         		    territory.updateTerritoryArmy(randomTerritory.toString(), 1, "ADD");
@@ -60,15 +57,6 @@ public class Reinforcement {
         		    territory.updateTerritoryUser("No Player", randomTerritory.toString());
         		}
 		}
-		
-		for(int i = 0 ; i < playerSize ; i++ ) {
-			String playerName = players.getPlayers(i);
-			System.out.println(playerName +" Assigned with Continent Object");
-			System.out.println(playerName +" Total  Army of " + players.getPlayerArmy(playerName));		
-		}
-		
-		
-		
-		
+				
 	}
 }
