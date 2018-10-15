@@ -476,14 +476,14 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		    
 		    @Override
 		    public void valueChanged(ListSelectionEvent e) {
-			
-			territoryInfoModel.removeAllElements();
-			String continentSelected = continentInfoList.getSelectedValue().trim();
-			ArrayList<String> tempContinentTerritory = continent.getContinentTerritory().get(continentSelected);
-			
-			for(int i=0;i<tempContinentTerritory.size();i++) {
-			    	String territoryName = tempContinentTerritory.get(i).trim();
+			if(StringUtils.isNotEmpty(continentInfoList.getSelectedValue())) {
+			    territoryInfoModel.removeAllElements();
+			    String continentSelected = continentInfoList.getSelectedValue().trim();
+			    ArrayList<String> tempContinentTerritory = continent.getContinentTerritory().get(continentSelected);
+			    for(int i=0;i<tempContinentTerritory.size();i++) {
+				String territoryName = tempContinentTerritory.get(i).trim();
 				territoryInfoModel.addElement(territoryName.trim()+ "---" +territory.getTerritoryUser().get(territoryName));
+			    }   
 			}
 		    }
 		});
