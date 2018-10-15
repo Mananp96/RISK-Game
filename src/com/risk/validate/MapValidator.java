@@ -3,8 +3,6 @@ package com.risk.validate;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.risk.controller.BoardData;
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
 import com.risk.models.Territory;
@@ -21,14 +19,16 @@ public class MapValidator {
 	Map<String, ArrayList<String>> continentTerritories;
 	Map<String, Integer> continentValue;
 	Map<String, ArrayList<String>> adjcentTerritories;
+	Map<String,String> territoriesMap;
+	Map<String,String> adjacentTerritoriesMap;
 	
-	//Constructor to set all HashMap.
-	public MapValidator() {
-		// TODO Auto-generated constructor stub
-		BoardData boardData= new BoardData(null);
-		this.continentTerritories =  boardData.continentObject.getContinentTerritory();
-		this.continentValue = continent.getContinentValue();
-		this.adjcentTerritories = territory.getAdjacentTerritory();
+	public MapValidator(Continent continentObject, Territory territoryObject) {
+		
+		this.continentTerritories =  continentObject.getContinentTerritory();
+		this.continentValue = continentObject.getContinentValue();
+		this.adjcentTerritories = territoryObject.getAdjacentTerritory();
+		this.territoriesMap = territoryObject.getTerritoriesMap();
+		this.adjacentTerritoriesMap = territoryObject.getAdjacentTerritoriesMap();
 	}
 
 	/**
@@ -39,6 +39,11 @@ public class MapValidator {
 	 *
 	 */
 	public boolean validateMap() throws InvalidMapException {
+		System.out.println(continentValue);
+		System.out.println(continentTerritories);
+		System.out.println(adjcentTerritories);
+		System.out.println(territoriesMap);
+		System.out.println(adjacentTerritoriesMap);
 		
 		if(continentValue != null) {
 			isMapValid = validateContinentValue();
@@ -137,5 +142,35 @@ public class MapValidator {
 		return isMapValid;
 	}
 	
+	/*
+	 * this method is used to check if Graph is Connected or not.
+	 * returns true if it is connected else returns false.
+	 * 
+	 * @return isMapValid  returns true if graph is connected else false
+	 * @throws InvalidMapException
+	 */
+	public boolean isGraphConnected() throws InvalidMapException {
+		
+		if(territoriesMap.size() == adjacentTerritoriesMap.size()) {
+			for(Entry<String, String> entry : territoriesMap.entrySet()) {
+				String territoriesKey = entry.getKey();
+				
+				for(Entry<String, String> entry1 : adjacentTerritoriesMap.entrySet()) {
+					
+					if(territoriesKey.equals(entry.getKey())) {
+						continue;
+					}else {
+						break;
+					}
+				
+				}
+				
+			}
+		}else {
+			System.out.println("graph is not connected.");
+			throw new InvalidMapException("graph is not connected.");
+		}
+		return isMapValid;
+	}
 
 }
