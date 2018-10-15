@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.ButtonGroup;
@@ -22,6 +23,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -31,6 +33,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultCaret;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.risk.controller.CreateMapFile;
 import com.risk.controller.InitializeData;
@@ -61,13 +65,11 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private String createNewMapBtnName = "Create New Map";
 	private String editExistingMapBtnName = "Edit Existing Map";
 	private String saveBtnName = "Save";
-	/* private String sixPlayersBtnName = "sixPlayersBtn"; */
 	private String backBtnName = "backBtn";
 	private int  playerPlaying; 
 	
 	private JLabel playerCountLabel;
 	
-
 	private GridLayout mainLayout;
 	private GridLayout playerLayout;
 	private GridLayout editMapLayout;
@@ -97,8 +99,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JLabel selectedLabel;
 	private JLabel targetLabel;
 	private JList<String> cardsList;
-	private JList<String> continentList;
-	private JList<String> territoryList;
+	private JList<String> territoryAList;
+	private JList<String> territoryBList;
 	private JList<String> continentInfoList;
 	private JList<String> territoryInfoList;
 	private JScrollPane continentScrollPane;
@@ -119,8 +121,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	
 	private boolean randomMap = false;
 	private boolean previousEditMap = false;
-	private DefaultListModel<String> continentModel;
-	private DefaultListModel<String> territoryModel;
+	private DefaultListModel<String> territoryAModel;
+	private DefaultListModel<String> territoryBModel;
 	private DefaultListModel<String> continentInfoModel;
 	private DefaultListModel<String> territoryInfoModel;
 	private JScrollPane continentInfoScrollPane;
