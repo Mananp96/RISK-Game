@@ -20,41 +20,42 @@ public class CreateMapFile {
 		this.mapData = mapData;
 	}
 
-	/* If file gets created then the createNewFile() 
+	/**
+	 * If file gets created then the createNewFile() 
 	 * method would return true or if the file is 
 	 * already present it would return false.
+	 * 
+	 * 
 	 */
 	public void createMap() {
 	    try {
-		File file = new File(fileName); 
+	    	
+	    	File file = new File(fileName); 
 	        boolean isFileCreated = file.createNewFile();
+	        
 	        if(isFileCreated) {
 	            fileWriter = new FileWriter(file);
 	            bufferedWriter = new BufferedWriter(fileWriter);
 	            bufferedWriter.write(mapData);
+	            bufferedWriter.flush();
+	            bufferedWriter.close();
+	           
 	            BoardData boardData = new BoardData(fileName);
 	            boolean isMapValid = boardData.generateBoardData();
+	            
 	            if(isMapValid) {
-			System.out.println("Map is Valid.");
+	            	System.out.println("Map is Valid.");
+	            	System.out.println("File has been created successfully");
 	            } else {
-	        	System.out.println("map is not valid.");
+	            	System.out.println("map is not valid.");
 	            }
-	            System.out.println("File has been created successfully");	
+	            
 	        } else {
 	            System.out.println("File already present at the specified location");
 	       	}
-        } catch (Exception exception) {
+	        
+        } catch (IOException exception) {
        		exception.printStackTrace();
-	    }
-            
-	    finally {
-                try {
-    		bufferedWriter.close();
-    		fileWriter.close();
-    	    } catch (IOException e) {
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    	    	}
-            }       
+	    }       
 	} 
 }

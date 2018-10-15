@@ -53,6 +53,7 @@ public class BoardData {
 		try 
 		{
 			reader = new BufferedReader(new FileReader(filePath));
+			System.out.println(filePath);
 			stringBuilder = new StringBuilder();
 			
 			while((currentLine = reader.readLine()) != null) {		
@@ -107,7 +108,7 @@ public class BoardData {
 //			}
 			
 			
-			
+		reader.close();
 		}catch(IOException | InvalidMapException e) {
 			e.printStackTrace();
 		}
