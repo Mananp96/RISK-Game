@@ -629,7 +629,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		c.gridy = 0;
 		
 		logPanel.add(new JLabel("Log Screen"),c);
-	*/		return logPanel;
+	*/		
+		return logPanel;
 	}
 
 	protected JPanel mainMenu(JFrame frame, Players players){
