@@ -11,13 +11,72 @@ public class Territory {
 	Map<String, Integer> territoryArmy; // Armies for particular territory
 	Map<String, ArrayList<String>> adjacentTerritory; // adjacent territory of territory
 	ArrayList<String> territoryList; // List of total territory
+	Map<String, String> territoriesMap;
+	Map<String,String> adjacentTerritoriesMap;
+	boolean flag = false;
 	
 	public Territory() {
+		flag = false;
 		territoryUser = new HashMap<>();
 		territoryCont = new HashMap<>();
 		territoryArmy = new HashMap<>();
 		adjacentTerritory = new HashMap<>();
 		territoryList = new ArrayList<>();
+		territoriesMap = new HashMap<>();
+		adjacentTerritoriesMap = new HashMap<>();
+	}
+	
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+	public Map<String, String> getTerritoriesMap() {
+		return territoriesMap;
+	}
+
+	public void setTerritoriesMap(Map<String, String> territoriesMap) {
+		this.territoriesMap = territoriesMap;
+	}
+
+	public void addTerritoriesMap(String key, String value) {
+		if(territoriesMap.size() == 0 || territoriesMap.isEmpty()) {
+			territoriesMap.put(key, value);
+		}else {
+			if(territoriesMap.containsKey(key)) {
+				this.flag = true;
+			}else {
+				territoriesMap.put(key, value);
+			}
+		}
+		
+	}
+	
+	public Map<String, String> getAdjacentTerritoriesMap() {
+		return adjacentTerritoriesMap;
+	}
+
+	public void setAdjacentTerritoriesMap(Map<String, String> adjacentTerritoriesMap) {
+		this.adjacentTerritoriesMap = adjacentTerritoriesMap;
+	}
+	
+	public void addAdjacentTerritoriesMap(String key,  String value) {
+		System.out.println(key);
+		if(adjacentTerritoriesMap.size() == 0 || adjacentTerritoriesMap.isEmpty()) {
+			adjacentTerritoriesMap.put(key, value);
+		
+		}else {
+			if(adjacentTerritoriesMap.containsKey(key)) {
+				this.flag = true;
+				System.out.println("++"+key);
+			}else {
+				adjacentTerritoriesMap.put(key, value);
+			}
+		}
+		
 	}
 	
 	public ArrayList<String> getTerritoryList() {
@@ -87,7 +146,7 @@ public class Territory {
 	
 	public Map<String, String> updateTerritoryUser (String user,String territory){
 		if(territoryUser.containsKey(territory)) {
-			territoryUser.replace(territory, territoryUser.get(territory), user);
+			territoryUser.replace(territory, territoryUser.get(territory), user); 
 		} else {
 			territoryUser.put(territory, user);
 		}

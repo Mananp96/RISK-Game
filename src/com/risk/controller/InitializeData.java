@@ -103,7 +103,7 @@ public class InitializeData {
 		
 		BoardData boardData = new BoardData(filePath);
 		boolean isMapValid = boardData.generateBoardData();
-		
+
 			System.out.println("Model Data Continent Value: - " + boardData.continentObject.getContinentValue());
 			System.out.println("Model Data Territory with Adjacent: - " + boardData.territoryObject.getAdjacentTerritory());
 			System.out.println("Model Data Territory with Adjacent Size: - " + boardData.territoryObject.getAdjacentTerritory().size());
@@ -121,7 +121,7 @@ public class InitializeData {
 			setContinent(reinforcement.continent);
 			setPlayers(reinforcement.players);
 			setTerritory(reinforcement.territory);
-			
+
 		
 		//System.out.println("Territory After Initial Reinforcement User" + territory.getTerritoryUser());
 		//System.out.println("Territory After Initial Reinforcement Army" + territory.getTerritoryArmy());

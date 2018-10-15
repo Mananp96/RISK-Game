@@ -29,6 +29,9 @@ public class BoardData {
 	HashMap<String, Integer> contValue; 								//for storing [Continents] and it's [Winning Value].
 	HashMap<String, ArrayList<String>> adjcentTerr;						//for storing [Territories] and it's [Adjacent Territories].
 	HashMap<String, HashMap<String, ArrayList<String>>> userOwnedTerr;	//for storing [User] and it's owned [Continents] [Territories].
+	HashMap<String, String> territories;
+	HashMap<String, String> adjacentTerritories;
+	
 	private BufferedReader reader;
 	
 	public Continent continentObject;
@@ -54,6 +57,7 @@ public class BoardData {
 			
 			while((currentLine = reader.readLine()) != null) {		
 				if(currentLine.equals("[Continents]")) {
+					
 					contFlag = true;
 					terrFlag = false;
 				}
@@ -68,54 +72,48 @@ public class BoardData {
 					
 					continentsArray = currentLine.split("=");
 					continentObject.setContinentValue(continentsArray[0], Integer.parseInt(continentsArray[1]));
-					//contValue.put(continentsArray[0], Integer.parseInt(continentsArray[1]));
+					
 				}
 				
 				//assign Territories List.
 				if(terrFlag && ! (currentLine.isEmpty() || currentLine.equals("[Territories]"))) {
-					territoriesList = new ArrayList<>();
-					//ArrayList<String> tempList = new ArrayList<>(); 
-					
+					territoriesList = new ArrayList<>(); 
 					territoriesArray = currentLine.split(",");
 					
 					//to assign Adjacent Territories HashMap
 					for(int i = 4; i < territoriesArray.length ; i++) {
 						territoryObject.addAdjacentTerritory(territoriesArray[0], territoriesArray[i]);
-						//	tempList.add(territoriesArray[i]);
+//						if(territoryObject.isFlag()) {
+//							break;
+//						}
+//						territoryObject.addAdjacentTerritoriesMap(territoriesArray[i],territoriesArray[i]);
 					}
-					//System.out.println(territoryObject.getAdjacentTerritory());
-				//	adjcentTerr.put(territoriesArray[0], tempList);
-					
-					//to assign Continent Territories HashMap
-					//territoriesList.add(territoriesArray[0]);
-					
 					territoryObject.addTerritory(territoriesArray[0]);
+//					territoryObject.addTerritoriesMap(territoriesArray[0], territoriesArray[0]);
+//					if(territoryObject.isFlag()) {
+//						break;
+//					}
 					territoryObject.addTerritoryCont(territoriesArray[0], territoriesArray[3]);
 					continentObject.addContinentTerritory(territoriesArray[3], territoriesArray[0]);
-					/*if(contTerr.get(territoriesArray[3]) == null) {
-						ArrayList<String> tempArr1= new ArrayList<>();
-						tempArr1.add(territoriesArray[0]);
-						contTerr.put(territoriesArray[3], tempArr1);
-					}
-					else if(contTerr.get(territoriesArray[3]) != null){
-						ArrayList<String> tempArr2 = contTerr.get(territoriesArray[3]);
-						tempArr2.add(territoriesArray[0]);
-						contTerr.put(territoriesArray[3], tempArr2);
-					}*/
-					
 				}
 				
 			}
-			MapValidator mapValidator = new MapValidator();
-			mapValidator.validateMap();
+			
+//			if(!territoryObject.isFlag()) {
+				MapValidator mapValidator = new MapValidator(continentObject,territoryObject);
+				isMapValid = mapValidator.validateMap();
+//			}else {
+//				return false;
+//			}
+			
 			
 			
 		}catch(IOException | InvalidMapException e) {
 			e.printStackTrace();
 		}
-		System.out.println("isMapValid--------------"+isMapValid);
-		return isMapValid;
 		
+//		System.out.println("isMapValid--------------"+isMapValid);
+		return isMapValid;
 		
 	}
 	
