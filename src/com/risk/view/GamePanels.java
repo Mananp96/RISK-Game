@@ -499,20 +499,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		    @Override
 		    public void valueChanged(ListSelectionEvent e) {
 			// TODO Auto-generated method stub
-			try {
-			    territoryDetails.setText("");
-			    System.out.println("territoryInfoList.getSelectedValue() " +territoryInfoList.getSelectedValue());
-			    if(territoryInfoList.getSelectedValue() != null) {
-				String[] territoryName = territoryInfoList.getSelectedValue().split("---");
-				territoryDetails.append("Continent  : " + continentInfoList.getSelectedValue() + "\n");
-				territoryDetails.append("Territory  : " + territoryName[0]+"\n");
-				territoryDetails.append("Player     : " + territory.getTerritoryUser().get(territoryName[0].trim())+"\n");
-				territoryDetails.append("Army       : " + territory.getTerritoryArmy().get(territoryName[0].trim()));
-			    }
-			}
-			catch(Exception ex) {
-			    System.out.println("Handles Null Values");
-			}
+			displayTerritoryDetails();
 		    }
 		});
 		
