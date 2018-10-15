@@ -31,8 +31,8 @@ public class BoardData {
 	HashMap<String, HashMap<String, ArrayList<String>>> userOwnedTerr;	//for storing [User] and it's owned [Continents] [Territories].
 	private BufferedReader reader;
 	
-	Continent continentObject;
-	Territory territoryObject;
+	public Continent continentObject;
+	public Territory territoryObject;
 	
 	public BoardData(String filePath) {
 		super();

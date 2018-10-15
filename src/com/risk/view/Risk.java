@@ -40,12 +40,6 @@ public class Risk {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		players = new Players();
-		players.addPlayers("Manan");
-		players.addPlayers("Shalin");
-		players.addPlayers("Khyati");
-		players.addPlayers("Vaishakhi");
-		players.addPlayers("Himen");		
 		gamePanels = new GamePanels();
 		frame = new JFrame();
 		frame.setTitle("Risk");

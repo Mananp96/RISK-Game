@@ -17,7 +17,8 @@ import com.risk.models.Territory;
 public class MapValidator {
 	
 	boolean isMapValid;
-	
+	Continent continent;
+	Territory territory;
 	Map<String, ArrayList<String>> continentTerritories;
 	Map<String, Integer> continentValue;
 	Map<String, ArrayList<String>> adjcentTerritories;
@@ -26,6 +27,8 @@ public class MapValidator {
 	public MapValidator() {
 		// TODO Auto-generated constructor stub
 		BoardData boardData= new BoardData(null);
+		territory = new Territory();
+		continent = new Continent();
 		this.continentTerritories =  boardData.continentObject.getContinentTerritory();
 		this.continentValue = continent.getContinentValue();
 		this.adjcentTerritories = territory.getAdjacentTerritory();

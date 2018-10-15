@@ -63,7 +63,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private String saveBtnName = "Save";
 	/* private String sixPlayersBtnName = "sixPlayersBtn"; */
 	private String backBtnName = "backBtn";
-	private int  playerPlaying; 
+	private int  playerPlaying;
 	
 	private JLabel playerCountLabel;
 	
@@ -225,7 +225,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		frame.setResizable(true);
 		gamePanel = new JPanel();
 		//gamePanel.setSize(new Dimension(300, 600));
-		//	gamePanel.setLayout(new GridLayout(2, 3));
+		//gamePanel.setLayout(new GridLayout(2, 3));
 		frame.setLayout(mainLayout);
 		
 		c = new GridBagConstraints();
@@ -719,7 +719,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		userPanel.add(mapOptB);
 		userPanel.add(new JLabel("Player Names are"));
 		for (int i = 0; i < count; i++) {
-			userPanel.add(new JLabel("Player " + (i+1) + " : " + players.getPlayers(i))); 
+			userPanel.add(new JLabel("Player " + (i + 1) + " : " + players.getPlayers(i)));
 		}
 		playerPlaying = count;
 		startGameBtn = new JButton("Start Game");
@@ -736,6 +736,10 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+
+		players = new Players();
+		players.addPlayers("Manan");
+		players.addPlayers("Shalin");
 
 		String actionName = arg0.getActionCommand();
 		
@@ -799,25 +803,29 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		}
 		else if(actionName.equals(twoPlayersBtnName)){
 			System.out.println("Two Player Game");
-			frame.setContentPane(userInfoPanel(2));	
+			players.addPlayers("Neutral Player");
+			frame.setContentPane(userInfoPanel(3));
 			frame.invalidate();
 			frame.validate();
 		}
 		else if(actionName.equals(threePlayersBtnName)){
 			System.out.println("Three Player Game");
-			frame.setContentPane(userInfoPanel(3));	
+			players.addPlayers("Khyati");
+			frame.setContentPane(userInfoPanel(3));
 			frame.invalidate();
 			frame.validate();
 		}
 		else if(actionName.equals(fourPlayersBtnName)){
 			System.out.println("Four Player Game");
-			frame.setContentPane(userInfoPanel(4));	
+			players.addPlayers("Vaishakhi");
+			frame.setContentPane(userInfoPanel(4));
 			frame.invalidate();
 			frame.validate();
 		}
 		else if(actionName.equals(fivePlayersBtnName)){
 			System.out.println("Five Player Game");
-			frame.setContentPane(userInfoPanel(5));	
+			players.addPlayers("Himen");
+			frame.setContentPane(userInfoPanel(5));
 			frame.invalidate();
 			frame.validate();
 		}
