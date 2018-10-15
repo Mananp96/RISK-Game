@@ -828,6 +828,83 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		}
 	}
 
+	public void openInputDialog(boolean flag) {
+	    if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){	    
+		String[] terrName = territoryAList.getSelectedValue().split("---");
+	    	String message = flag ? "Add Armies in " + terrName[0] : "Add Armies Again in " + terrName[0];
+	    	String name = players.getPlayers(playerTurn);
+	    	int army = players.getPlayerArmy(name);
+	    	String title = "Add Amrmies upto " + army;
+	    	System.out.println("Player Name " + players.getPlayers(playerTurn));
+	    	System.out.println("Player Army " + players.getPlayerArmy(players.getPlayers(playerTurn)));
+	    	String output = JOptionPane.showInputDialog(frame, message, title, JOptionPane.OK_CANCEL_OPTION).trim();
+	    	if (StringUtils.isNumeric(output)) {
+	    	    if(Integer.parseInt(output) > 0 && Integer.parseInt(output) <= army) {
+	    		players.updateArmy(name,Integer.parseInt(output) , "DELETE");
+	    		territory.updateTerritoryArmy(terrName[0], Integer.parseInt(output), "ADD");
+	    		System.out.println("Armies Updates " + players.getPlayerArmy(name));
+	    		territoryAModel.removeAllElements();
+	    		territoryBModel.removeAllElements();
+	    		territoryInfoModel.removeAllElements();
+	    		continentInfoModel.removeAllElements();
+	    		updateTerritoryAList();
+	    		updateContinentInfoList();    
+	    		enableReinforcementBtn();
+	    	    } else {
+    	    	    	System.out.println("Input armies are out pf range");
+    	    	    	openInputDialog(false);	
+	    	    }
+	    	} else {
+	    	    System.out.println("Input armies are not properly entered");
+	    	    openInputDialog(false);
+	    	}
+	    }
+	}
+	public  void displayTerritoryDetails() {
+	// TODO Auto-generated method stub
+	    try {
+		territoryDetails.setText("");
+		System.out.println("territoryInfoList.getSelectedValue() " +territoryInfoList.getSelectedValue());
+    		if(territoryInfoList.getSelectedValue() != null) {
+    		    String[] territoryName = territoryInfoList.getSelectedValue().split("---");
+    		    territoryDetails.append("Continent  : " + continentInfoList.getSelectedValue() + "\n");
+    		    territoryDetails.append("Territory  : " + territoryName[0]+"\n");
+    		    territoryDetails.append("Player     : " + territory.getTerritoryUser().get(territoryName[0].trim())+"\n");
+    		    territoryDetails.append("Army       : " + territory.getTerritoryArmy().get(territoryName[0].trim()));
+    		}
+	    }
+	    catch(Exception ex) {
+		System.out.println("Handles Null Values");
+	    }			
+	}
+	
+	public void updateTerritoryAList() {
+	    territoryAModel.removeAllElements();
+	    
+	    for (Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
+		if(entry.getValue().equals(players.getPlayers(playerTurn)))	
+		    territoryAModel.addElement(entry.getKey());
+	    }
+	}
+	
+	public void updateContinentInfoList() {
+	    continentInfoModel.removeAllElements();
+	    for (Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
+		    continentInfoModel.addElement(entry.getKey());
+	    }
+	}
+	
+	public void enableReinforcementBtn() {
+	    String name = players.getPlayers(playerTurn);
+	    if(StringUtils.isNotEmpty(name)) {
+		if(players.getPlayerArmy(name) == 0) 
+		    reinforceBtn.setEnabled(false);
+		else
+		    reinforceBtn.setEnabled(true);
+	    }
+	}
+
+	    
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
