@@ -307,8 +307,12 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		attackBtn = new JButton("Attack!");
 		fortifyBtn = new JButton("Fortify");
 		endTurnBtn = new JButton("End Turn");
+		
 		menuBtn.setActionCommand(backBtnName);
+		reinforceBtn.setActionCommand("placeReinforcement");
+		
 		menuBtn.addActionListener(this);
+		reinforceBtn.addActionListener(this);
 		/*
 		cardsListModel = new RiskListModel(model, "cards");
 		countryAListModel = new RiskListModel(model, "countryA");
@@ -321,41 +325,40 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		cardsList = new JList<>();
 		cardsList.setLayoutOrientation(JList.VERTICAL_WRAP);
 		cardsList.setVisibleRowCount(6);
-		continentModel = new DefaultListModel<>();
-		continentList = new JList<>(continentModel);
+		territoryAModel = new DefaultListModel<>();
+		territoryAList = new JList<>(territoryAModel);
 		for (Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 			if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn))) {
-				continentModel.addElement(entry.getKey() +"---" +territory.getTerritoryArmy().get(entry.getKey()));
+				territoryAModel.addElement(entry.getKey() +"---" +territory.getTerritoryArmy().get(entry.getKey()));
 			}
 		}
 		
-		continentList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		continentList.setLayoutOrientation(JList.VERTICAL);
-		continentList.setVisibleRowCount(42);
-		territoryModel = new DefaultListModel<>();
-		territoryList = new JList<>(territoryModel);
-		territoryList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		territoryList.setLayoutOrientation(JList.VERTICAL);
-		territoryList.setVisibleRowCount(6);
+		territoryAList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		territoryAList.setLayoutOrientation(JList.VERTICAL);
+		territoryAList.setVisibleRowCount(42);
+		territoryBModel = new DefaultListModel<>();
+		territoryBList = new JList<>(territoryBModel);
+		territoryBList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		territoryBList.setLayoutOrientation(JList.VERTICAL);
+		territoryBList.setVisibleRowCount(6);
 		
-		continentScrollPane = new JScrollPane(continentList);
-		territoryScrollPane = new JScrollPane(territoryList);
-		continentList.addListSelectionListener(new ListSelectionListener() {
-			
+		continentScrollPane = new JScrollPane(territoryAList);
+		territoryScrollPane = new JScrollPane(territoryBList);
+		territoryAList.addListSelectionListener(new ListSelectionListener() {			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
-				territoryModel.removeAllElements();
-				String[] territorySelected = continentList.getSelectedValue().split("---");
-				ArrayList<String> tempAdjacentTerritory = territory.getAdjacentTerritory().get(territorySelected[0]);
-				
-				for(int i=0;i<tempAdjacentTerritory.size();i++) {
-					territoryModel.addElement(tempAdjacentTerritory.get(i)+ "---" +territory.getTerritoryArmy().get(tempAdjacentTerritory.get(i)));
-				}
-				
+				territoryBModel.removeAllElements();
+				if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){
+				    String[] territorySelected = territoryAList.getSelectedValue().split("---");
+				    ArrayList<String> tempAdjacentTerritory = territory.getAdjacentTerritory().get(territorySelected[0]);
+				    for(int i=0;i<tempAdjacentTerritory.size();i++) {
+					territoryBModel.addElement(tempAdjacentTerritory.get(i)+ "---" +territory.getTerritoryArmy().get(tempAdjacentTerritory.get(i)));
+				    }
+				}	
 			}
 		});
-		territoryList.addListSelectionListener(this);
+		territoryBList.addListSelectionListener(this);
 		
 		c = new GridBagConstraints();
 		
