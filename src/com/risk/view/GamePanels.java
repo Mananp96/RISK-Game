@@ -226,8 +226,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		frame.setVisible(true);
 		frame.setResizable(true);
 		gamePanel = new JPanel();
-		//gamePanel.setSize(new Dimension(300, 600));
-		//gamePanel.setLayout(new GridLayout(2, 3));
 		frame.setLayout(mainLayout);
 		
 		c = new GridBagConstraints();
@@ -313,15 +311,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		
 		menuBtn.addActionListener(this);
 		reinforceBtn.addActionListener(this);
-		/*
-		cardsListModel = new RiskListModel(model, "cards");
-		countryAListModel = new RiskListModel(model, "countryA");
-		countryBListModel = new RiskListModel(model, "countryB");
-		*/
-		/*model.addObserver((RiskListModel)cardsListModel);
-		model.addObserver((RiskListModel)countryAListModel);
-		model.addObserver((RiskListModel)countryBListModel);
-		*/
+
 		cardsList = new JList<>();
 		cardsList.setLayoutOrientation(JList.VERTICAL_WRAP);
 		cardsList.setVisibleRowCount(6);
