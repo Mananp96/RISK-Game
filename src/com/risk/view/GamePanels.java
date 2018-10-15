@@ -134,9 +134,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		// Creates the panel
 		playerPanel = new JPanel();
 		// Sets Layout
-		/* Layout for 6 Player
-		 playerLayout = new GridLayout(7, 1, 5, 5);
-		 */
 		playerLayout = new GridLayout(6, 1, 5, 5);
 		playerPanel.setLayout(playerLayout);
 		
@@ -145,7 +142,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		threePlayersBtn = new JButton("Three");
 		fourPlayersBtn = new JButton("Four");
 		fivePlayersBtn = new JButton("Five");
-		/*sixPlayersBtn = new JButton("Six");*/
 		backBtn = new JButton ("Back");	
 		
 		playerPanel.add(playerCountLabel);
@@ -153,21 +149,18 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		playerPanel.add(threePlayersBtn);
 		playerPanel.add(fourPlayersBtn);
 		playerPanel.add(fivePlayersBtn);
-		/*playerPanel.add(sixPlayersBtn);*/
 		playerPanel.add(backBtn);
 		
 		twoPlayersBtn.addActionListener(this);
 		threePlayersBtn.addActionListener(this);
 		fourPlayersBtn.addActionListener(this);
 		fivePlayersBtn.addActionListener(this);
-/*		sixPlayersBtn.addActionListener(this);*/
 		backBtn.addActionListener(this);
 		
 		twoPlayersBtn.setActionCommand(twoPlayersBtnName);
 		threePlayersBtn.setActionCommand(threePlayersBtnName);
 		fourPlayersBtn.setActionCommand(fourPlayersBtnName);
 		fivePlayersBtn.setActionCommand(fivePlayersBtnName);
-		/*sixPlayersBtn.setActionCommand(sixPlayersBtnName);*/
 		backBtn.setActionCommand(backBtnName);
 		return playerPanel;
 	}
@@ -561,7 +554,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		c = new GridBagConstraints();
 		
 		logArea = new JTextArea(4,40);
-	//	System.setOut(new PrintStream(new TextAreaOutputStream(printTextArea)));
 		logArea.setFocusable(false);
 		logArea.setLineWrap(true);
 		logArea.setWrapStyleWord(true);
@@ -576,20 +568,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		c.gridx = 0;
 		c.gridy = 0;
 		logPanel.add(logScrollPane, c);
-		/*		logPanel.setLayout(new GridBagLayout());
-		logPanel.setSize(new Dimension(400,200));
-		
-		c = new GridBagConstraints();
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 0;
-		
-		logPanel.add(new JLabel("Log Screen"),c);
-	*/		
 		return logPanel;
 	}
 
