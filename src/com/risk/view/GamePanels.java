@@ -40,6 +40,7 @@ import javax.swing.text.DefaultCaret;
 import org.apache.commons.lang3.StringUtils;
 
 import com.risk.controller.CreateMapFile;
+import com.risk.controller.EditMapFile;
 import com.risk.controller.InitializeData;
 import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
@@ -50,7 +51,13 @@ import com.risk.models.Territory;
  * @author Himen Sidhpura
  */
 public class GamePanels implements ActionListener, ListSelectionListener {
-	JFrame frame;
+	/**
+	 * @param frame Frame object
+	 * @param players Player model object
+	 * @param territory Territory model object
+	 * @param continent Continent model object
+	 */
+    	JFrame frame;
 	Players players;
 	Territory territory;
 	Continent continent;
@@ -65,6 +72,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	String editExistingMapBtnName = "Edit Existing Map";
 	String saveBtnName = "Save";
 	String backBtnName = "backBtn";
+	String existingMapFilePath;
+
 	private String editMapBtnName = "Edit Button";
 	private String mapFilePath;
 	int  playerPlaying;
@@ -89,8 +98,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JButton startGameBtn;
 	
 	private JTextArea territoryDetails;
-	private JTextArea addContinentsArea;
-	private JTextArea addTerritoriesArea;
 	private JTextArea logArea;
 	private JList<String> cardsList;
 	private JList<String> territoryAList;
@@ -103,7 +110,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JRadioButton mapOptA;
 	private JRadioButton mapOptB;
 	
-	private boolean randomMap = false;
+	private boolean randomMap = true;
 	private DefaultListModel<String> territoryAModel;
 	private DefaultListModel<String> territoryBModel;
 	private DefaultListModel<String> continentInfoModel;
@@ -112,6 +119,11 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JComboBox<String> territoryBDropDown;
 	private SpinnerNumberModel selectArmyModel;
 	private JLabel fortErrorMsg;
+	private JTextArea continentArea;
+	private JTextArea territoryArea;
+	private JLabel fetchFileDataError;
+	private String defaultMapTag;
+	private String finalMapData;
 	
 	
 	/**
@@ -154,7 +166,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	}
 	
 	/**
-	 * Panel for editing existing map 
+	 * Create New File or Update Existing one Navigation Panel
 	 * @return editMapPanel
 	 */
 	protected JPanel editMapPanel() {
@@ -177,79 +189,117 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		
 	}
 	/**
-	 * Panel for Creating new Map from scratch
+	 * method used for Creating new Map from scratch
 	 * @return createMapPanel
 	 */
 	protected JPanel createMapPanel() {
 		
 		JPanel createMapPanel = new JPanel();
-		frame.setPreferredSize(new Dimension(300, 600));
-		frame.setVisible(true);
+		GridBagLayout createMapLayout = new GridBagLayout();
+		createMapPanel.setLayout(createMapLayout);
+		createMapPanel.setSize(new Dimension(400,250));
 		frame.setResizable(true);
-		JLabel l1 = new JLabel("Continents ", JLabel.CENTER);
-		JLabel l2 = new JLabel("Territories ", JLabel.CENTER);
-		addContinentsArea = new JTextArea(6, 20);
-		addTerritoriesArea = new JTextArea(6, 20);
-		addContinentsArea.setFocusable(true);
-		addTerritoriesArea.setFocusable(true);
-		addContinentsArea.setLineWrap(true);
-		addTerritoriesArea.setLineWrap(true);
-		addContinentsArea.setWrapStyleWord(true);
-		addTerritoriesArea.setWrapStyleWord(true);
-		createMapPanel.add(l1);
-		createMapPanel.add(addContinentsArea);
-		createMapPanel.add(l2);
-		createMapPanel.add(addTerritoriesArea);
+		JLabel label1 = new JLabel("Enter Continent in Every New Line in Continent=value format and continent must be maximum 32 ", JLabel.CENTER);
+		continentArea = new JTextArea(4,40);
+		continentArea.setFocusable(true);
+		continentArea.setLineWrap(true);
+		continentArea.setWrapStyleWord(true);
+		JScrollPane editContinentScrollPane = new JScrollPane(continentArea);
+		
+		JLabel label2 = new JLabel("Enter Territories in New Line in this format : territory,x coordinate, y coordinat, adjacent territory 1, adjacent territory 2 .........,adjacent territory n, (n<=10) ", JLabel.CENTER);
+		territoryArea = new JTextArea(4,40);
+		territoryArea.setFocusable(true);
+		territoryArea.setLineWrap(true);
+		territoryArea.setWrapStyleWord(true);
+		JScrollPane editTerritoryScrollPane = new JScrollPane(territoryArea);
+		
 		saveMapBtn = new JButton("Save");
-		createMapPanel.add(saveMapBtn);
 		saveMapBtn.addActionListener(this);
 		saveMapBtn.setActionCommand(saveBtnName);
+		backBtn = new JButton("Exit");
+		backBtn.addActionListener(this);
+		backBtn.setActionCommand(backBtnName);
+		createMapPanel.add(label1, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 0));
+		createMapPanel.add(editContinentScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 8, 0, 1));
+		createMapPanel.add(label2, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 2));
+		createMapPanel.add(editTerritoryScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 8, 0, 3));
+		createMapPanel.add(saveMapBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 0, 4));
+		createMapPanel.add(backBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 1, 4));
+
 		return createMapPanel;
 		
 	}
-	
 	/**
-	 * Initialize GridBagConstraint object with all of its fields set to their default value.
-	 * @param insets The initial insets value
-	 * @param fill The initial fill value
-	 * @param anchor The initial anchor value.
-	 * @param wx The initial weightx value.
-	 * @param wy The initial weighty value.
-	 * @param x The initial gridx value.
-	 * @param y The initial gridy value.
-	 * @return GridBagConstraints object with all of its fields set to the passed-in arguments
+	 * method used for Editing Existing Map
+	 * @return existingMapPanel
 	 */
-	public GridBagConstraints setGridBagConstraints(Insets insets,int fill,int anchor, double wx, double wy, int x, int y) {
-	    	c = new GridBagConstraints();
-	    	c.fill = fill;
-	    	c.anchor = anchor;
-	    	c.insets = insets;
-	    	c.weightx = wx;
-	    	c.weighty = wy;
-	    	c.gridx = x;
-	    	c.gridy = y;
-	    	return c;
-	}
-	/**
-	 * Initialize GridBagConstraint object with all of its fields set to their default value.
-	 * @param insets The initial insets value
-	 * @param fill The initial fill value
-	 * @param anchor The initial anchor value.
-	 * @param wx The initial weightx value.
-	 * @param wy The initial weighty value.
-	 * @param x The initial gridx value.
-	 * @param y The initial gridy value.
-	 * @return GridBagConstraints object with all of its fields set to the passed-in arguments
-	 */
-	public GridBagConstraints setGridBagConstraints(Insets insets,int fill, double wx, double wy, int x, int y) {
-	    	c = new GridBagConstraints();
-	    	c.fill = fill;
-	    	c.insets = insets;
-	    	c.weightx = wx;
-	    	c.weighty = wy;
-	    	c.gridx = x;
-	    	c.gridy = y;
-	    	return c;
+	protected JPanel editExistingMapPanel() {
+		
+		JPanel existingMapPanel = new JPanel();
+		GridBagLayout exisitngMapLayout = new GridBagLayout();
+		existingMapPanel.setLayout(exisitngMapLayout);
+		existingMapPanel.setSize(new Dimension(400,250));
+		frame.setResizable(true);
+		mapOptA = new JRadioButton("Choose Your Own Map");
+		mapOptA.setActionCommand("Own Map");
+		JFileChooser chooseMap = new JFileChooser("D:");
+		chooseMap.addChoosableFileFilter(new FileFilter() {
+				public String getDescription() {
+				return "MAP Documents (*.map)";
+				}
+				public boolean accept(File f) {
+					if (f.isDirectory()) {
+						return true;
+					} else {
+						return f.getName().toLowerCase().endsWith(".map");
+					}
+				}
+			});
+		mapOptA.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(mapOptA.isSelected() && chooseMap.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					existingMapFilePath = chooseMap.getSelectedFile().getPath();
+					generateEditMapData(existingMapFilePath);
+					randomMap = false;
+				}
+			}
+		});
+		fetchFileDataError = new JLabel("If Below Text Area are blank then there is problem with file");
+		
+		JLabel label1 = new JLabel("Enter Continent in Every New Line in Continent=value format and continent must be maximum 32 ", JLabel.CENTER);
+		continentArea = new JTextArea(4,40);
+		continentArea.setFocusable(true);
+		continentArea.setLineWrap(true);
+		continentArea.setWrapStyleWord(true);
+		JScrollPane editContinentScrollPane = new JScrollPane(continentArea);
+		
+		JLabel label2 = new JLabel("Enter Territories in New Line in this format : territory,x coordinate, y coordinat, adjacent territory 1, adjacent territory 2 .........,adjacent territory n, (n<=10) ", JLabel.CENTER);
+		territoryArea = new JTextArea(4,40);
+		territoryArea.setFocusable(true);
+		territoryArea.setLineWrap(true);
+		territoryArea.setWrapStyleWord(true);
+		JScrollPane editTerritoryScrollPane = new JScrollPane(territoryArea);
+		
+		saveMapBtn = new JButton("Update Map Data");
+		saveMapBtn.addActionListener(this);
+		saveMapBtn.setActionCommand("Update Map Data");
+		backBtn = new JButton("Exit");
+		backBtn.addActionListener(this);
+		backBtn.setActionCommand(backBtnName);
+		existingMapPanel.add(mapOptA, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 0));
+		existingMapPanel.add(fetchFileDataError, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 1));
+		existingMapPanel.add(label1, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 2));
+		existingMapPanel.add(editContinentScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 8, 0, 3));
+		existingMapPanel.add(label2, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
+		existingMapPanel.add(editTerritoryScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 8, 0, 5));
+		existingMapPanel.add(saveMapBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 0, 6));
+		existingMapPanel.add(backBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 1, 6));
+
+		return existingMapPanel;
+		
 	}
 	
 	/**
@@ -291,7 +341,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		return mapPanel;
 	}
 	/**
-	 * Panel consist various sections such as Reinforcement Button, Foritify Button, Attack Button, List of Territory and Adjacent Territory
+	 * Panel consist various sections such as Reinforcement Button, Fortify Button, Attack Button, List of Territory and Adjacent Territory
 	 * @return EventPanel consist of various game play events
 	 */
 	protected JPanel eventScreen(){
@@ -516,6 +566,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	protected JPanel mainMenu(JFrame frame, Players players){
 		this.players = players;
 		this.frame = frame;
+		frame.setPreferredSize(new Dimension(300, 300));
 		// Creates the panel
 		JPanel menuPanel = new JPanel();
 		// Sets Layout
@@ -572,8 +623,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
-				if(mapOptA.isSelected()) {
-					int retVal = chooseMap.showOpenDialog(frame);
+				if(mapOptA.isSelected() && chooseMap.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					mapFilePath = chooseMap.getSelectedFile().getPath();
 					randomMap = true;
 				}
@@ -587,7 +637,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			public void itemStateChanged(ItemEvent e) {
 
 				if(mapOptB.isSelected()) {
-					
+					randomMap = false;
 				}
 			}
 		});
@@ -611,8 +661,67 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		userPanel.add(backBtn);
 		return userPanel;
 	}
-	
+	/**
+	 *  method is used to generate map data which is selected for editing
+	 * @param filePath path of input file use for editing
+	 */
+	protected void generateEditMapData(String filePath) {
+	    if(StringUtils.isNotEmpty(filePath)) {
+		EditMapFile editMapFile = new EditMapFile(filePath); 
+		if(editMapFile.generateData()) {
+		    continentArea.setText(editMapFile.getContinentData().toString());
+		    territoryArea.setText(editMapFile.getTerritoryData().toString());
+		    fetchFileDataError.setText("File Content Data is validated and Ready to Edit");
+		}
+	    }
+	}
 
+	/**
+	 * The GridBagConstraints is used specifies constraints for components that are laid out using the GridBagLayout class.
+	 * Initialize GridBagConstraint object with all of its fields set to their default value.
+	 * @param insets The initial insets value
+	 * @param fill The initial fill value
+	 * @param anchor The initial anchor value.
+	 * @param wx The initial weightx value.
+	 * @param wy The initial weighty value.
+	 * @param x The initial gridx value.
+	 * @param y The initial gridy value.
+	 * @return GridBagConstraints object with all of its fields set to the passed-in arguments
+	 */
+	public GridBagConstraints setGridBagConstraints(Insets insets,int fill,int anchor, double wx, double wy, int x, int y) {
+	    	c = new GridBagConstraints();
+	    	c.fill = fill;
+	    	c.anchor = anchor;
+	    	c.insets = insets;
+	    	c.weightx = wx;
+	    	c.weighty = wy;
+	    	c.gridx = x;
+	    	c.gridy = y;
+	    	return c;
+	}
+	/**
+	 * The GridBagConstraints is used specifies constraints for components that are laid out using the GridBagLayout class.
+	 * Initialize GridBagConstraint object with all of its fields set to their default value.
+	 * @param insets The initial insets value
+	 * @param fill The initial fill value
+	 * @param anchor The initial anchor value.
+	 * @param wx The initial weightx value.
+	 * @param wy The initial weighty value.
+	 * @param x The initial gridx value.
+	 * @param y The initial gridy value.
+	 * @return GridBagConstraints object with all of its fields set to the passed-in arguments
+	 */
+	public GridBagConstraints setGridBagConstraints(Insets insets,int fill, double wx, double wy, int x, int y) {
+	    	c = new GridBagConstraints();
+	    	c.fill = fill;
+	    	c.insets = insets;
+	    	c.weightx = wx;
+	    	c.weighty = wy;
+	    	c.gridx = x;
+	    	c.gridy = y;
+	    	return c;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
@@ -626,8 +735,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.setContentPane(playerMenu());
 			frame.invalidate();
 			frame.validate();
-		}
-		else if(actionName.equals(editMapBtnName)){
+		} else if(actionName.equals(editMapBtnName)){
 					
 			frame.setContentPane(editMapPanel());
 			frame.invalidate();
@@ -636,7 +744,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		} else if (actionName.equals(editExistingMapBtnName)) {
 			
 			System.out.println("Editing Existing Map");
-			frame.setContentPane(editMapPanel());
+			frame.setContentPane(editExistingMapPanel());
 			frame.invalidate();
 			frame.validate();
 		
@@ -648,60 +756,102 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.validate();
 		
 		} else if (actionName.equals(saveBtnName)) {
-			
 			System.out.println("Saving New Map");
-			String defaultMapTag = "[Map]\n"+
+			defaultMapTag = "[Map]\n"+
 					"author=Sean O'Connor\n"+
 					"warn=yes\n"+
 					"image=Africa.bmp\n"+
 					"wrap=no\n";
-			String finalMapData = String.format("%s\n[Continents]\n%s\n\n[Territories]\n%s", defaultMapTag, addContinentsArea.getText(),
-					addTerritoriesArea.getText());
+			finalMapData = String.format("%s%n[Continents]%n%s%n%n[Territories]%n%s", defaultMapTag, continentArea.getText(),territoryArea.getText());
 			CreateMapFile createMapFile = new CreateMapFile(finalMapData);
-			createMapFile.createMap();
-		}else if(actionName.equals(exitBtnName)){
+			boolean createMapFlag = createMapFile.createMap();
+			if(createMapFlag) {
+			    JOptionPane.showMessageDialog(frame, "File is Created  with Name : " + createMapFile.getFileName(),"Content Validated",JOptionPane.OK_OPTION);
+			} else {
+			    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+			}
+			 
+		} else if (actionName.equals("Update Map Data")) {
+			
+			System.out.println("Editing New Map");
+			defaultMapTag = "[Map]\n"+
+					"author=Sean O'Connor\n"+
+					"warn=yes\n"+
+					"image=Africa.bmp\n"+
+					"wrap=no\n";
+			finalMapData = String.format("%s%n[Continents]%n%s%n%n[Territories]%n%s", defaultMapTag, continentArea.getText(),territoryArea.getText());
+			EditMapFile editMapFile = new EditMapFile(existingMapFilePath);
+			boolean editMapFlag = editMapFile.editMap(finalMapData);
+			if(editMapFlag) {
+			    JOptionPane.showMessageDialog(frame, "File is Updated : " + editMapFile.getFilePath(),"Content Validated",JOptionPane.OK_OPTION);
+			} else {
+			    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+			}
+			 
+		}  else if (actionName.equals(exitBtnName)){
 			System.out.println("Quit Game");
 			System.exit(0);
-		}
-		else if(actionName.equals("Start Game")){
+		} else if (actionName.equals("Start Game")){
 		    if(randomMap) {
-			ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
-			InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
-			boolean isMapValid = initializeData.generateData();
-			continent = initializeData.getContinent();
-			players = initializeData.getPlayers();
-			territory = initializeData.getTerritory();
-			frame.setContentPane(gameView());
-			frame.invalidate();
-			frame.validate();
+			if(StringUtils.isNotEmpty(mapFilePath)) {
+			    	ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
+				InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
+				boolean isMapValid = initializeData.generateData();
+				if(isMapValid) {
+				    continent = initializeData.getContinent();
+				    players = initializeData.getPlayers();
+				    territory = initializeData.getTerritory();
+				    frame.setContentPane(gameView());
+				    frame.invalidate();
+				    frame.validate();
+				} else {
+				    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+				}
+			} else {
+			    JOptionPane.showMessageDialog(frame, "No Map Selected.", "Content Invalid", JOptionPane.ERROR_MESSAGE);    
+			}
+			
 		    } else {
-				// previously Edited Map
+			if(StringUtils.isNotEmpty(existingMapFilePath)) {
+			    ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
+				InitializeData initializeData = new InitializeData( existingMapFilePath, playerPlaying , armies.getPlayerArmies(), players);
+				boolean isEditMapValid = initializeData.generateData();
+				if(isEditMapValid) {
+				    continent = initializeData.getContinent();
+				    players = initializeData.getPlayers();
+				    territory = initializeData.getTerritory();
+				    frame.setContentPane(gameView());
+				    frame.invalidate();
+				    frame.validate();
+				} else {
+				    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+				}
+			} else {
+			    JOptionPane.showMessageDialog(frame, "No Map Edited Previously.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+			}
+
 		    }
 			
-		}
-		else if(actionName.equals(twoPlayersBtnName)){
+		} else if(actionName.equals(twoPlayersBtnName)){
 			System.out.println("Two Player Game");
 			players.addPlayers("Neutral Player");
 			frame.setContentPane(userInfoPanel(3));
 			frame.invalidate();
 			frame.validate();
-		}
-		else if(actionName.equals(threePlayersBtnName)){
+		} else if(actionName.equals(threePlayersBtnName)){
 			System.out.println("Three Player Game");
 			players.addPlayers("Khyati");
 			frame.setContentPane(userInfoPanel(3));
 			frame.invalidate();
 			frame.validate();
-		}
-		else if(actionName.equals(fourPlayersBtnName)){
+		} else if(actionName.equals(fourPlayersBtnName)){
 			System.out.println("Four Player Game");
 			players.addPlayers("Khyati");
 			players.addPlayers("Vaishakhi");
 			frame.setContentPane(userInfoPanel(4));
 			frame.invalidate();
 			frame.validate();
-		}
-		else if(actionName.equals(fivePlayersBtnName)){
+		} else if(actionName.equals(fivePlayersBtnName)){
 			System.out.println("Five Player Game");
 			players.addPlayers("Khyati");
 			players.addPlayers("Vaishakhi");
@@ -709,24 +859,88 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.setContentPane(userInfoPanel(5));
 			frame.invalidate();
 			frame.validate();
-		}
-		else if(actionName.equals("placeReinforcement")) {
-		    goForReinforcement(true);
-		}	
-		else if(actionName.equals("startFortification")) {
-		    goForFortification();
-		}
-		else if(actionName.equals("endTurn")) {
-		    changePlayerTurn();
-		}
-		else if(actionName.equals(backBtnName)){
-			frame.setContentPane(mainMenu(frame,players));
+		} else if(actionName.equals("placeReinforcement")) {
+		    	goForReinforcement(true);
+		} else if(actionName.equals("startFortification")) {
+		    	goForFortification();
+		} else if(actionName.equals("endTurn")) {
+		    	changePlayerTurn();
+		} else if(actionName.equals(backBtnName)){
+		    	frame.setContentPane(mainMenu(frame,players));
 			frame.invalidate();
 			frame.validate();
-			
 		}
 	}
 	
+	/**
+	 * method used to do reinforcement on territory.
+	 * @param flag used to identify whether player can do reinforcement or not.
+	 */
+	public void goForReinforcement(boolean flag) {
+	    if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){	    
+		String[] terrName = territoryAList.getSelectedValue().split("---");
+	    	String message = flag ? "Add Armies in " + terrName[0] : "Add Armies Again in " + terrName[0];
+	    	String name = players.getPlayerPlaying().get(playerTurn);
+	    	int army = players.getPlayerArmy(name);
+	    	String title = "Add Amrmies upto " + army;
+	    	System.out.println("Player Name " + players.getPlayerPlaying().get(playerTurn));
+	    	System.out.println("Player Army " + players.getPlayerArmy(players.getPlayerPlaying().get(playerTurn)));
+	    	String output = JOptionPane.showInputDialog(frame, message, title, JOptionPane.OK_CANCEL_OPTION);
+	    	if (StringUtils.isNumeric(output)) {
+	    	    if(Integer.parseInt(output) > 0 && Integer.parseInt(output) <= army) {
+	    		players.updateArmy(name,Integer.parseInt(output) , "DELETE");
+	    		territory.updateTerritoryArmy(terrName[0], Integer.parseInt(output), "ADD");
+	    		System.out.println("Armies Updates " + players.getPlayerArmy(name));
+	    		territoryAModel.removeAllElements();
+	    		territoryBModel.removeAllElements();
+	    		territoryInfoModel.removeAllElements();
+	    		continentInfoModel.removeAllElements();
+	    		updateTerritoryAList();
+	    		updateContinentInfoList();    
+	    		enableReinforcementBtn();
+	    		updateLogArea();
+	    	    } else {
+    	    	    	System.out.println("Input armies are out pf range");
+    	    	goForReinforcement(false);	
+	    	    }
+	    	} else {
+	    	    System.out.println("Input armies are not properly entered");
+	    	goForReinforcement(false);
+	    	}
+	    }
+	}
+	/**
+	 * method used to enable reinforcement button and disable fortify button if player has 1 or more army
+	 * It also used to disable reinforcement button and enable fortify button if player has no army  
+	 */
+	public void enableReinforcementBtn() {
+	    String name = players.getPlayerPlaying().get(playerTurn);
+	    System.out.println("enableReinforcementBtn :  Name " +name);
+	    System.out.println("enableReinforcementBtn :  playerTurn " +playerTurn);
+	    System.out.println("enableReinforcementBtn :  player " +players.getPlayerList());
+	    System.out.println("enableReinforcementBtn :  player aRMY " +players.getPlayerArmy(name));
+	    if(StringUtils.isNotEmpty(name)) {
+		if(players.getPlayerArmy(name) == 0) {
+		    reinforceBtn.setEnabled(false);
+		    fortifyBtn.setEnabled(true);
+		    startFortificationPhase();
+		}
+		    
+		else {
+		    fortifyBtn.setEnabled(false);
+		    reinforceBtn.setEnabled(true);
+		}
+		    
+	    }
+	}
+	/**
+	 * method use to enable list of current territory owned by current player to move army from one  territory to another.   
+	 */
+	public void startFortificationPhase() {
+	   addTerritoryADropDown();
+	   
+	}
+
 	/**
 	 * Method is used to change the Turn of player when End Turn Button is Clicked.
 	 */
@@ -810,43 +1024,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	}
 	
 	/**
-	 * method used to do reinforcement on territory.
-	 * @param flag used to identify whether player can do reinforcement or not.
-	 */
-	public void goForReinforcement(boolean flag) {
-	    if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){	    
-		String[] terrName = territoryAList.getSelectedValue().split("---");
-	    	String message = flag ? "Add Armies in " + terrName[0] : "Add Armies Again in " + terrName[0];
-	    	String name = players.getPlayerPlaying().get(playerTurn);
-	    	int army = players.getPlayerArmy(name);
-	    	String title = "Add Amrmies upto " + army;
-	    	System.out.println("Player Name " + players.getPlayerPlaying().get(playerTurn));
-	    	System.out.println("Player Army " + players.getPlayerArmy(players.getPlayerPlaying().get(playerTurn)));
-	    	String output = JOptionPane.showInputDialog(frame, message, title, JOptionPane.OK_CANCEL_OPTION);
-	    	if (StringUtils.isNumeric(output)) {
-	    	    if(Integer.parseInt(output) > 0 && Integer.parseInt(output) <= army) {
-	    		players.updateArmy(name,Integer.parseInt(output) , "DELETE");
-	    		territory.updateTerritoryArmy(terrName[0], Integer.parseInt(output), "ADD");
-	    		System.out.println("Armies Updates " + players.getPlayerArmy(name));
-	    		territoryAModel.removeAllElements();
-	    		territoryBModel.removeAllElements();
-	    		territoryInfoModel.removeAllElements();
-	    		continentInfoModel.removeAllElements();
-	    		updateTerritoryAList();
-	    		updateContinentInfoList();    
-	    		enableReinforcementBtn();
-	    		updateLogArea();
-	    	    } else {
-    	    	    	System.out.println("Input armies are out pf range");
-    	    	goForReinforcement(false);	
-	    	    }
-	    	} else {
-	    	    System.out.println("Input armies are not properly entered");
-	    	goForReinforcement(false);
-	    	}
-	    }
-	}
-	/**
 	 * Method used to display complete details of territory such as which continent it belongs to, which player has occupied it with how many armies.
 	 */
 	public  void displayTerritoryDetails() {
@@ -886,37 +1063,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    for (Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
 		    continentInfoModel.addElement(entry.getKey());
 	    }
-	}
-	/**
-	 * method used to enable reinforcement button and disable fortify button if player has 1 or more army
-	 * It also used to disable reinforcement button and enable fortify button if player has no army  
-	 */
-	public void enableReinforcementBtn() {
-	    String name = players.getPlayerPlaying().get(playerTurn);
-	    System.out.println("enableReinforcementBtn :  Name " +name);
-	    System.out.println("enableReinforcementBtn :  playerTurn " +playerTurn);
-	    System.out.println("enableReinforcementBtn :  player " +players.getPlayerList());
-	    System.out.println("enableReinforcementBtn :  player aRMY " +players.getPlayerArmy(name));
-	    if(StringUtils.isNotEmpty(name)) {
-		if(players.getPlayerArmy(name) == 0) {
-		    reinforceBtn.setEnabled(false);
-		    fortifyBtn.setEnabled(true);
-		    startFortificationPhase();
-		}
-		    
-		else {
-		    fortifyBtn.setEnabled(false);
-		    reinforceBtn.setEnabled(true);
-		}
-		    
-	    }
-	}
-	/**
-	 * method use to enable list of current territory owned by current player to move army from one  territory to another.   
-	 */
-	public void startFortificationPhase() {
-	   addTerritoryADropDown();
-	   
 	}
 	/**
 	 * method use to display list of current territory owned by current player to move army from one  territory to another.   
@@ -959,14 +1105,10 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		    fortErrorMsg.setText("You can't move your Army");
 	    }
 	}
-	
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub	
 	}
-
-
-
 
 }
