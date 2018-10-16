@@ -11,9 +11,15 @@ import java.util.Map;
  */
 public class Players {
 
-	Map<String, Continent> playerContinent; // player had territories in particular continent
-	Map<String, Integer> playerArmy;  // player having no. of armies
-	ArrayList<String> playerList;
+    	/**
+	 * @param playerContinent player had territories in particular continent
+	 * @param playerArmy player having no. of armies
+	 * @param playerList no. of player currently playing game
+	 * @param playerPlaying no. of player playing game
+	 */
+	Map<String, Continent> playerContinent; // 
+	Map<String, Integer> playerArmy;  // 
+	ArrayList<String> playerList; 
 	ArrayList<String> playerPlaying;
 
 	public Players() {
