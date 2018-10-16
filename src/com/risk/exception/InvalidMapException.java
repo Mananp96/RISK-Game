@@ -9,7 +9,7 @@ public class InvalidMapException extends Exception{
 	
 	/**
 	 * This method is used print InvalidMapException message.
-	 * 
+	 * @param message contains exception message.
 	 */
 	public InvalidMapException(String message) {
 		super(message);
