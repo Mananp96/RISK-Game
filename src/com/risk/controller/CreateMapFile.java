@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * This class is used to <b>create a new map file</b> from scratch.
@@ -11,10 +12,10 @@ import java.io.IOException;
 public class CreateMapFile {
 
 	String mapData;
-	String fileName = "mapFile.map";
+	String fileName;
 	BufferedWriter bufferedWriter = null;
 	FileWriter fileWriter = null;
-
+	
 	/**
 	 * Set the mapData.
 	 * @param newMapData User entered Input to create a map file.
@@ -22,15 +23,34 @@ public class CreateMapFile {
 	public CreateMapFile(String newMapData) {
 		this.mapData = newMapData;
 	}
+	/**
+	 * method used to get File Name which is created
+	 * @return fileName
+	 */
+	public String getFileName() {
+	    return fileName;
+	}
+	/**
+	 * method used to set fileName
+	 * @param fileName name of file
+	 */
+	public void setFileName(String fileName) {
+	    this.fileName = fileName;
+	}
+
 
 	/**
 	 * This method is used to create a new File and write the mapData (User input to create a new map file)
 	 * to file. checks if newly created file has valid map data or not? 
 	 */
-	public void createMap() {
+	public boolean createMap() {
 		
 		try {
-			File file = new File(fileName); 
+		    	
+		    	Random random = new Random();
+			fileName = "mapFile_"+ random.nextInt(1000)+".map";
+		    	File file = new File(fileName); 
+		    	System.out.println("File Name ---> "+fileName);
 			boolean isFileCreated = file.createNewFile();
 
 			if(isFileCreated) {
@@ -44,9 +64,11 @@ public class CreateMapFile {
 
 				if(isMapValid) {
 					System.out.println("Map is Valid.");
-					System.out.println("File has been created successfully");
+					System.out.println("File has been created successfully with File Name " + fileName);
+					return true;
 				} else {
 					System.out.println("map is not valid.");
+					return false;
 				}
 
 			} else {
@@ -55,6 +77,7 @@ public class CreateMapFile {
 
 		} catch (IOException exception) {
 			exception.printStackTrace();
-		}       
+		}
+		return false;       
 	} 
 }
