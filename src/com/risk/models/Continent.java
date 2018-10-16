@@ -11,9 +11,15 @@ import java.util.Map;
  */
 public class Continent {
 
-	Map<String, Integer> continentValue; // value of armies when continent is fully acquired by player.
-	Map<String, ArrayList<String>> continentTerritory; // no.of territories for each continent
-	Map<String, ArrayList<String>> continentOwnedterritory; // no. of territories owned by player for particular continent
+    	/**
+	 * @param continentValue value of armies when continent is fully acquired by player.
+	 * @param continentTerritory no.of territories for each continent
+	 * @param continentOwnedterritory no. of territories owned by player for particular continent
+	 * @param playerOwnedContTerr no. of territory owned by player
+	 */
+	Map<String, Integer> continentValue; 
+	Map<String, ArrayList<String>> continentTerritory;
+	Map<String, ArrayList<String>> continentOwnedterritory; 
 	Map<String, Territory> playerOwnedContTerr;
 
 	public Continent() {
