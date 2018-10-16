@@ -6,13 +6,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.ButtonGroup;
@@ -45,40 +45,30 @@ import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
-
+/**
+ * 
+ * @author Himen Sidhpura
+ */
 public class GamePanels implements ActionListener, ListSelectionListener {
-
-	private JFrame frame;
+	JFrame frame;
 	Players players;
 	Territory territory;
 	Continent continent;
 	int playerTurn = 0;
-	private JPanel menuPanel;
-	private JPanel playerPanel;
-	private JPanel gamePanel;
-	private JPanel mapPanel;
-	private JPanel editMapPanel;
-	private JPanel createMapPanel;
-	private String newBtnName = "New Game";
-	private String exitBtnName = "Quit";
-	private String twoPlayersBtnName = "twoPlayersBtn";
-	private String threePlayersBtnName = "threePlayersBtn";
-	private String fourPlayersBtnName = "fourPlayersBtn";
-	private String fivePlayersBtnName = "fivePlayersBtn";
-	private String createNewMapBtnName = "Create New Map";
-	private String editExistingMapBtnName = "Edit Existing Map";
-	private String saveBtnName = "Save";
-	private String backBtnName = "backBtn";
-	private int  playerPlaying;
-	
-	private JLabel playerCountLabel;
-	
+	String newBtnName = "New Game";
+	String exitBtnName = "Quit";
+	String twoPlayersBtnName = "twoPlayersBtn";
+	String threePlayersBtnName = "threePlayersBtn";
+	String fourPlayersBtnName = "fourPlayersBtn";
+	String fivePlayersBtnName = "fivePlayersBtn";
+	String createNewMapBtnName = "Create New Map";
+	String editExistingMapBtnName = "Edit Existing Map";
+	String saveBtnName = "Save";
+	String backBtnName = "backBtn";
+	private String editMapBtnName = "Edit Button";
+	private String mapFilePath;
+	int  playerPlaying;
 	private GridLayout mainLayout;
-	private GridLayout playerLayout;
-	private GridLayout editMapLayout;
-	private JPanel logPanel;
-	private JPanel eventPanel;
-	private JPanel countryPanel;
 	private JButton reinforceBtn;
 	private JButton attackBtn;
 	private JButton fortifyBtn;
@@ -94,31 +84,22 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JButton threePlayersBtn;
 	private JButton fourPlayersBtn;
 	private JButton fivePlayersBtn;
-	/* private JButton sixPlayersBtn; */
 	private JButton backBtn;
-
+	private JButton editButton;
+	private JButton startGameBtn;
+	
+	private JTextArea territoryDetails;
 	private JTextArea addContinentsArea;
 	private JTextArea addTerritoriesArea;
-	private JLabel selectedLabel;
-	private JLabel targetLabel;
+	private JTextArea logArea;
 	private JList<String> cardsList;
 	private JList<String> territoryAList;
 	private JList<String> territoryBList;
 	private JList<String> continentInfoList;
 	private JList<String> territoryInfoList;
-	private JScrollPane continentScrollPane;
-	private JScrollPane territoryScrollPane;
 	private GridBagConstraints c;
-	private GridBagLayout mapLayout;
-	private GridBagLayout logLayout;
-	private JTextArea logArea;
-	private JScrollPane logScrollPane;
 	private DefaultCaret caret;
-	private JPanel userPanel;
-	private JButton startGameBtn;
-	private String editMapBtnName = "Edit Button";
-	private String mapFilePath;
-	private JButton editButton;
+	
 	private JRadioButton mapOptA;
 	private JRadioButton mapOptB;
 	
@@ -127,24 +108,24 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private DefaultListModel<String> territoryBModel;
 	private DefaultListModel<String> continentInfoModel;
 	private DefaultListModel<String> territoryInfoModel;
-	private JScrollPane continentInfoScrollPane;
-	private JScrollPane territoryInfoScrollPane;
-	private JTextArea territoryDetails;
-	private JPanel fortificationPanel;
 	private JComboBox<String> territoryADropDown;
 	private JComboBox<String> territoryBDropDown;
 	private SpinnerNumberModel selectArmyModel;
-	private JSpinner selectArmy;
 	private JLabel fortErrorMsg;
 	
+	
+	/**
+	 * Allow user to select number of player he/she want to play in game.
+	 * @return playerPanel
+	 */
 	public JPanel playerMenu(){
 		// Creates the panel
-		playerPanel = new JPanel();
+		JPanel playerPanel = new JPanel();
 		// Sets Layout
-		playerLayout = new GridLayout(6, 1, 5, 5);
+		LayoutManager playerLayout = new GridLayout(6, 1, 5, 5);
 		playerPanel.setLayout(playerLayout);
 		
-		playerCountLabel = new JLabel("Number of Players : ");
+		JLabel playerCountLabel = new JLabel("Number of Players : ");
 		twoPlayersBtn = new JButton("Two");
 		threePlayersBtn = new JButton("Three");
 		fourPlayersBtn = new JButton("Four");
@@ -172,12 +153,16 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		return playerPanel;
 	}
 	
+	/**
+	 * Panel for editing existing map 
+	 * @return editMapPanel
+	 */
 	protected JPanel editMapPanel() {
 		
 		// Creates the panel
-		editMapPanel = new JPanel();
+		JPanel editMapPanel = new JPanel();
 		// Sets Layout
-		editMapLayout = new GridLayout(2, 1, 5, 5);
+		GridLayout editMapLayout = new GridLayout(2, 1, 5, 5);
 		editMapPanel.setLayout(editMapLayout);
 		// Creates buttons
 		createNewMapBtn = new JButton("Create new map");
@@ -191,9 +176,13 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		return editMapPanel;
 		
 	}
+	/**
+	 * Panel for Creating new Map from scratch
+	 * @return createMapPanel
+	 */
 	protected JPanel createMapPanel() {
 		
-		createMapPanel = new JPanel();
+		JPanel createMapPanel = new JPanel();
 		frame.setPreferredSize(new Dimension(300, 600));
 		frame.setVisible(true);
 		frame.setResizable(true);
@@ -218,6 +207,55 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		return createMapPanel;
 		
 	}
+	
+	/**
+	 * Initialize GridBagConstraint object with all of its fields set to their default value.
+	 * @param insets The initial insets value
+	 * @param fill The initial fill value
+	 * @param anchor The initial anchor value.
+	 * @param wx The initial weightx value.
+	 * @param wy The initial weighty value.
+	 * @param x The initial gridx value.
+	 * @param y The initial gridy value.
+	 * @return GridBagConstraints object with all of its fields set to the passed-in arguments
+	 */
+	public GridBagConstraints setGridBagConstraints(Insets insets,int fill,int anchor, double wx, double wy, int x, int y) {
+	    	c = new GridBagConstraints();
+	    	c.fill = fill;
+	    	c.anchor = anchor;
+	    	c.insets = insets;
+	    	c.weightx = wx;
+	    	c.weighty = wy;
+	    	c.gridx = x;
+	    	c.gridy = y;
+	    	return c;
+	}
+	/**
+	 * Initialize GridBagConstraint object with all of its fields set to their default value.
+	 * @param insets The initial insets value
+	 * @param fill The initial fill value
+	 * @param anchor The initial anchor value.
+	 * @param wx The initial weightx value.
+	 * @param wy The initial weighty value.
+	 * @param x The initial gridx value.
+	 * @param y The initial gridy value.
+	 * @return GridBagConstraints object with all of its fields set to the passed-in arguments
+	 */
+	public GridBagConstraints setGridBagConstraints(Insets insets,int fill, double wx, double wy, int x, int y) {
+	    	c = new GridBagConstraints();
+	    	c.fill = fill;
+	    	c.insets = insets;
+	    	c.weightx = wx;
+	    	c.weighty = wy;
+	    	c.gridx = x;
+	    	c.gridy = y;
+	    	return c;
+	}
+	
+	/**
+	 * 
+	 * @return GamePanel object which consist portion of Game Play
+	 */
 	protected JPanel gameView() {
 		
 		frame.setPreferredSize(new Dimension(900,800));
@@ -225,79 +263,46 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.setResizable(true);
-		gamePanel = new JPanel();
+		JPanel gamePanel = new JPanel();
 		frame.setLayout(mainLayout);
 		
-		c = new GridBagConstraints();
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.LINE_START;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 0;
-		gamePanel.add(displayMap(),c);
-				
-		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.CENTER;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 1;
-		c.gridy = 0;
-		gamePanel.add(eventScreen(),c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.LINE_END;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 2;
-		c.gridy = 0;
-		gamePanel.add(countryScreen(),c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.SOUTHWEST;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 1;
-		gamePanel.add(logScreen(),c);
-	
+		gamePanel.add(displayMap(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_START, 0.5, 0.5, 0, 0));
+		gamePanel.add(eventScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.CENTER, 0.5, 0.5, 1, 0));
+		gamePanel.add(countryScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+		gamePanel.add(logScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.SOUTHWEST, 0.5, 0.5, 0, 1));
+
 		return gamePanel;
 	}
-	
+	/**
+	 * 
+	 * @return
+	 */
 	protected JPanel displayMap(){
-		mapPanel = new JPanel();
+		JPanel mapPanel = new JPanel();
 		mapPanel.setSize(new Dimension(400, 600));
-		mapLayout = new GridBagLayout();
+		GridBagLayout mapLayout = new GridBagLayout();
 		mapPanel.setLayout(mapLayout);
 		ImageIcon mapImageIcon = new ImageIcon("D:\\eclipse-workspace\\RiskGame\\src\\riskpackage\\Map.jpg");
 		JScrollPane mapScrollPane = new JScrollPane(new JLabel(mapImageIcon));
 		mapScrollPane.setPreferredSize(new Dimension(300, 600));
 		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 14;
-		c.gridx = 0;
-		c.gridy = 0;
 		
-		mapPanel.add(mapScrollPane,c);
+		mapPanel.add(mapScrollPane,setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 14, 0, 0));
 		return mapPanel;
 	}
-	
+	/**
+	 * Panel consist various sections such as Reinforcement Button, Foritify Button, Attack Button, List of Territory and Adjacent Territory
+	 * @return EventPanel consist of various game play events
+	 */
 	protected JPanel eventScreen(){
 	
-		eventPanel = new JPanel();
+		JPanel eventPanel = new JPanel();
 		eventPanel.setPreferredSize(new Dimension(300, 600));
 		GridBagLayout eventLayout = new GridBagLayout();
 		eventPanel.setLayout(eventLayout);
 		
-		selectedLabel = new JLabel("Selected Territory:");
-		targetLabel = new JLabel("Adjacent Territory:");
+		JLabel selectedLabel = new JLabel("Selected Territory:");
+		JLabel targetLabel = new JLabel("Adjacent Territory:");
 		
 		menuBtn = new JButton("Menu");
 		turnInBtn = new JButton("Turn In Cards");
@@ -337,8 +342,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		territoryBList.setLayoutOrientation(JList.VERTICAL);
 		territoryBList.setVisibleRowCount(6);
 		
-		continentScrollPane = new JScrollPane(territoryAList);
-		territoryScrollPane = new JScrollPane(territoryBList);
+		JScrollPane continentScrollPane = new JScrollPane(territoryAList);
+		JScrollPane territoryScrollPane = new JScrollPane(territoryBList);
 		territoryAList.addListSelectionListener(new ListSelectionListener() {			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -355,103 +360,29 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		});
 		territoryBList.addListSelectionListener(this);
 		
-		
-		c = new GridBagConstraints();
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(0, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 0;
-		eventPanel.add(menuBtn, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 5;
-		c.gridx = 0;
-		c.gridy = 2;
-		eventPanel.add(cardsList, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 3;
-		eventPanel.add(turnInBtn, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 4;
-		eventPanel.add(selectedLabel, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 10;
-		c.gridx = 0;
-		c.gridy = 5;
-		eventPanel.add(continentScrollPane, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 6;
-		eventPanel.add(reinforceBtn, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 7;
-		eventPanel.add(targetLabel, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 10;
-		c.gridx = 0;
-		c.gridy = 8;
-		eventPanel.add(territoryScrollPane, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 9;
-		eventPanel.add(attackBtn, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 10;
-		eventPanel.add(fortifyBtn, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 11;
-		eventPanel.add(endTurnBtn, c);
+		eventPanel.add(menuBtn, setGridBagConstraints(new Insets(0, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 0));
+		eventPanel.add(cardsList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
+		eventPanel.add(turnInBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 3));
+		eventPanel.add(selectedLabel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
+		eventPanel.add(continentScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 5));
+		eventPanel.add(reinforceBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 6));
+		eventPanel.add(targetLabel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 7));
+		eventPanel.add(territoryScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 8));
+		eventPanel.add(attackBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 9));
+		eventPanel.add(fortifyBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 10));
+		eventPanel.add(endTurnBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 11));
 		
 		return eventPanel;
 	}
 	
+	/**
+	 * Display various portion of game play such as list of continent and territory. And also details about army in particular territory and also which player occupied it.
+	 * Section for movement of Army for Fortification Phase.
+	 * @return countryPanel which consist detail view continent and territory
+	 */
 	protected JPanel countryScreen(){
 
-		countryPanel = new JPanel();		
+		JPanel countryPanel = new JPanel();		
 		countryPanel.setPreferredSize(new Dimension(600, 600));
 		GridBagLayout countryLayout = new GridBagLayout();
 		countryPanel.setLayout(countryLayout);
@@ -499,66 +430,27 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		    }
 		});
 		
-		continentInfoScrollPane = new JScrollPane(continentInfoList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		territoryInfoScrollPane = new JScrollPane(territoryInfoList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane continentInfoScrollPane = new JScrollPane(continentInfoList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane territoryInfoScrollPane = new JScrollPane(territoryInfoList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		territoryDetails = new JTextArea(4,2);		
-		c = new GridBagConstraints();
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5,2, 2, 5);
-		c.weightx = 0.5;
-		c.weighty = 1;
-		c.gridx = 0;
-		c.gridy = 0;
-		countryPanel.add(countryLabel, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 1;
-		c.gridx = 1;
-		c.gridy = 0;
-		countryPanel.add(territoryLabel, c);
-		
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 3;
-		c.gridx = 0;
-		c.gridy = 1;
-		countryPanel.add(continentInfoScrollPane, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 3;
-		c.gridx = 1;
-		c.gridy = 1;
-		countryPanel.add(territoryInfoScrollPane, c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 3;
-		c.gridx = 0;
-		c.gridy = 2;
-		countryPanel.add(fortificationPanel(), c);
-		
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 3;
-		c.gridx = 1;
-		c.gridy = 2;
-		countryPanel.add(territoryDetails, c);
+
+		countryPanel.add(countryLabel, setGridBagConstraints(new Insets(5,2, 2, 5), GridBagConstraints.BOTH, 0.5,1, 0, 0));
+		countryPanel.add(territoryLabel, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,1, 1, 0));
+		countryPanel.add(continentInfoScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 1));
+		countryPanel.add(territoryInfoScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 1, 1));
+		countryPanel.add(fortificationPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
+		countryPanel.add(territoryDetails, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 1, 2));
 		return countryPanel;
 	}
 	
+	/**
+	 * Display list of territory and it's adjacent territory of current Player 
+	 * @return fortificationPanel for movement of army
+	 */
 	private JPanel fortificationPanel() {
 	    // TODO Auto-generated method stub
-	    fortificationPanel = new JPanel();
+	    JPanel fortificationPanel = new JPanel();
 	    fortificationPanel.setLayout(new GridLayout(6, 1));
 	    JLabel territoryALabel = new JLabel("Territory List");
 	    territoryADropDown = new JComboBox<>();
@@ -566,7 +458,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    territoryBDropDown = new JComboBox<>();
 	    fortErrorMsg = new JLabel("Select Army : ");
 	    selectArmyModel = new SpinnerNumberModel();
-	    selectArmy = new JSpinner(selectArmyModel);	
+	    JSpinner selectArmy = new JSpinner(selectArmyModel);	
 	    fortificationPanel.add(territoryALabel);
 	    fortificationPanel.add(territoryADropDown);
 	    fortificationPanel.add(territoryBLabel);
@@ -593,39 +485,39 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    return fortificationPanel;
 	}
 
+	/**
+	 * Display who is current with his total number of army
+	 * @return logPanel
+	 */
 	protected JPanel logScreen(){
 		
-		logPanel = new JPanel();
-		logLayout = new GridBagLayout();
+		JPanel logPanel = new JPanel();
+		GridBagLayout logLayout = new GridBagLayout();
 		logPanel.setLayout(logLayout);
 		logPanel.setSize(new Dimension(400,250));
-		c = new GridBagConstraints();
-		
 		logArea = new JTextArea(4,40);
 		logArea.setFocusable(false);
 		logArea.setLineWrap(true);
 		logArea.setWrapStyleWord(true);
 		caret = (DefaultCaret)logArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		logScrollPane = new JScrollPane(logArea);
-		
-		c.fill = GridBagConstraints.WEST;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weightx = 0.5;
-		c.weighty = 14;
-		c.gridx = 0;
-		c.gridy = 0;
-		logPanel.add(logScrollPane, c);
+		JScrollPane logScrollPane = new JScrollPane(logArea);
+		logPanel.add(logScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.WEST, 0.5,14, 0, 0));
 		updateLogArea();
 
 		return logPanel;
 	}
-
+	/**
+	 * Frame consist of Start button, Edit Button and Quit Button
+	 * @param frame current frame
+	 * @param players player object
+	 * @return menuPanel 
+	 */ 
 	protected JPanel mainMenu(JFrame frame, Players players){
 		this.players = players;
 		this.frame = frame;
 		// Creates the panel
-		menuPanel = new JPanel();
+		JPanel menuPanel = new JPanel();
 		// Sets Layout
 		mainLayout = new GridLayout(3, 1, 5, 5);
 		menuPanel.setLayout(mainLayout);
@@ -648,9 +540,16 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		return menuPanel;
 	}
 
+	/**
+	 * Display number of players playing in Game.
+	 * Enable user to select random maps.
+	 * Enable user to select previously Edited Map
+	 * @param count number of player
+	 * @return userPanel
+	 */
 	public JPanel userInfoPanel(int count){
 		int playerCount = count;
-		userPanel = new JPanel();
+		JPanel userPanel = new JPanel();
 		userPanel.setLayout(new GridLayout(6 + count, 1, 5, 5));
 		System.out.println("No. of Players : " + playerCount);
 		mapOptA = new JRadioButton("Choose Your Own Map");
@@ -812,7 +711,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.validate();
 		}
 		else if(actionName.equals("placeReinforcement")) {
-		    openInputDialog(true);
+		    goForReinforcement(true);
 		}	
 		else if(actionName.equals("startFortification")) {
 		    goForFortification();
@@ -827,6 +726,10 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			
 		}
 	}
+	
+	/**
+	 * Method is used to change the Turn of player when End Turn Button is Clicked.
+	 */
 	public void changePlayerTurn() {
 	    playerTurn++;
 	    if(playerTurn < players.getPlayerList().size()) {
@@ -851,11 +754,17 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    }
 	}
 	
+	/**
+	 * Used to Display Detail of Current Player.
+	 */
 	public void updateLogArea() {
 	    logArea.setText("");
 	    logArea.append("Current Player : " + players.getPlayerList().get(playerTurn)+"\n");
 	    logArea.append("Current Armies : " + players.getPlayerArmy(players.getPlayerList().get(playerTurn)));
 	}
+	/**
+	 * Method Allow Player to do Fortification Phase.
+	 */
 	public void goForFortification() {
 	    String fromTerritory = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
 	    String toTerritory = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
@@ -865,13 +774,16 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		if(getArmySelect < fromArmy && getArmySelect >= 1) {
 		    territory.updateTerritoryArmy(fromTerritory, getArmySelect, "DELETE");
 		    territory.updateTerritoryArmy(toTerritory, getArmySelect, "ADD");
+		    fortErrorMsg.setText("You can Move upto " + (territory.getTerritoryArmy().get(fromTerritory)-1) + " Army");
 		} else {
 		    JOptionPane.showMessageDialog(frame, "Armies unable to move from " + fromTerritory + " to " + toTerritory +". Please enter no. of  Armies again", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 		checkFortificationStatus();
 	    }
 	}
-	
+	/**
+	 * method used to check whether current player can go for fortification phase more or not.
+	 */
 	public void checkFortificationStatus() {
 	    boolean flag = false;
 	    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
@@ -896,7 +808,12 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    }
 		
 	}
-	public void openInputDialog(boolean flag) {
+	
+	/**
+	 * method used to do reinforcement on territory.
+	 * @param flag used to identify whether player can do reinforcement or not.
+	 */
+	public void goForReinforcement(boolean flag) {
 	    if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){	    
 		String[] terrName = territoryAList.getSelectedValue().split("---");
 	    	String message = flag ? "Add Armies in " + terrName[0] : "Add Armies Again in " + terrName[0];
@@ -921,14 +838,17 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    		updateLogArea();
 	    	    } else {
     	    	    	System.out.println("Input armies are out pf range");
-    	    	    	openInputDialog(false);	
+    	    	goForReinforcement(false);	
 	    	    }
 	    	} else {
 	    	    System.out.println("Input armies are not properly entered");
-	    	    openInputDialog(false);
+	    	goForReinforcement(false);
 	    	}
 	    }
 	}
+	/**
+	 * Method used to display complete details of territory such as which continent it belongs to, which player has occupied it with how many armies.
+	 */
 	public  void displayTerritoryDetails() {
 	// TODO Auto-generated method stub
 	    try {
@@ -947,6 +867,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    }			
 	}
 	
+	/**
+	 *  method used to update list of territory of current player
+	 */
 	public void updateTerritoryAList() {
 	    territoryAModel.removeAllElements();
 	    
@@ -955,14 +878,19 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		    territoryAModel.addElement(entry.getKey());
 	    }
 	}
-	
+	/**
+	 * method used to update list of continent in CountryPanel
+	 */
 	public void updateContinentInfoList() {
 	    continentInfoModel.removeAllElements();
 	    for (Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
 		    continentInfoModel.addElement(entry.getKey());
 	    }
 	}
-	
+	/**
+	 * method used to enable reinforcement button and disable fortify button if player has 1 or more army
+	 * It also used to disable reinforcement button and enable fortify button if player has no army  
+	 */
 	public void enableReinforcementBtn() {
 	    String name = players.getPlayerPlaying().get(playerTurn);
 	    System.out.println("enableReinforcementBtn :  Name " +name);
@@ -983,11 +911,16 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		    
 	    }
 	}
+	/**
+	 * method use to enable list of current territory owned by current player to move army from one  territory to another.   
+	 */
 	public void startFortificationPhase() {
 	   addTerritoryADropDown();
 	   
 	}
-	
+	/**
+	 * method use to display list of current territory owned by current player to move army from one  territory to another.   
+	 */
 	public void addTerritoryADropDown() {
 	    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 		if(entry.getValue().equals(players.getPlayerPlaying().get(playerTurn))){
@@ -995,6 +928,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		}
 	    }
 	}
+	/**
+	 * method use to display list of adjacent territory owned by current player to move army from selected  territory to adjacent one.   
+	 */
 	public void addTerritoryBDropDown() {
 	    territoryBDropDown.removeAllItems();
             String dropDownAValue =  territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());  
@@ -1007,6 +943,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
                }
             }
 	}
+	/**
+	 * method used to give input as no. of armies player want to move in fortification phase
+	 */
 	public void enterArmyToMove() {
 	    String fromTerritory = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
 	    String toTerritory = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
