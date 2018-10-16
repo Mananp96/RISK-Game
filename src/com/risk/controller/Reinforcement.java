@@ -20,6 +20,8 @@ public class Reinforcement {
 	 * @param players object of model Players.
 	 * @param continent object of model Continent.
 	 * @param territory object of model Territory.
+	 * @param armies object of model ArmiesSelection.
+
 	 */
 	public Reinforcement(Players players, Continent continent, Territory territory) {
 		this.continent = continent;
