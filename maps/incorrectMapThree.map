@@ -1,0 +1,17 @@
+[Map]
+author=Sean O'Connor
+warn=yes
+image=none
+wrap=no
+scroll=horizontal
+
+[Continents]
+Northern Africa=4
+Southern Africa=3
+Western Africa=7
+Eastern Africa=3
+Central Africa=6
+The Horn=3
+The Congo=5
+
+[Territories]
