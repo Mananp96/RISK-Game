@@ -23,6 +23,7 @@ public class MapValidator {
 	Map<String,String> territoriesMap;
 	Map<String,String> adjacentTerritoriesMap;
 
+
 	public MapValidator(Continent continentObject, Territory territoryObject) {
 		
 		this.continentTerritories =  continentObject.getContinentTerritory();
@@ -43,8 +44,8 @@ public class MapValidator {
 		System.out.println(continentValue);
 		System.out.println(continentTerritories);
 		System.out.println(adjcentTerritories);
-		System.out.println(territoriesMap);
-		System.out.println(adjacentTerritoriesMap);
+//		System.out.println(territoriesMap);
+//		System.out.println(adjacentTerritoriesMap);
 		
 		if(continentValue != null) {
 			isMapValid = validateContinentValue();

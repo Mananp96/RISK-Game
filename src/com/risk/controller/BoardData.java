@@ -77,8 +77,8 @@ public class BoardData {
 	 * @return true if map data is valid, else return false.
 	 */
 	public boolean generateBoardData() {
-	    	continentData = new StringBuilder();
-	    	territoryData = new StringBuilder();
+	    continentData = new StringBuilder();
+	    territoryData = new StringBuilder();
 		continentObject = new Continent();
 		territoryObject = new Territory();
 		String currentLine;
