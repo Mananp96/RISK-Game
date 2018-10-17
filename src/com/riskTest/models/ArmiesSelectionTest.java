@@ -2,7 +2,7 @@ package com.riskTest.models;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.risk.models.ArmiesSelection;
@@ -26,8 +26,7 @@ public class ArmiesSelectionTest {
 	/**
 	 * This method is invoked at the start of all the test methods.
 	 */
-	@Before
-	public void beforeTest() {
+	@BeforeEach public void beforeTest() {
 		this.twoPlayer = new ArmiesSelection(2);
 		this.threePlayer = new ArmiesSelection(3);
 		this.fourPlayer = new ArmiesSelection(4);
@@ -37,8 +36,8 @@ public class ArmiesSelectionTest {
 	/**
 	 * This method is to test the selection of Number of armies according to Player.
 	 */
-	@Test
-	public void testArmiesSelection() {
+	@Test public void testArmiesSelection() {
+		
 		assertEquals(twoPlayerArmies,twoPlayer.getPlayerArmies());
 		assertEquals(threePlayerArmies,threePlayer.getPlayerArmies());
 		assertEquals(fourPlayerArmies,fourPlayer.getPlayerArmies());
