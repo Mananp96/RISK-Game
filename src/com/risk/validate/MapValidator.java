@@ -143,7 +143,7 @@ public class MapValidator {
 		return isMapValid;
 	}
 	
-	/*
+	/**
 	 * this method is used to check if Graph is Connected or not.
 	 * returns true if it is connected else returns false.
 	 * 
