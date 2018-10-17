@@ -13,24 +13,21 @@ import com.risk.models.Territory;
  * @version 1.0
  */
 public class MapValidator {
-	
+
 	boolean isMapValid;
 	Continent continent;
 	Territory territory;
 	Map<String, ArrayList<String>> continentTerritories;
 	Map<String, Integer> continentValue;
 	Map<String, ArrayList<String>> adjcentTerritories;
-	Map<String,String> territoriesMap;
-	Map<String,String> adjacentTerritoriesMap;
-
 
 	public MapValidator(Continent continentObject, Territory territoryObject) {
-		
+
 		this.continentTerritories =  continentObject.getContinentTerritory();
 		this.continentValue = continentObject.getContinentValue();
 		this.adjcentTerritories = territoryObject.getAdjacentTerritory();
-//		this.territoriesMap = territoryObject.getTerritoriesMap();
-//		this.adjacentTerritoriesMap = territoryObject.getAdjacentTerritoriesMap();
+		//		this.territoriesMap = territoryObject.getTerritoriesMap();
+		//		this.adjacentTerritoriesMap = territoryObject.getAdjacentTerritoriesMap();
 	}
 
 	/**
@@ -44,9 +41,9 @@ public class MapValidator {
 		System.out.println(continentValue);
 		System.out.println(continentTerritories);
 		System.out.println(adjcentTerritories);
-//		System.out.println(territoriesMap);
-//		System.out.println(adjacentTerritoriesMap);
-		
+		//		System.out.println(territoriesMap);
+		//		System.out.println(adjacentTerritoriesMap);
+
 		if(continentValue != null) {
 			isMapValid = validateContinentValue();
 		} else { 
@@ -55,8 +52,8 @@ public class MapValidator {
 		}
 		return isMapValid;
 	}
-	
-	
+
+
 	/**
 	 * Validate continent Winning Value. Winning Value must be atleast one.
 	 * 
@@ -64,24 +61,60 @@ public class MapValidator {
 	 *             invalid map exception
 	 */
 	public boolean validateContinentValue() throws InvalidMapException {
-		
+
 		for (Entry<String, Integer> entry : continentValue.entrySet()) {
 			String key = entry.getKey();
-		    if(continentValue.get(key) >= 1) {
-		    	
-		    	isMapValid = validateTerritories();
-		    	this.isMapValid = true;
-		    	
-		    }else {
-		    	this.isMapValid = false;
-		    	throw new InvalidMapException("Continent winning value should be more than one.");
-		    }
-		    
+			if(continentValue.get(key) >= 1) {
+
+				isMapValid = validateContinent();
+				this.isMapValid = true;
+
+			}else {
+				this.isMapValid = false;
+				throw new InvalidMapException("Continent winning value should be more than one.");
+			}
+
 		}
 		return isMapValid;
 	}
-	
-	
+
+	/**
+	 * This method validate the Continents. 
+	 * Continents at the upper parts with value and Continents at bottom parts with Territories 
+	 * should be equals in size and also according to names.
+	 * 
+	 * @return isMapValid returns true if continents are valid,else false.
+	 * @throws InvalidMapException
+	 */
+	public boolean validateContinent() throws InvalidMapException {
+		if(continentTerritories != null) {
+			if(continentTerritories.size() == continentValue.size()) {
+
+				for(Entry<String, ArrayList<String>> entryTerritory : continentTerritories.entrySet()) {
+					String key = entryTerritory.getKey();
+					if(continentValue.containsKey(key)) {
+						isMapValid = true;
+					}else {
+						isMapValid = false;
+						throw new InvalidMapException("Continents are not Valid");
+					}
+					validateTerritories();
+				}
+
+			}else {
+				isMapValid = false;
+				throw new InvalidMapException("Continent are not Compatible");
+			}
+		}else {
+			isMapValid = false;
+			throw new InvalidMapException("Territories should not be null");
+		}
+
+
+		return isMapValid;
+	}
+
+
 	/**
 	 * Validate continent. It should have atleast one territory.
 	 * 
@@ -89,38 +122,30 @@ public class MapValidator {
 	 *             invalid map exception
 	 */
 	public boolean validateTerritories() throws InvalidMapException {
-		
+
 		if(continentTerritories.size() > 0) {
-			
-			if(continentValue.size() == continentTerritories.size()) {
-				
-					for (Entry<String, ArrayList<String>> entry : continentTerritories.entrySet()) {
-					    String key = entry.getKey();
-					    
-					    if(entry.getValue().size() > 0) {
-						    isMapValid = validateAdjcentTerritories();
-					    }else {
-					    	this.isMapValid = false;
-					    	throw new InvalidMapException("Territories should be 1 or more.");
-					    }		    
-					}
-					
-			}else {
-				this.isMapValid = false;
-				throw new InvalidMapException("Continent is Not compatible");
+
+			for (Entry<String, ArrayList<String>> entry : continentTerritories.entrySet()) {
+				String key = entry.getKey();
+				if(entry.getValue().size() > 0) {
+					isMapValid = validateAdjcentTerritories();
+				}else {
+					this.isMapValid = false;
+					throw new InvalidMapException("Territories should be 1 or more.");
+				}		    
 			}
-			
+
 		}else {
 			this.isMapValid = false;
 			throw new InvalidMapException("Territories should not be null");
 
 		}
 		System.out.println("3."+isMapValid);
-		
+
 		return isMapValid;
 	}
 
-	
+
 	/**
 	 * Validate Territories. It should have atleast one adjacent territory.
 	 *
@@ -128,22 +153,22 @@ public class MapValidator {
 	 *             invalid map exception
 	 */
 	public boolean validateAdjcentTerritories() throws InvalidMapException {
-		
+
 		if(adjcentTerritories != null) {
 			for (Entry<String, ArrayList<String>> entry : adjcentTerritories.entrySet()) {
-			    String key = entry.getKey();
-			    if(entry.getValue().size() > 0) {
-			    	this.isMapValid = true;
-			    }else {
-			    	this.isMapValid = false;
-			    	throw new InvalidMapException("adjacent territories should not be null");
-			    }
+				String key = entry.getKey();
+				if(entry.getValue().size() > 0) {
+					this.isMapValid = true;
+				}else {
+					this.isMapValid = false;
+					throw new InvalidMapException("adjacent territories should not be null");
+				}
 			}
 		}	
 		System.out.println("4."+isMapValid);
 		return isMapValid;
 	}
-	
+
 	/**
 	 * this method is used to check if Graph is Connected or not.
 	 * returns true if it is connected else returns false.
@@ -151,28 +176,9 @@ public class MapValidator {
 	 * @return isMapValid  returns true if graph is connected else false
 	 * @throws InvalidMapException
 	 */
-	public boolean isGraphConnected() throws InvalidMapException {
-		
-		if(territoriesMap.size() == adjacentTerritoriesMap.size()) {
-			for(Entry<String, String> entry : territoriesMap.entrySet()) {
-				String territoriesKey = entry.getKey();
-				
-				for(Entry<String, String> entry1 : adjacentTerritoriesMap.entrySet()) {
-					
-					if(territoriesKey.equals(entry.getKey())) {
-						continue;
-					}else {
-						break;
-					}
-				
-				}
-				
-			}
-		}else {
-			System.out.println("graph is not connected.");
-			throw new InvalidMapException("graph is not connected.");
-		}
+	public boolean isGraphConnected() {
 		return isMapValid;
+
 	}
 
 }
