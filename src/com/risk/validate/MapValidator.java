@@ -29,8 +29,8 @@ public class MapValidator {
 		this.continentTerritories =  continentObject.getContinentTerritory();
 		this.continentValue = continentObject.getContinentValue();
 		this.adjcentTerritories = territoryObject.getAdjacentTerritory();
-		this.territoriesMap = territoryObject.getTerritoriesMap();
-		this.adjacentTerritoriesMap = territoryObject.getAdjacentTerritoriesMap();
+//		this.territoriesMap = territoryObject.getTerritoriesMap();
+//		this.adjacentTerritoriesMap = territoryObject.getAdjacentTerritoriesMap();
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class MapValidator {
 		if(adjcentTerritories != null) {
 			for (Entry<String, ArrayList<String>> entry : adjcentTerritories.entrySet()) {
 			    String key = entry.getKey();
-			    if(adjcentTerritories.get(key).size() > 0) {
+			    if(entry.getValue().size() > 0) {
 			    	this.isMapValid = true;
 			    }else {
 			    	this.isMapValid = false;

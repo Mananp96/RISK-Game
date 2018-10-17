@@ -167,9 +167,9 @@ public class Territory {
 	/**
 	 * This method is used to:
 	 * <ul>
-	 * <li>update count of army for each territory</li>
-	 * <li>used for initial startup phase of Game</li>
-	 * <li>used to update count of army during reinforcement</li>
+	 * <li>Update count of army for each territory.</li>
+	 * <li>for initial startup phase of Game.</li>
+	 * <li>Update count of army during reinforcement.</li>
 	 * </ul>
 	 * 
 	 * @param territory Name of Territory
