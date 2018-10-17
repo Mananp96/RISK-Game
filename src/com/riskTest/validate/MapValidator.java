@@ -1,13 +1,14 @@
 package com.riskTest.validate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 /**
- * This class is used to test MapValidator.java
+ * MapValidator Test class
  *
  * @version 1.0
  */
@@ -24,7 +25,13 @@ public class MapValidator {
 	/**
 	 * This method is used to initialize all Map Data.
 	 */
-	@Before public void beforeTest() {
+	@Before
+	public void beforeTest() {
+		continentTerritories = new HashMap<>();
+		continentValue = new HashMap<>();
+		adjcentTerritories = new HashMap<>();
+		territoriesMap = new HashMap<>();
+		adjacentTerritoriesMap = new HashMap<>();
 		
 		
 	}
@@ -33,7 +40,8 @@ public class MapValidator {
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateMap()} method of MapValidator.java.
 	 */
-	@Test public void testValidateMap() {
+	@Test
+	public void testValidateMap() {
 		
 	}
 	
@@ -41,7 +49,8 @@ public class MapValidator {
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateContinentValue()} method of MapValidator.java.
 	 */
-	@Test public void testValidateContinentValue() {
+	@Test
+	public void testValidateContinentValue() {
 		
 	}
 	
@@ -49,7 +58,8 @@ public class MapValidator {
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateTerritories()} method of MapValidator.java.
 	 */
-	@Test public void testValidateTerritories() {
+	@Test
+	public void testValidateTerritories() {
 		
 	}
 	
@@ -57,7 +67,8 @@ public class MapValidator {
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateAdjcentTerritories()} method of MapValidator.java.
 	 */
-	@Test public void testValidateAdjcentTerritories() {
+	@Test
+	public void testValidateAdjcentTerritories() {
 		
 	}
 	
@@ -65,7 +76,8 @@ public class MapValidator {
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#isGraphConnected()} method of MapValidator.java.
 	 */
-	@Test public void testIsGraphConnected() {
+	@Test
+	public void testIsGraphConnected() {
 		
 	}
 	
