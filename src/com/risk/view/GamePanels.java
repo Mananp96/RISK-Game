@@ -238,7 +238,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	protected JPanel editExistingMapPanel() {
 	    frame.setResizable(true);
 	    NewEditMapPanel newEditMapPanel=new NewEditMapPanel();
-	    return newEditMapPanel.createMapPanel(frame,false);
+	    return newEditMapPanel.createMapPanel(frame,true);
 	}
 	
 	/**
@@ -576,6 +576,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			public void itemStateChanged(ItemEvent e) {
 
 				if(mapOptB.isSelected()) {
+				    existingMapFilePath = "previous.map";
 					randomMap = false;
 				}
 			}
@@ -626,8 +627,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	/**
 	 * The GridBagConstraints is used specifies constraints for components that are laid out using the GridBagLayout class.
 	 * Initialize GridBagConstraint object with all of its fields set to their default value.
-	 * @param insets The initial insets value.
-	 * @param fill The initial fill value.
+	 * @param insets The initial insets value
+	 * @param fill The initial fill value
+	 * @param anchor The initial anchor value.
 	 * @param wx The initial weightx value.
 	 * @param wy The initial weighty value.
 	 * @param x The initial gridx value.
@@ -694,7 +696,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 			}
 			 
-		} else if (actionName.equals("Update Map Data")) {
+		}/* else if (actionName.equals("Update Map Data")) {
 			
 			System.out.println("Editing New Map");
 			defaultMapTag = "[Map]\n"+
@@ -711,7 +713,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 			}
 			 
-		}  else if (actionName.equals(exitBtnName)){
+		} */ else if (actionName.equals(exitBtnName)){
 			System.out.println("Quit Game");
 			System.exit(0);
 		} else if (actionName.equals("Start Game")){
