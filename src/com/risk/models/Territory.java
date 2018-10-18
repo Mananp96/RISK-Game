@@ -280,7 +280,7 @@ public class Territory {
 		}else {
 			ArrayList<String> continentList = new ArrayList<>();
 			continentList.add(continent);
-			duplicateTerritoryContinent.put(continent, continentList);
+			duplicateTerritoryContinent.put(territory, continentList);
 		}
 	}
 	

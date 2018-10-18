@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
 import com.risk.models.Territory;
+import com.riskTest.validate.ConnectedGraph;
 
 /**
  * This class is used to Validate Map.
@@ -41,6 +42,7 @@ public class MapValidator {
 		System.out.println(continentValue);
 		System.out.println(continentTerritories);
 		System.out.println(adjcentTerritories);
+		System.out.println("---"+duplicateTerritoryContinent);
 		//		System.out.println(territoriesMap);
 		//		System.out.println(adjacentTerritoriesMap);
 
@@ -127,7 +129,7 @@ public class MapValidator {
 
 			for(Entry<String, ArrayList<String>> entryContinent : continentTerritories.entrySet()) {
 				if(entryContinent.getValue().size() > 0) {
-					for(Entry<String, ArrayList<String>> entryTerritory : continentTerritories.entrySet()) {
+					for(Entry<String, ArrayList<String>> entryTerritory : duplicateTerritoryContinent.entrySet()) {
 						if(entryTerritory.getValue().size() == 1) {
 							this.isMapValid = true;
 						}else {
@@ -185,6 +187,16 @@ public class MapValidator {
 	 * @throws InvalidMapException
 	 */
 	public boolean isGraphConnected() {
+		
+		ConnectedGraph connectedGraph = new ConnectedGraph(adjcentTerritories);
+		for(Entry<String,ArrayList<String>> entry : adjcentTerritories.entrySet()) {
+			String key = entry.getKey();
+			for(int i = 0; i<entry.getValue().size(); i++) {
+				
+			}
+		}
+		
+		
 		return isMapValid;
 
 	}
