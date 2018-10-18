@@ -33,7 +33,7 @@ public class NewEditMapPanel implements ActionListener {
         private JLabel fetchFileDataError;
         private GridBagConstraints c;
         private String backBtnName = "backBtn";
-         String existingMapFilePath;
+        String existingMapFilePath;
         boolean randomMap;
         
         private JComboBox<String> editContinentList;
@@ -66,8 +66,8 @@ public class NewEditMapPanel implements ActionListener {
         private JButton deleteContinentBtn;
         private JButton deleteTerritoryBtn;
         private JButton deleteAdjTerrBtn;
-	private Territory territory;
-	private Continent continent;
+		private Territory territory;
+		private Continent continent;
 
         public JPanel createMapPanel(){
             
@@ -237,11 +237,11 @@ public class NewEditMapPanel implements ActionListener {
             if(StringUtils.isNotEmpty(filePath)) {
         	EditMapFile editMapFile = new EditMapFile(filePath); 
         	if(editMapFile.generateData()) {
-        	  //  continentArea.setText(editMapFile.getContinentData().toString());
+        	  	//continentArea.setText(editMapFile.getContinentData().toString());
         	    //territoryArea.setText(editMapFile.getTerritoryData().toString());
         	    fetchFileDataError.setText("File Content Data is validated and Ready to Edit");
-        	    territory = editMapFile.getTerritory();
-        	    continent = editMapFile.getContinent();
+        	    //territory = editMapFile.getTerritory();
+        	    //continent = editMapFile.getContinent();
         	    updateAllContinentList();
         	    updateAddTerrContinentList();
         	    updateAddAdjContinentList();
@@ -412,8 +412,8 @@ public class NewEditMapPanel implements ActionListener {
 	private void updateContinent(String oldContinent, String newContinent, String value) {
 	    System.out.println("Continent Selected is + " + oldContinent + " new one is " + newContinent + " value "+ value);
 	    if(StringUtils.isNotEmpty(oldContinent) && StringUtils.isNotEmpty(newContinent) && StringUtils.isNotEmpty(value) && StringUtils.isNumeric(value) && Integer.parseInt(value) > 0) {
-		continent.updateContinentValue(oldContinent, newContinent, Integer.parseInt(value));
-		territory.updateTerritoryContinent(oldContinent, newContinent);
+		//continent.updateContinentValue(oldContinent, newContinent, Integer.parseInt(value));
+		//territory.updateTerritoryContinent(oldContinent, newContinent);
 		displaySuccessDialog();
 		updateAllContinentList();
 		updateEditContinentList();
