@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
 import com.risk.models.Territory;
-import com.riskTest.validate.ConnectedGraph;
 
 /**
  * This class is used to Validate Map.
@@ -22,6 +21,7 @@ public class MapValidator {
 	Map<String, ArrayList<String>> duplicateTerritoryContinent;
 	Map<String, Integer> continentValue;
 	Map<String, ArrayList<String>> adjcentTerritories;
+	Map<String, Integer> territoryNumber;
 
 	public MapValidator(Continent continentObject, Territory territoryObject) {
 
@@ -29,6 +29,7 @@ public class MapValidator {
 		this.continentValue = continentObject.getContinentValue();
 		this.adjcentTerritories = territoryObject.getAdjacentTerritory();
 		this.duplicateTerritoryContinent = territoryObject.getDuplicateTerritoryContinent();
+		this.territoryNumber = territoryObject.getNumberOfTerritory();
 	}
 
 	/**
@@ -36,16 +37,8 @@ public class MapValidator {
 	 * @return isMapValid
 	 * @throws InvalidMapException 
 	 *
-	 *
 	 */
 	public boolean validateMap() throws InvalidMapException {
-		System.out.println(continentValue);
-		System.out.println(continentTerritories);
-		System.out.println(adjcentTerritories);
-		System.out.println("---"+duplicateTerritoryContinent);
-		//		System.out.println(territoriesMap);
-		//		System.out.println(adjacentTerritoriesMap);
-
 		if(continentValue != null) {
 			isMapValid = validateContinentValue();
 		} else { 
@@ -55,7 +48,6 @@ public class MapValidator {
 		return isMapValid;
 	}
 
-
 	/**
 	 * Validate continent Winning Value. Winning Value must be at-least one.
 	 * 
@@ -63,19 +55,15 @@ public class MapValidator {
 	 *             invalid map exception
 	 */
 	public boolean validateContinentValue() throws InvalidMapException {
-
 		for (Entry<String, Integer> entry : continentValue.entrySet()) {
 			String key = entry.getKey();
 			if(continentValue.get(key) >= 1) {
-
 				isMapValid = validateContinent();
 				this.isMapValid = true;
-
 			}else {
 				this.isMapValid = false;
 				throw new InvalidMapException("Continent winning value should be more than one.");
 			}
-
 		}
 		return isMapValid;
 	}
@@ -91,7 +79,6 @@ public class MapValidator {
 	public boolean validateContinent() throws InvalidMapException {
 		if(continentTerritories != null) {
 			if(continentTerritories.size() == continentValue.size()) {
-
 				for(Entry<String, ArrayList<String>> entryTerritory : continentTerritories.entrySet()) {
 					String key = entryTerritory.getKey();
 					if(continentValue.containsKey(key)) {
@@ -102,7 +89,6 @@ public class MapValidator {
 					}
 					validateTerritories();
 				}
-
 			}else {
 				isMapValid = false;
 				throw new InvalidMapException("Continent are not Compatible");
@@ -111,11 +97,9 @@ public class MapValidator {
 			isMapValid = false;
 			throw new InvalidMapException("Territories should not be null");
 		}
-
-
 		return isMapValid;
 	}
-	
+
 	/**
 	 * Validate continent. It should have at-least one territory.
 	 * and territory should not be in unique Continent.
@@ -126,7 +110,6 @@ public class MapValidator {
 	public boolean validateTerritories() throws InvalidMapException {
 
 		if(continentTerritories.size() > 0) {
-
 			for(Entry<String, ArrayList<String>> entryContinent : continentTerritories.entrySet()) {
 				if(entryContinent.getValue().size() > 0) {
 					for(Entry<String, ArrayList<String>> entryTerritory : duplicateTerritoryContinent.entrySet()) {
@@ -143,15 +126,12 @@ public class MapValidator {
 					throw new InvalidMapException("Continent should have at-least one Territory");
 				}
 			}
-			
 			isMapValid = validateAdjcentTerritories();
 		}else {
 			this.isMapValid = false;
 			throw new InvalidMapException("Territories should not be null");
-
 		}
 		System.out.println("3."+isMapValid);
-
 		return isMapValid;
 	}
 
@@ -163,10 +143,8 @@ public class MapValidator {
 	 *             invalid map exception
 	 */
 	public boolean validateAdjcentTerritories() throws InvalidMapException {
-
 		if(adjcentTerritories != null) {
 			for (Entry<String, ArrayList<String>> entry : adjcentTerritories.entrySet()) {
-				
 				if(entry.getValue().size() > 0) {
 					this.isMapValid = true;
 				}else {
@@ -174,8 +152,8 @@ public class MapValidator {
 					throw new InvalidMapException("adjacent territories should not be null");
 				}
 			}
+			this.isGraphConnected();
 		}	
-		
 		return isMapValid;
 	}
 
@@ -186,19 +164,24 @@ public class MapValidator {
 	 * @return isMapValid  returns true if graph is connected else false
 	 * @throws InvalidMapException
 	 */
-	public boolean isGraphConnected() {
-		
-		ConnectedGraph connectedGraph = new ConnectedGraph(adjcentTerritories);
+	public boolean isGraphConnected() throws InvalidMapException {
+
+		ConnectedGraph graph = new ConnectedGraph(territoryNumber.size());
 		for(Entry<String,ArrayList<String>> entry : adjcentTerritories.entrySet()) {
-			String key = entry.getKey();
-			for(int i = 0; i<entry.getValue().size(); i++) {
-				
+			for(int i = 0; i<entry.getValue().size() ; i++) {
+				graph.addConnectionLine(territoryNumber.get(entry.getKey()),
+						territoryNumber.get(entry.getValue().get(i)));						
 			}
 		}
-		
-		
+		if(graph.isGraphStronglyConnected()) {
+			System.out.println("Graph is Connected.");
+			this.isMapValid = true;
+		}else {
+			System.out.println("Graph is not Connected.");
+			this.isMapValid = false;
+			throw new InvalidMapException("Graph is not connected");
+		}
 		return isMapValid;
-
 	}
 
 }

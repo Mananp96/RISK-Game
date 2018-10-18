@@ -17,6 +17,7 @@ import com.risk.validate.MapValidator;
 public class BoardData {
 
 	private String filePath;
+	int territoryNumber = 0;
 
 	boolean continentFlag = false; 	
 	boolean territoriesFlag = false;
@@ -116,6 +117,9 @@ public class BoardData {
 					territoryObject.addTerritoryCont(territoriesArray[0], territoriesArray[3]); //need to refactor 
 					continentObject.addContinentTerritory(territoriesArray[3], territoriesArray[0]);
 					territoryObject.addDuplicateTerritoryContinent(territoriesArray[0], territoriesArray[3]); //need to refactor
+					
+					territoryObject.addNumberOfTerritory(territoriesArray[0],territoryNumber++);
+					
 				}
 
 			}

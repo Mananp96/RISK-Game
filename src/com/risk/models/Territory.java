@@ -22,11 +22,11 @@ public class Territory {
 	Map<String, Integer> territoryArmy; 
 	Map<String, ArrayList<String>> adjacentTerritory; 
 	Map<String, ArrayList<String>> duplicateTerritoryContinent; //to be used only for validation to check duplicacy.
+	Map<String, Integer> territoryNumber; // territory with Number
 	
 	ArrayList<String> territoryList; 
 	
 	boolean flag = false;
-	
 	
 	public Territory() {
 		flag = false;
@@ -36,70 +36,8 @@ public class Territory {
 		adjacentTerritory = new HashMap<>();
 		territoryList = new ArrayList<>();
 		duplicateTerritoryContinent = new HashMap<>();
-		
+		territoryNumber = new HashMap<>();
 	}
-	
-	
-//	public boolean isFlag() {
-//		return flag;
-//	}
-//
-//	public void setFlag(boolean flag) {
-//		this.flag = flag;
-//	}
-	
-//	/**
-//	 * 
-//	 * @return territoriesMap 
-//	 */
-//	public Map<String, String> getTerritoriesMap() {
-//		return territoriesMap;
-//	}
-//	
-//	/**
-//	 * 
-//	 * @param territoriesMap 
-//	 */
-//	public void setTerritoriesMap(Map<String, String> territoriesMap) {
-//		this.territoriesMap = territoriesMap;
-//	}
-//
-//	public void addTerritoriesMap(String key, String value) {
-//		if(territoriesMap.size() == 0 || territoriesMap.isEmpty()) {
-//			territoriesMap.put(key, value);
-//		}else {
-//			if(territoriesMap.containsKey(key)) {
-//				this.flag = true;
-//			}else {
-//				territoriesMap.put(key, value);
-//			}
-//		}
-//		
-//	}
-//	
-//	public Map<String, String> getAdjacentTerritoriesMap() {
-//		return adjacentTerritoriesMap;
-//	}
-//
-//	public void setAdjacentTerritoriesMap(Map<String, String> adjacentTerritoriesMap) {
-//		this.adjacentTerritoriesMap = adjacentTerritoriesMap;
-//	}
-//	
-//	public void addAdjacentTerritoriesMap(String key,  String value) {
-//		System.out.println(key);
-//		if(adjacentTerritoriesMap.size() == 0 || adjacentTerritoriesMap.isEmpty()) {
-//			adjacentTerritoriesMap.put(key, value);
-//		
-//		}else {
-//			if(adjacentTerritoriesMap.containsKey(key)) {
-//				this.flag = true;
-//				System.out.println("++"+key);
-//			}else {
-//				adjacentTerritoriesMap.put(key, value);
-//			}
-//		}
-//		
-//	}
 	
 	/**
 	 * 
@@ -291,5 +229,22 @@ public class Territory {
 	public Map<String,ArrayList<String>> getDuplicateTerritoryContinent(){
 		return duplicateTerritoryContinent;
 	}
+
+	/**
+	 * Give a Number to Territory
+	 * @param string Name of Territory
+	 * @param i Number starting from 0
+	 */
+	public void addNumberOfTerritory(String territory, int territoryNum) {
+		territoryNumber.put(territory, territoryNum);
+	}
 	
+	/**
+	 * 
+	 * @return a HashMap contains number of territory.
+	 */
+	public Map<String,Integer> getNumberOfTerritory(){
+		return territoryNumber;
+	}
+
 }
