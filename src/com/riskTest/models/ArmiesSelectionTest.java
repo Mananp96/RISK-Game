@@ -12,12 +12,12 @@ import com.risk.models.ArmiesSelection;
  *
  */
 public class ArmiesSelectionTest {
-	
+
 	int twoPlayerArmies = 40;
 	int threePlayerArmies = 35;
 	int fourPlayerArmies = 30;
 	int fivePlayerArmies = 25;
-	
+
 	ArmiesSelection twoPlayer;
 	ArmiesSelection threePlayer;
 	ArmiesSelection fourPlayer;

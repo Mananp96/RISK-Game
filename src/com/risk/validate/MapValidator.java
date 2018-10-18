@@ -29,8 +29,8 @@ public class MapValidator {
 		this.continentTerritories =  continentObject.getContinentTerritory();
 		this.continentValue = continentObject.getContinentValue();
 		this.adjcentTerritories = territoryObject.getAdjacentTerritory();
-		this.territoriesMap = territoryObject.getTerritoriesMap();
-		this.adjacentTerritoriesMap = territoryObject.getAdjacentTerritoriesMap();
+		//this.territoriesMap = territoryObject.getTerritoriesMap();
+		//this.adjacentTerritoriesMap = territoryObject.getAdjacentTerritoriesMap();
 	}
 
 	/**
