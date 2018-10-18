@@ -1,12 +1,10 @@
 package com.riskTest.validate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.risk.exception.InvalidMapException;
@@ -32,13 +30,13 @@ public class MapValidatorTest {
 	 * This method is used to initialize all Map Data and
 	 * invoked at the start of all the test methods.
 	 */
-	@Before
+	@BeforeEach
 	public void beforeTest() {
 		continent = new Continent();
 		territory = new Territory();
 		
 		continent.setContinentValue("Northern Africa", 4);
-		continent.setContinentValue("Western Africa", 7);
+
 		
 		continent.addContinentTerritory("Northern Africa", "Morocco");
 		continent.addContinentTerritory("Northern Africa", "Algeria");
@@ -57,6 +55,7 @@ public class MapValidatorTest {
 		territory.addAdjacentTerritory("Mauritania", "Western Sahara");	
 		
 		
+		
 	}
 	
 	/**
@@ -66,16 +65,24 @@ public class MapValidatorTest {
 	 */
 	@Test
 	public void testValidateMap() throws InvalidMapException {
-		
-		
+		continent.setContinentValue("Western Africa", 7);
+		mapValidator = new MapValidator(continent, territory);
+		assertTrue(mapValidator.validateMap());
 	}
 	
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateContinentValue()} method of MapValidator.java.
+	 * @throws InvalidMapException 
 	 */
 	@Test
-	public void testValidateContinentValue() {
+	public void testValidateContinentValue() throws InvalidMapException {
+		continent.setContinentValue("Western Africa", 0);
+		mapValidator = new MapValidator(continent, territory);
+		
+		Assertions.assertThrows(InvalidMapException.class, () -> {
+		    mapValidator.validateContinentValue();
+		  });
 		
 	}
 	
@@ -85,7 +92,12 @@ public class MapValidatorTest {
 	 */
 	@Test
 	public void testValidateTerritories() {
+		continent.addContinentTerritory("Southern Africa", "");
+		mapValidator = new MapValidator(continent, territory);
 		
+		Assertions.assertThrows(InvalidMapException.class, () -> {
+		    mapValidator.validateTerritories();
+		  });
 	}
 	
 	/**
@@ -94,6 +106,13 @@ public class MapValidatorTest {
 	 */
 	@Test
 	public void testValidateAdjcentTerritories() {
+		continent.addContinentTerritory("Southern Africa", "Congo");
+	
+		mapValidator = new MapValidator(continent, territory);
+		
+		Assertions.assertThrows(InvalidMapException.class, () -> {
+		    mapValidator.validateAdjcentTerritories();
+		  });
 		
 	}
 	

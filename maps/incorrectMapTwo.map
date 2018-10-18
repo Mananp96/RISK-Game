@@ -1,0 +1,25 @@
+[Map]
+author=Sean O'Connor
+warn=yes
+image=none
+wrap=no
+scroll=horizontal
+
+[Continents]
+Northern Africa=4
+Southern Africa=3
+Western Africa=7
+
+
+[Territories]
+A,0,0,Northern Africa,B
+B,0,0,Northern Africa,A
+
+A,0,0,Southern Africa,B
+C,0,0,Southern Africa,D,E
+E,0,0,Southern Africa,C,F
+
+D,0,0,Western Africa,C,F,G,H
+F,0,0,Western Africa,D,E
+G,0,0,Western Africa,D
+H,0,0,Western Africa,D

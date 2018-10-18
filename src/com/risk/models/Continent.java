@@ -85,10 +85,6 @@ public class Continent {
 		return continentTerritory;
 	}
 
-	/*
-	 * used to identify which continent has how many territory of particular player
-	 * used to add or remove  territory of particular player 
-	 */
 	/**
 	 * 
 	 * @return a Map continentTerritory
@@ -105,14 +101,14 @@ public class Continent {
 	}
 
 	/**
-	 * used to identify which continent has how many territory of particular player
+	 * Used to identify which continent has how many territory of particular player
 	 * and store it to HashMap continentOwnedterritory
 	 * used to add or remove  territory of particular player
 	 * 
 	 * @param continent Name of Continent
 	 * @param territory Name of Territory
 	 * @param operation 
-	 * @return a map continentOwnedterritory
+	 * @return a HashMap continentOwnedterritory
 	 */
 	public Map<String, ArrayList<String>> addContinentOwnedTerritory(String continent, String territory, boolean operation) {
 
