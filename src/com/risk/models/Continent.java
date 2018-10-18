@@ -163,6 +163,12 @@ public class Continent {
 		this.continentOwnedTerritory = continentOwnedterritory;
 	}
 	
+	/**
+	 *  This method used to update keys and value of map
+	 * @param oldContinent Old key
+	 * @param newContinent New key which need to replace by old key
+	 * @param newValue New value of Continent
+	 */
 	public void updateContinentValue(String oldContinent, String newContinent, int newValue) {
 	    continentValue.remove(oldContinent);
 	    continentValue.put(newContinent, newValue);
