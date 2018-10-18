@@ -114,9 +114,19 @@ public class MapValidator {
 		return isMapValid;
 	}
 
-
+	public static Object getKeyFromValue(Map hm, Object value) {
+        for (Object o : hm.keySet()) {
+          if (hm.get(o).equals(value)) {
+            return o;
+          }
+        }
+        return null;
+      }
+    
+	
 	/**
-	 * Validate continent. It should have atleast one territory.
+	 * Validate continent. It should have at-least one territory.
+	 * and territory should not be in unique Continent.
 	 * 
 	 * @throws InvalidMapException
 	 *             invalid map exception
@@ -128,6 +138,11 @@ public class MapValidator {
 			for (Entry<String, ArrayList<String>> entry : continentTerritories.entrySet()) {
 				String key = entry.getKey();
 				if(entry.getValue().size() > 0) {
+					ArrayList<String> territoryList = entry.getValue();
+					for(int i = 0; i<territoryList.size(); i++) {
+						
+						
+					}
 					isMapValid = validateAdjcentTerritories();
 				}else {
 					this.isMapValid = false;
