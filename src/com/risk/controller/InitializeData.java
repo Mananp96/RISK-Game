@@ -143,23 +143,23 @@ public class InitializeData {
 		boolean isMapValid = boardData.generateBoardData();
 		System.out.println(isMapValid);
 		if(isMapValid) {
-		System.out.println("Model Data Continent Value: - " + boardData.continentObject.getContinentValue());
-		System.out.println("Model Data Territory with Adjacent: - " + boardData.territoryObject.getAdjacentTerritory());
-		System.out.println("Model Data Territory with Adjacent Size: - " + boardData.territoryObject.getAdjacentTerritory().size());
-		System.out.println("Model Data Continent with Territory: - " + boardData.continentObject.getContinentTerritory());
-		System.out.println("Model Data of Territory List : - " + boardData.territoryObject.getTerritoryList());
-		System.out.println("Model Data of Territory List Size : - " + boardData.territoryObject.getTerritoryList().size());
-		System.out.println("Model Data of Territory with Continents List : - " + boardData.territoryObject.getTerritoryCont());
-		System.out.println("Model Data of Territory with Continents List Size : - " + boardData.territoryObject.getTerritoryCont().size());
+			System.out.println("Model Data Continent Value: - " + boardData.continentObject.getContinentValue());
+			System.out.println("Model Data Territory with Adjacent: - " + boardData.territoryObject.getAdjacentTerritory());
+			System.out.println("Model Data Territory with Adjacent Size: - " + boardData.territoryObject.getAdjacentTerritory().size());
+			System.out.println("Model Data Continent with Territory: - " + boardData.continentObject.getContinentTerritory());
+			System.out.println("Model Data of Territory List : - " + boardData.territoryObject.getTerritoryList());
+			System.out.println("Model Data of Territory List Size : - " + boardData.territoryObject.getTerritoryList().size());
+			System.out.println("Model Data of Territory with Continents List : - " + boardData.territoryObject.getTerritoryCont());
+			System.out.println("Model Data of Territory with Continents List Size : - " + boardData.territoryObject.getTerritoryCont().size());
 
-		continent = boardData.continentObject;
-		territory = boardData.territoryObject;
-		players.selectPlayers(players.getPlayerList(), playerCount);
-		Reinforcement reinforcement = new Reinforcement(players,continent,territory);
-		reinforcement.initialReinforcement();
-		setContinent(reinforcement.continent);
-		setPlayers(reinforcement.players);
-		setTerritory(reinforcement.territory);
+			continent = boardData.continentObject;
+			territory = boardData.territoryObject;
+			players.selectPlayers(players.getPlayerList(), playerCount);
+			Reinforcement reinforcement = new Reinforcement(players,continent,territory);
+			reinforcement.initialReinforcement();
+			setContinent(reinforcement.continent);
+			setPlayers(reinforcement.players);
+			setTerritory(reinforcement.territory);
 		}else {
 			System.out.println("Map is not Valid");
 		}
