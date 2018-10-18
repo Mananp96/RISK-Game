@@ -18,6 +18,7 @@ public class MapValidator {
 	Continent continent;
 	Territory territory;
 	Map<String, ArrayList<String>> continentTerritories;
+	Map<String, ArrayList<String>> duplicateTerritoryContinent;
 	Map<String, Integer> continentValue;
 	Map<String, ArrayList<String>> adjcentTerritories;
 
@@ -26,8 +27,7 @@ public class MapValidator {
 		this.continentTerritories =  continentObject.getContinentTerritory();
 		this.continentValue = continentObject.getContinentValue();
 		this.adjcentTerritories = territoryObject.getAdjacentTerritory();
-		//		this.territoriesMap = territoryObject.getTerritoriesMap();
-		//		this.adjacentTerritoriesMap = territoryObject.getAdjacentTerritoriesMap();
+		this.duplicateTerritoryContinent = territoryObject.getDuplicateTerritoryContinent();
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class MapValidator {
 
 
 	/**
-	 * Validate continent Winning Value. Winning Value must be atleast one.
+	 * Validate continent Winning Value. Winning Value must be at-least one.
 	 * 
 	 * @throws InvalidMapException
 	 *             invalid map exception
@@ -113,16 +113,6 @@ public class MapValidator {
 
 		return isMapValid;
 	}
-
-	public static Object getKeyFromValue(Map hm, Object value) {
-        for (Object o : hm.keySet()) {
-          if (hm.get(o).equals(value)) {
-            return o;
-          }
-        }
-        return null;
-      }
-    
 	
 	/**
 	 * Validate continent. It should have at-least one territory.
@@ -135,21 +125,24 @@ public class MapValidator {
 
 		if(continentTerritories.size() > 0) {
 
-			for (Entry<String, ArrayList<String>> entry : continentTerritories.entrySet()) {
-				String key = entry.getKey();
-				if(entry.getValue().size() > 0) {
-					ArrayList<String> territoryList = entry.getValue();
-					for(int i = 0; i<territoryList.size(); i++) {
-						
-						
+			for(Entry<String, ArrayList<String>> entryContinent : continentTerritories.entrySet()) {
+				if(entryContinent.getValue().size() > 0) {
+					for(Entry<String, ArrayList<String>> entryTerritory : continentTerritories.entrySet()) {
+						if(entryTerritory.getValue().size() == 1) {
+							this.isMapValid = true;
+						}else {
+							this.isMapValid = false;
+							throw new InvalidMapException("Error: Territory Duplicacy."
+									+ "One Territory should be in One Continent only");
+						}
 					}
-					isMapValid = validateAdjcentTerritories();
 				}else {
 					this.isMapValid = false;
-					throw new InvalidMapException("Territories should be 1 or more.");
-				}		    
+					throw new InvalidMapException("Continent should have at-least one Territory");
+				}
 			}
-
+			
+			isMapValid = validateAdjcentTerritories();
 		}else {
 			this.isMapValid = false;
 			throw new InvalidMapException("Territories should not be null");
@@ -162,7 +155,7 @@ public class MapValidator {
 
 
 	/**
-	 * Validate Territories. It should have atleast one adjacent territory.
+	 * Validate Territories. It should have at-least one adjacent territory.
 	 *
 	 * @throws InvalidMapException
 	 *             invalid map exception
@@ -171,7 +164,7 @@ public class MapValidator {
 
 		if(adjcentTerritories != null) {
 			for (Entry<String, ArrayList<String>> entry : adjcentTerritories.entrySet()) {
-				String key = entry.getKey();
+				
 				if(entry.getValue().size() > 0) {
 					this.isMapValid = true;
 				}else {
@@ -180,7 +173,7 @@ public class MapValidator {
 				}
 			}
 		}	
-		System.out.println("4."+isMapValid);
+		
 		return isMapValid;
 	}
 

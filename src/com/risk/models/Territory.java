@@ -21,9 +21,10 @@ public class Territory {
 	Map<String, String> territoryCont; 
 	Map<String, Integer> territoryArmy; 
 	Map<String, ArrayList<String>> adjacentTerritory; 
+	Map<String, ArrayList<String>> duplicateTerritoryContinent; //to be used only for validation to check duplicacy.
+	
 	ArrayList<String> territoryList; 
-	Map<String, String> territoriesMap;
-	Map<String,String> adjacentTerritoriesMap;
+	
 	boolean flag = false;
 	
 	
@@ -34,8 +35,8 @@ public class Territory {
 		territoryArmy = new HashMap<>();
 		adjacentTerritory = new HashMap<>();
 		territoryList = new ArrayList<>();
-		territoriesMap = new HashMap<>();
-		adjacentTerritoriesMap = new HashMap<>();
+		duplicateTerritoryContinent = new HashMap<>();
+		
 	}
 	
 	
@@ -264,6 +265,31 @@ public class Territory {
 	public ArrayList<String> addTerritory(String territory){
 		territoryList.add(territory);
 		return territoryList;
+	}
+	
+	/**
+	 * This method is used to check if particular Territory is having multiple Continents?
+	 * To be used for map validation purpose only.
+	 * 
+	 * @param territory Name of Territory
+	 * @param continent Name of Continent
+	 */
+	public void addDuplicateTerritoryContinent(String territory, String continent) {
+		if(duplicateTerritoryContinent.containsKey(territory)) {
+			duplicateTerritoryContinent.get(territory).add(continent);
+		}else {
+			ArrayList<String> continentList = new ArrayList<>();
+			continentList.add(continent);
+			duplicateTerritoryContinent.put(continent, continentList);
+		}
+	}
+	
+	/**
+	 * 
+	 * @return a HashMap with Territory and it's Continent.
+	 */
+	public Map<String,ArrayList<String>> getDuplicateTerritoryContinent(){
+		return duplicateTerritoryContinent;
 	}
 	
 }

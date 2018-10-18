@@ -106,15 +106,16 @@ public class BoardData {
 
 				//assign Territories List.
 				if(territoriesFlag && ! (currentLine.isEmpty() || currentLine.equals("[Territories]"))) {
-				    	territoryData.append(currentLine +"\n");
+				    territoryData.append(currentLine +"\n");
 					territoriesArray = currentLine.split(",");
 					//to assign Adjacent Territories HashMap
 					for(int i = 4; i < territoriesArray.length ; i++) {
 						territoryObject.addAdjacentTerritory(territoriesArray[0], territoriesArray[i]);						
 					}
 					territoryObject.addTerritory(territoriesArray[0]);
-					territoryObject.addTerritoryCont(territoriesArray[0], territoriesArray[3]);
+					territoryObject.addTerritoryCont(territoriesArray[0], territoriesArray[3]); //need to refactor 
 					continentObject.addContinentTerritory(territoriesArray[3], territoriesArray[0]);
+					territoryObject.addDuplicateTerritoryContinent(territoriesArray[0], territoriesArray[3]); //need to refactor
 				}
 
 			}
