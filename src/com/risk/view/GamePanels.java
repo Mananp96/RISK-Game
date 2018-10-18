@@ -704,9 +704,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	/**
 	 * The GridBagConstraints is used specifies constraints for components that are laid out using the GridBagLayout class.
 	 * Initialize GridBagConstraint object with all of its fields set to their default value.
-	 * @param insets The initial insets value
-	 * @param fill The initial fill value
-	 * @param anchor The initial anchor value.
+	 * @param insets The initial insets value.
+	 * @param fill The initial fill value.
 	 * @param wx The initial weightx value.
 	 * @param wy The initial weighty value.
 	 * @param x The initial gridx value.

@@ -14,18 +14,18 @@ public class Continent {
     /**
 	 * @param continentValue value of armies when continent is fully acquired by player.
 	 * @param continentTerritory no.of territories for each continent
-	 * @param continentOwnedterritory no. of territories owned by player for particular continent
+	 * @param continentOwnedTerritory no. of territories owned by player for particular continent
 	 * @param playerOwnedContTerr no. of territory owned by player
 	 */
 	Map<String, Integer> continentValue; 
 	Map<String, ArrayList<String>> continentTerritory;
-	Map<String, ArrayList<String>> continentOwnedterritory; 
+	Map<String, ArrayList<String>> continentOwnedTerritory;
 	Map<String, Territory> playerOwnedContTerr;
 
 	public Continent() {
 		continentValue = new HashMap<>();
 		continentTerritory = new HashMap<>();
-		continentOwnedterritory = new HashMap<>();
+		continentOwnedTerritory = new HashMap<>();
 		playerOwnedContTerr = new HashMap<>();
 	}
 
@@ -113,30 +113,30 @@ public class Continent {
 	public Map<String, ArrayList<String>> addContinentOwnedTerritory(String continent, String territory, boolean operation) {
 
 		if(operation) {
-			if(continentOwnedterritory.containsKey(continent)) {
-				ArrayList<String> tempArray1 = continentOwnedterritory.get(continent);
+			if(continentOwnedTerritory.containsKey(continent)) {
+				ArrayList<String> tempArray1 = continentOwnedTerritory.get(continent);
 				if(!tempArray1.contains(territory)){
 					tempArray1.add(territory);
-					continentOwnedterritory.put(continent,tempArray1);
+					continentOwnedTerritory.put(continent,tempArray1);
 				}
 			} else {
 				ArrayList<String> tempArray2 = new ArrayList<>();
 				tempArray2.add(territory);
-				continentOwnedterritory.put(continent, tempArray2);
+				continentOwnedTerritory.put(continent, tempArray2);
 			}
 		} else {
-			if(continentOwnedterritory.containsKey(continent)) {
-				ArrayList<String> tempArray3 = continentOwnedterritory.get(continent);
+			if(continentOwnedTerritory.containsKey(continent)) {
+				ArrayList<String> tempArray3 = continentOwnedTerritory.get(continent);
 				if(tempArray3.contains(territory)){
 					tempArray3.remove(territory);
 					if(!tempArray3.isEmpty())
-						continentOwnedterritory.replace(continent, continentOwnedterritory.get(continent), tempArray3);
+						continentOwnedTerritory.replace(continent, continentOwnedTerritory.get(continent), tempArray3);
 					else
-						continentOwnedterritory.remove(continent);
+						continentOwnedTerritory.remove(continent);
 				}
 			}
 		}
-		return continentOwnedterritory;
+		return continentOwnedTerritory;
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class Continent {
 	 * @return a map continentOwnedterritory
 	 */
 	public Map<String, ArrayList<String>> getContinentOwnedterritory() {
-		return continentOwnedterritory;
+		return continentOwnedTerritory;
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class Continent {
 	 * @param continentOwnedterritory no. of Territories owned by Player for particular Continent
 	 */
 	public void setContinentOwnedterritory(Map<String, ArrayList<String>> continentOwnedterritory) {
-		this.continentOwnedterritory = continentOwnedterritory;
+		this.continentOwnedTerritory = continentOwnedterritory;
 	}
 
 }
