@@ -25,8 +25,6 @@ public class EditMapFile {
      * @param territoryData Store Territory Data read from file
      */
     String filePath;
-    StringBuilder continentData;
-    StringBuilder territoryData;
     Territory territory;
     Continent continent;
     /**
@@ -36,8 +34,6 @@ public class EditMapFile {
     public EditMapFile(String filePath) {
 	super();
 	this.filePath = filePath;
-	continentData = new StringBuilder();
-	territoryData = new StringBuilder();
     }
     
     /**
@@ -48,8 +44,6 @@ public class EditMapFile {
 	BoardData boardData = new BoardData(filePath);
 	boolean isMapValid = boardData.generateBoardData();
 	if(isMapValid) {
-	    //continentData = boardData.getContinentData();
-	    //territoryData = boardData.getTerritoryData();
 	    continent = boardData.continentObject;
 	    territory = boardData.territoryObject;
 	}
@@ -72,7 +66,16 @@ public class EditMapFile {
         this.continent = continent;
     }
 
+    /**
+     * 
+     * @param continent Continent Model Object
+     * @param territory Territory Model Object
+     * @return true if content edit is validated according to Risk Map Otherwise return false;
+     * @throws InvalidMapException
+     */
     public boolean saveEditMap(Continent continent,Territory territory) throws InvalidMapException {
+	this.continent = continent;
+	this.territory = territory;
 	MapValidator mapValidator = new MapValidator(continent, territory);
 	boolean flag = mapValidator.validateMap();
 	if(flag) {
@@ -83,6 +86,7 @@ public class EditMapFile {
     
     public void createFile() {
 	try {
+	    System.out.println("File Creation Started");
 	    String defaultMapTag = "[Map]\n"+
 			"author=Unknown\n"+
 			"warn=yes\n"+
@@ -93,6 +97,9 @@ public class EditMapFile {
 	    continentStr.append("[Continents]\n");
 	    territoryStr.append("[Territories]\n");
 	    File file = new File("previous.map"); 
+	    if(file.exists()) {
+		System.out.println("Exist file deletd "+ file.delete());
+	    }
 	    boolean isFileCreated = file.createNewFile();
 	    if(isFileCreated) {
 		FileWriter fileWriter = new FileWriter(file);
@@ -101,62 +108,23 @@ public class EditMapFile {
 		    continentStr.append(entry.getKey()+"="+entry.getValue()+"\n");
 		}
 		for(Entry<String,ArrayList<String>> entry : territory.getAdjacentTerritory().entrySet()) {
-		    /*territoryStr.append(entry.getKey()+",0,0,"+territory.getTerritoryC)
-		    for(int i=0; i< entry.getValue().size();i++)*/
+		    territoryStr.append(entry.getKey()+",0,0,"+territory.getTerritoryCont().get(entry.getKey()));
+		    for(int i=0; i< entry.getValue().size();i++) {
+			territoryStr.append(","+entry.getValue().get(i));
+		    }
+		    territoryStr.append("\n");
 		}
+		bufferedWriter.write(defaultMapTag+""+continentStr+""+territoryStr);
+		bufferedWriter.flush();
+		bufferedWriter.close();
+		System.out.println("File Created");
 	    }
 	} catch (Exception e) {
-	    System.out.println("Exception is thrown while creating file");
+	    e.printStackTrace();
+	    System.out.println("Exception is thrown while creating file : "+e);
 	}
 	
 
-    }
-    /**
-     * 
-     * @param mapData Map content read from file
-     * @return true if edited data is validated corrected Otherwise return false
-     * @throws InvalidMapException 
-     */
-    public boolean editMap(String mapData) {
-	try {
-	    	
-	    	Random random = new Random();
-		String fileName = "mapFile_"+ random.nextInt(1000)+".map";
-	    	File file = new File(fileName); 
-	    	System.out.println("File Name ---> "+fileName);
-		boolean isFileCreated = file.createNewFile();
-
-		if(isFileCreated) {
-			FileWriter fileWriter = new FileWriter(file);
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write(mapData);
-			bufferedWriter.flush();
-			bufferedWriter.close();
-			BoardData boardData = new BoardData(fileName);
-			boolean isMapValid = boardData.generateBoardData();
-
-			if(isMapValid) {
-				System.out.println("Map is Valid.");
-				System.out.println("File has been Update successfully with File Name " + fileName);
-				bufferedWriter = new BufferedWriter(new FileWriter(filePath));
-				bufferedWriter.write(mapData);
-				bufferedWriter.flush();
-				bufferedWriter.close();
-				return true;
-			} else {
-				System.out.println("map is not valid.");
-				return false;
-			}
-
-		} else {
-			System.out.println("File already present at the specified location");
-		}
-
-	} catch (IOException exception) {
-		System.out.println("Exception --------->  IO Exception is thrown");
-	}
-
-	return false;
     }
     /**
      * 
@@ -171,34 +139,6 @@ public class EditMapFile {
      */
     public void setFilePath(String filePath) {
         this.filePath = filePath;
-    }
-    /**
-     * 
-     * @return continentData Continent Data read from file
-     */
-    public StringBuilder getContinentData() {
-        return continentData;
-    }
-    /**
-     * 
-     * @param continentData Continent Data read from file
-     */
-    public void setContinentData(StringBuilder continentData) {
-        this.continentData = continentData;
-    }
-    /**
-     * 
-     * @return territoryData Continent Data read from file
-     */
-    public StringBuilder getTerritoryData() {
-        return territoryData;
-    }
-    /**
-     * 
-     * @param territoryData Continent Data read from file
-     */
-    public void setTerritoryData(StringBuilder territoryData) {
-        this.territoryData = territoryData;
     }
 
 }
