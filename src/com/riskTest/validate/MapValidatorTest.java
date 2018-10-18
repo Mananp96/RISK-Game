@@ -106,8 +106,7 @@ public class MapValidatorTest {
 	 */
 	@Test
 	public void testValidateAdjcentTerritories() {
-		continent.addContinentTerritory("Southern Africa", "Congo");
-	
+		
 		mapValidator = new MapValidator(continent, territory);
 		
 		Assertions.assertThrows(InvalidMapException.class, () -> {

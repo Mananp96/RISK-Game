@@ -86,11 +86,5 @@ public class ContinentTest {
 		assertEquals(continentTerritory,continent.getContinentTerritory());
 	}
 	
-	/**
-	 * This method is to test AddContinentOwnedTerritory() method.
-	 */
-	@Test
-	public void testAddContinentOwnedTerritory() {
-		
-	}
+	
 }
