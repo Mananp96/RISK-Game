@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
@@ -113,7 +112,7 @@ public class NewEditMapPanel implements ActionListener {
         		}
         	});
         	fetchFileDataError = new JLabel("There is problem with file");
-        	if(createNew) {
+        	if(!createNew) {
         	    mapOptA.setVisible(false);
         	    fetchFileDataError.setVisible(false);
         	    chooseMap.setVisible(false);
@@ -434,6 +433,10 @@ public class NewEditMapPanel implements ActionListener {
 	    if(deleteTerritoryList.getSelectedIndex() != -1) {
 		territory.getTerritoryCont().remove(territoryStr);
 		territory.getAdjacentTerritory().remove(territoryStr);
+		for(Entry<String, ArrayList<String>> entry : continent.getContinentTerritory().entrySet()) {
+		   if(entry.getValue().contains(territoryStr))
+		       entry.getValue().remove(territoryStr);
+		}
 		for(Entry<String, ArrayList<String>> entry : territory.getAdjacentTerritory().entrySet()) {
     		    ArrayList<String> tempArray = new ArrayList<>();
     		    for(int i=0;i<entry.getValue().size();i++) {
@@ -457,6 +460,7 @@ public class NewEditMapPanel implements ActionListener {
 		System.out.println("Enter  continent  for delete is "+ continentStr);
 		    if(deleteContinentList.getSelectedIndex() != -1) {
 			continent.getContinentValue().remove(continentStr);
+			continent.getContinentTerritory().remove(continentStr);
 			Map<String, String> tempMap =territory.getTerritoryCont();
 			Set<String> set = new HashSet<> ();
 			for(Entry<String, String> entry : tempMap.entrySet()) {
@@ -486,6 +490,13 @@ public class NewEditMapPanel implements ActionListener {
 	    if(StringUtils.isNotEmpty(oldTerritory) && StringUtils.isNotEmpty(newTerritory)) {
 		territory.getTerritoryCont().put(newTerritory,territory.getTerritoryCont().remove(oldTerritory));
 		territory.getAdjacentTerritory().put(newTerritory, territory.getAdjacentTerritory().remove(oldTerritory));
+		
+		for(Entry<String, ArrayList<String>> entry : continent.getContinentTerritory().entrySet()) {
+		   if(entry.getValue().contains(oldTerritory)) {
+		       entry.getValue().remove(oldTerritory);
+		       entry.getValue().add(newTerritory);
+		   }
+		}
 		for(Entry<String, ArrayList<String>> entry : territory.getAdjacentTerritory().entrySet()) {
     		    ArrayList<String> tempArray = new ArrayList<>();
     		    for(int i=0;i<entry.getValue().size();i++) {
@@ -510,6 +521,9 @@ public class NewEditMapPanel implements ActionListener {
 	    if(StringUtils.isNotEmpty(oldContinent) && StringUtils.isNotEmpty(newContinent) && StringUtils.isNotEmpty(value) && StringUtils.isNumeric(value) && Integer.parseInt(value) > 0) {
 		continent.updateContinentValue(oldContinent, newContinent, Integer.parseInt(value));
 		territory.updateTerritoryContinent(oldContinent, newContinent);
+		ArrayList<String> tempArray = continent.getContinentTerritory().get(oldContinent);
+		continent.getContinentTerritory().remove(oldContinent);
+		continent.getContinentTerritory().put(newContinent,tempArray);
 		displaySuccessDialog();
 		updateAllContinentList();
     	    	updateAddTerrContinentList();
@@ -543,6 +557,7 @@ public class NewEditMapPanel implements ActionListener {
 	    System.out.println("Continent selected is " + continentStr + " with Territory " + territoryStr);
 	    if(StringUtils.isNotEmpty(continentStr) && StringUtils.isNotEmpty(territoryStr) && !territory.getTerritoryCont().containsKey(territoryStr)) {
 		territory.addTerritoryCont(territoryStr, continentStr);
+		continent.addContinentTerritory(continentStr, territoryStr);
 		displaySuccessDialog();
 		addContinentField.setText("");
 		addContinentValField.setText("");
