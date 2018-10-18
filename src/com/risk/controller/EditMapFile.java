@@ -4,7 +4,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.Random;
+
+import com.risk.exception.InvalidMapException;
+import com.risk.models.Continent;
+import com.risk.models.Territory;
+import com.risk.validate.MapValidator;
 
 /**
  * This Class is used to edit map which are loaded by user
@@ -20,7 +27,8 @@ public class EditMapFile {
     String filePath;
     StringBuilder continentData;
     StringBuilder territoryData;
-    
+    Territory territory;
+    Continent continent;
     /**
      * Default Constructor which one parameter, filePath
      * @param filePath path of file loaded by user
@@ -40,16 +48,74 @@ public class EditMapFile {
 	BoardData boardData = new BoardData(filePath);
 	boolean isMapValid = boardData.generateBoardData();
 	if(isMapValid) {
-	    continentData = boardData.getContinentData();
-	    territoryData = boardData.getTerritoryData();
+	    //continentData = boardData.getContinentData();
+	    //territoryData = boardData.getTerritoryData();
+	    continent = boardData.continentObject;
+	    territory = boardData.territoryObject;
 	}
 	return isMapValid;
     }
     
+    public Territory getTerritory() {
+        return territory;
+    }
+
+    public void setTerritory(Territory territory) {
+        this.territory = territory;
+    }
+
+    public Continent getContinent() {
+        return continent;
+    }
+
+    public void setContinent(Continent continent) {
+        this.continent = continent;
+    }
+
+    public boolean saveEditMap(Continent continent,Territory territory) throws InvalidMapException {
+	MapValidator mapValidator = new MapValidator(continent, territory);
+	boolean flag = mapValidator.validateMap();
+	if(flag) {
+	    createFile();
+	}
+	return mapValidator.validateMap();
+    }
+    
+    public void createFile() {
+	try {
+	    String defaultMapTag = "[Map]\n"+
+			"author=Unknown\n"+
+			"warn=yes\n"+
+			"image=previous.bmp\n"+
+			"wrap=no\n";
+	    StringBuilder continentStr= new StringBuilder();
+	    StringBuilder territoryStr= new StringBuilder();
+	    continentStr.append("[Continents]\n");
+	    territoryStr.append("[Territories]\n");
+	    File file = new File("previous.map"); 
+	    boolean isFileCreated = file.createNewFile();
+	    if(isFileCreated) {
+		FileWriter fileWriter = new FileWriter(file);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		for(Entry<String, Integer> entry : continent.getContinentValue().entrySet() ) {
+		    continentStr.append(entry.getKey()+"="+entry.getValue()+"\n");
+		}
+		for(Entry<String,ArrayList<String>> entry : territory.getAdjacentTerritory().entrySet()) {
+		    /*territoryStr.append(entry.getKey()+",0,0,"+territory.getTerritoryC)
+		    for(int i=0; i< entry.getValue().size();i++)*/
+		}
+	    }
+	} catch (Exception e) {
+	    System.out.println("Exception is thrown while creating file");
+	}
+	
+
+    }
     /**
      * 
      * @param mapData Map content read from file
      * @return true if edited data is validated corrected Otherwise return false
+     * @throws InvalidMapException 
      */
     public boolean editMap(String mapData) {
 	try {

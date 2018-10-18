@@ -51,7 +51,6 @@ import com.risk.models.Territory;
  * @author Himen Sidhpura
  */
 public class GamePanels implements ActionListener, ListSelectionListener {
-
 	/**
 	 * @param frame Frame object
 	 * @param players Player model object
@@ -105,7 +104,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JList<String> territoryAList;
 	private JList<String> territoryBList;
 	private JList<String> continentInfoList;
-	private JList<String> territoryInfoList;
+	private JList<String> territoryInfoList;	
 	private GridBagConstraints c;
 	private DefaultCaret caret;
 	
@@ -117,15 +116,16 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private DefaultListModel<String> territoryBModel;
 	private DefaultListModel<String> continentInfoModel;
 	private DefaultListModel<String> territoryInfoModel;
+	
 	private JComboBox<String> territoryADropDown;
 	private JComboBox<String> territoryBDropDown;
 	private SpinnerNumberModel selectArmyModel;
 	private JLabel fortErrorMsg;
 	private JTextArea continentArea;
 	private JTextArea territoryArea;
-	private JLabel fetchFileDataError;
 	private String defaultMapTag;
 	private String finalMapData;
+
 	
 	
 	/**
@@ -236,72 +236,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * @return existingMapPanel
 	 */
 	protected JPanel editExistingMapPanel() {
-		
-		JPanel existingMapPanel = new JPanel();
-		GridBagLayout exisitngMapLayout = new GridBagLayout();
-		existingMapPanel.setLayout(exisitngMapLayout);
-		existingMapPanel.setSize(new Dimension(400,250));
-		frame.setResizable(true);
-		mapOptA = new JRadioButton("Choose Your Own Map");
-		mapOptA.setActionCommand("Own Map");
-		JFileChooser chooseMap = new JFileChooser("D:");
-		chooseMap.addChoosableFileFilter(new FileFilter() {
-				public String getDescription() {
-				return "MAP Documents (*.map)";
-				}
-				public boolean accept(File f) {
-					if (f.isDirectory()) {
-						return true;
-					} else {
-						return f.getName().toLowerCase().endsWith(".map");
-					}
-				}
-			});
-		mapOptA.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// TODO Auto-generated method stub
-				if(mapOptA.isSelected() && chooseMap.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					existingMapFilePath = chooseMap.getSelectedFile().getPath();
-					generateEditMapData(existingMapFilePath);
-					randomMap = false;
-				}
-			}
-		});
-		fetchFileDataError = new JLabel("If Below Text Area are blank then there is problem with file");
-		
-		JLabel label1 = new JLabel("Enter Continent in Every New Line in Continent=value format and continent must be maximum 32 ", JLabel.CENTER);
-		continentArea = new JTextArea(4,40);
-		continentArea.setFocusable(true);
-		continentArea.setLineWrap(true);
-		continentArea.setWrapStyleWord(true);
-		JScrollPane editContinentScrollPane = new JScrollPane(continentArea);
-		
-		JLabel label2 = new JLabel("Enter Territories in New Line in this format : territory,x coordinate, y coordinat, adjacent territory 1, adjacent territory 2 .........,adjacent territory n, (n<=10) ", JLabel.CENTER);
-		territoryArea = new JTextArea(4,40);
-		territoryArea.setFocusable(true);
-		territoryArea.setLineWrap(true);
-		territoryArea.setWrapStyleWord(true);
-		JScrollPane editTerritoryScrollPane = new JScrollPane(territoryArea);
-		
-		saveMapBtn = new JButton("Update Map Data");
-		saveMapBtn.addActionListener(this);
-		saveMapBtn.setActionCommand("Update Map Data");
-		backBtn = new JButton("Exit");
-		backBtn.addActionListener(this);
-		backBtn.setActionCommand(backBtnName);
-		existingMapPanel.add(mapOptA, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 0));
-		existingMapPanel.add(fetchFileDataError, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 1));
-		existingMapPanel.add(label1, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 2));
-		existingMapPanel.add(editContinentScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 8, 0, 3));
-		existingMapPanel.add(label2, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
-		existingMapPanel.add(editTerritoryScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 8, 0, 5));
-		existingMapPanel.add(saveMapBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 0, 6));
-		existingMapPanel.add(backBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 1, 6));
-
-		return existingMapPanel;
-		
+	    frame.setResizable(true);
+	    NewEditMapPanel newEditMapPanel=new NewEditMapPanel();
+	    return newEditMapPanel.createMapPanel(frame,false);
 	}
 	
 	/**
@@ -664,21 +601,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		return userPanel;
 	}
 	/**
-	 *  method is used to generate map data which is selected for editing
-	 * @param filePath path of input file use for editing
-	 */
-	protected void generateEditMapData(String filePath) {
-	    if(StringUtils.isNotEmpty(filePath)) {
-		EditMapFile editMapFile = new EditMapFile(filePath); 
-		if(editMapFile.generateData()) {
-		    continentArea.setText(editMapFile.getContinentData().toString());
-		    territoryArea.setText(editMapFile.getTerritoryData().toString());
-		    fetchFileDataError.setText("File Content Data is validated and Ready to Edit");
-		}
-	    }
-	}
-
-	/**
 	 * The GridBagConstraints is used specifies constraints for components that are laid out using the GridBagLayout class.
 	 * Initialize GridBagConstraint object with all of its fields set to their default value.
 	 * @param insets The initial insets value
@@ -836,7 +758,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		} else if(actionName.equals(twoPlayersBtnName)){
 			System.out.println("Two Player Game");
 			players.addPlayers("Neutral Player");
-			frame.setContentPane(userInfoPanel(2));
+			frame.setContentPane(userInfoPanel(3));
 			frame.invalidate();
 			frame.validate();
 		} else if(actionName.equals(threePlayersBtnName)){
@@ -901,7 +823,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 					enableReinforcementBtn();
 					updateLogArea();
 	    	    } else {
-	    	    	System.out.println("Input armies are out pf range");
+	    	    	System.out.println("Input armies are out of range");
     	    		goForReinforcement(false);
 	    	    }
 	    	} else {

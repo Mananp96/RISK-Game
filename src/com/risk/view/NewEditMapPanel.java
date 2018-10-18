@@ -9,11 +9,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,7 +30,9 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import com.risk.controller.EditMapFile;
+import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
+import com.risk.models.Players;
 import com.risk.models.Territory;
 
 public class NewEditMapPanel implements ActionListener {
@@ -33,7 +41,7 @@ public class NewEditMapPanel implements ActionListener {
         private JLabel fetchFileDataError;
         private GridBagConstraints c;
         private String backBtnName = "backBtn";
-        String existingMapFilePath;
+         String existingMapFilePath;
         boolean randomMap;
         
         private JComboBox<String> editContinentList;
@@ -45,9 +53,8 @@ public class NewEditMapPanel implements ActionListener {
         private JComboBox<String> deleteContinentList;
         private JComboBox<String> deleteTerritoryList;
         private JComboBox<String> deleteAdjTerrtList;
-        private JComboBox<String> addAdjContinentList;
-        private JComboBox<String> addAdjContTerritoryList;
-        private JComboBox<String> addAdjTerritoryList;
+        private JComboBox<String> addAdjTerritoryListA;
+        private JComboBox<String> addAdjTerritoryListB;
         
         private JTextField addContinentField;
         private JTextField addContinentValField;
@@ -68,10 +75,13 @@ public class NewEditMapPanel implements ActionListener {
         private JButton deleteAdjTerrBtn;
 		private Territory territory;
 		private Continent continent;
-
-        public JPanel createMapPanel(){
-            
-        	JPanel existingMapPanel = new JPanel();
+		private boolean validFlag;
+		JFrame frame;
+		boolean createNew;
+        public JPanel createMapPanel(JFrame frame,boolean createNew){
+            this.frame = frame;
+        	this.createNew = createNew;
+            JPanel existingMapPanel = new JPanel();
         	GridBagLayout exisitngMapLayout = new GridBagLayout();
         	existingMapPanel.setLayout(exisitngMapLayout);
         	existingMapPanel.setSize(new Dimension(400,250));
@@ -103,7 +113,11 @@ public class NewEditMapPanel implements ActionListener {
         		}
         	});
         	fetchFileDataError = new JLabel("There is problem with file");
-        	
+        	if(createNew) {
+        	    mapOptA.setVisible(false);
+        	    fetchFileDataError.setVisible(false);
+        	    chooseMap.setVisible(false);
+        	}
         	allContinentList = new JComboBox<>();
         	allContinentList.setActionCommand("allContinentList");
         	allContinentList.addActionListener(this);
@@ -124,13 +138,8 @@ public class NewEditMapPanel implements ActionListener {
         	addTerritoryBtn.setActionCommand("Add Territory");
         	addTerritoryBtn.addActionListener(this);
         	
-        	addAdjContinentList = new JComboBox<>();
-        	addAdjContinentList.setActionCommand("addAdjContinentList");
-        	addAdjContinentList.addActionListener(this);
-        	addAdjContTerritoryList = new JComboBox<>();
-        	addAdjContTerritoryList.setActionCommand("addAdjContTerritoryList");
-        	addAdjContTerritoryList.addActionListener(this);
-        	addAdjTerritoryList = new JComboBox<>();
+        	addAdjTerritoryListA = new JComboBox<>();
+        	addAdjTerritoryListB = new JComboBox<>();
         	addAdjTerritoryBtn = new JButton("Add Adjacent");
         	addAdjTerritoryBtn.setActionCommand("Add Adjacent");
         	addAdjTerritoryBtn.addActionListener(this);
@@ -144,6 +153,8 @@ public class NewEditMapPanel implements ActionListener {
         	editContinentBtn.setActionCommand("Update Continent");
         	editContinentBtn.addActionListener(this);
         	editTerritoryList = new JComboBox<>();
+        	editTerritoryList.setActionCommand("editTerritoryList");
+        	editTerritoryList.addActionListener(this);
         	editTerritoryField = new JTextField();
            	editTerritoryBtn = new JButton("Update Territory");
            	editTerritoryBtn.setActionCommand("Update Territory");
@@ -151,7 +162,11 @@ public class NewEditMapPanel implements ActionListener {
         	
         	
            	deleteContinentList = new JComboBox<>();
+           	deleteContinentList.setActionCommand("deleteContinentList");
+           	deleteContinentList.addActionListener(this);
            	deleteTerritoryList = new JComboBox<>();
+           	deleteTerritoryList.setActionCommand("deleteTerritoryList");
+           	deleteTerritoryList.addActionListener(this);
            	deleteAdjTerrtList = new JComboBox<>();
         	deleteContinentBtn = new JButton("Delete Continent");
         	deleteTerritoryBtn = new JButton("Delete Territory");
@@ -164,10 +179,16 @@ public class NewEditMapPanel implements ActionListener {
         	deleteTerritoryBtn.addActionListener(this);
         	deleteAdjTerrBtn.setActionCommand("Delete Adjacent");
         	deleteAdjTerrBtn.addActionListener(this);
+        	if(createNew) {
+        	    saveMapBtn = new JButton("Update Map Data");
+            	    saveMapBtn.addActionListener(this);
+            	    saveMapBtn.setActionCommand("Update Map Data");    
+        	} else {
+        	    saveMapBtn = new JButton("Create Map");
+            	    saveMapBtn.addActionListener(this);
+            	    saveMapBtn.setActionCommand("Create Map Data");    
+        	}
         	
-        	saveMapBtn = new JButton("Update Map Data");
-        	saveMapBtn.addActionListener(this);
-        	saveMapBtn.setActionCommand("Update Map Data");
         	backBtn = new JButton("Exit");
         	backBtn.addActionListener(this);
         	backBtn.setActionCommand(backBtnName);
@@ -196,13 +217,11 @@ public class NewEditMapPanel implements ActionListener {
         	existingMapPanel.add(addTerritoryBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 4, 6));
         	
         	existingMapPanel.add(new JLabel("Add Adjacent"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 7));
-        	existingMapPanel.add(new JLabel("Continent"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 0, 8));
-        	existingMapPanel.add(addAdjContinentList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 1, 8));
-        	existingMapPanel.add(new JLabel("Continent-->Territory"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 2, 8));
-        	existingMapPanel.add(addAdjContTerritoryList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 3, 8));
-        	existingMapPanel.add(new JLabel("All Territory"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 4, 8));
-        	existingMapPanel.add(addAdjTerritoryList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 5, 8));
-        	existingMapPanel.add(addAdjTerritoryBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 6, 8));
+        	existingMapPanel.add(new JLabel("Territory"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 0, 8));
+        	existingMapPanel.add(addAdjTerritoryListA, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 1, 8));
+        	existingMapPanel.add(new JLabel("and It's Adjacent Territory"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 2, 8));
+        	existingMapPanel.add(addAdjTerritoryListB, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 3, 8));
+        	existingMapPanel.add(addAdjTerritoryBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 4, 8));
         
         	existingMapPanel.add(new JLabel("Edit Continent"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 9));
         	existingMapPanel.add(editContinentList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 10));
@@ -237,44 +256,22 @@ public class NewEditMapPanel implements ActionListener {
             if(StringUtils.isNotEmpty(filePath)) {
         	EditMapFile editMapFile = new EditMapFile(filePath); 
         	if(editMapFile.generateData()) {
-        	  	//continentArea.setText(editMapFile.getContinentData().toString());
+        	  //  continentArea.setText(editMapFile.getContinentData().toString());
         	    //territoryArea.setText(editMapFile.getTerritoryData().toString());
         	    fetchFileDataError.setText("File Content Data is validated and Ready to Edit");
-        	    //territory = editMapFile.getTerritory();
-        	    //continent = editMapFile.getContinent();
+        	    territory = editMapFile.getTerritory();
+        	    continent = editMapFile.getContinent();
+        
         	    updateAllContinentList();
         	    updateAddTerrContinentList();
-        	    updateAddAdjContinentList();
         	    updateEditContinentList();
+        	    updateAddAdjTerritoryList();
+        	    updateEditTerritoryList();
         	    updateDeleteContinentList();
         	}
             }
         }	
 
-	private void updateEditContinentList() {
-	    editContinentList.removeAllItems();
-	    for(Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
-		editContinentList.addItem(entry.getKey());
-	    }	    
-	}
-	private void updateDeleteContinentList() {
-	    deleteContinentList.removeAllItems();
-	    for(Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
-		deleteContinentList.addItem(entry.getKey());
-	    }
-	}
-	private void updateAddAdjContinentList() {
-	    addAdjContinentList.removeAllItems();
-	    for(Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
-		addAdjContinentList.addItem(entry.getKey());
-	    }
-	}
-	private void updateAddTerrContinentList() {
-	    addTerrContinentList.removeAllItems();
-	    for(Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
-		addTerrContinentList.addItem(entry.getKey());
-	    }	    
-	}
 	/**
 	 * The GridBagConstraints is used specifies constraints for components that are laid out using the GridBagLayout class.
 	 * Initialize GridBagConstraint object with all of its fields set to their default value.
@@ -326,14 +323,16 @@ public class NewEditMapPanel implements ActionListener {
 	    String actionName = arg0.getActionCommand();
 		System.out.println("Action Name " + actionName);
 		if(actionName.equalsIgnoreCase(backBtnName)){
-		    displayErrorDialog();	    
+		    GamePanels gamePanels = new GamePanels();
+		    frame.setContentPane(gamePanels.mainMenu(frame, new Players()));
+		    frame.invalidate();
+			frame.validate();
 		} else if(actionName.equalsIgnoreCase("Add Continent")){
 		    addContinent(addContinentField.getText(),addContinentValField.getText());
 		} else if(actionName.equalsIgnoreCase("Add Territory")){
-		    System.out.println("------->");
 		    addTerritory(addTerrContinentList.getItemAt(addTerrContinentList.getSelectedIndex()),addTerritoryField.getText());
 		} else if(actionName.equalsIgnoreCase("Add Adjacent")){
-		    addAdjacentTerritory(addAdjContinentList.getItemAt(addAdjContinentList.getSelectedIndex()),addAdjContTerritoryList.getItemAt(addAdjContTerritoryList.getSelectedIndex()),addAdjTerritoryList.getItemAt(addAdjTerritoryList.getSelectedIndex()));
+		    addAdjacentTerritory(addAdjTerritoryListA.getItemAt(addAdjTerritoryListA.getSelectedIndex()),addAdjTerritoryListB.getItemAt(addAdjTerritoryListB.getSelectedIndex()));
 		} else if(actionName.equalsIgnoreCase("Update Continent")){
 		    updateContinent(editContinentList.getItemAt(editContinentList.getSelectedIndex()),editContinentField.getText(),editContinentValue.getText());		 		    
 		} else if(actionName.equalsIgnoreCase("Update Territory")){
@@ -345,42 +344,62 @@ public class NewEditMapPanel implements ActionListener {
 		} else if(actionName.equalsIgnoreCase("Delete Adjacent")){
 		    deleteAdjacentTerritory(deleteAdjTerrtList.getItemAt(deleteAdjTerrtList.getSelectedIndex()));
 		} else if(actionName.equalsIgnoreCase("Update Map Data")){
-		    
+		    EditMapFile editMapFile = new EditMapFile("previous.map");
+		    try {
+			validFlag = editMapFile.saveEditMap(continent, territory);
+			if(validFlag)
+			    displaySuccessDialog();
+		    } catch (InvalidMapException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
 		} else if(actionName.equalsIgnoreCase("allContinentList")) {
 		   updateAllTerritoryList();
 		} else if(actionName.equalsIgnoreCase("allTerritoryList")) {
 		    updateAllAdjTerritoryList();
-		} else if(actionName.equalsIgnoreCase("addAdjContinentList")) {
-		    updateAddAdjContTerritoryList();
-		} else if(actionName.equalsIgnoreCase("addAdjContTerritoryList")) {
-		    updateAddAdjTerritoryList();
 		} else if(actionName.equalsIgnoreCase("editContinentList") && editContinentList.getSelectedIndex() != -1) {
 			editContinentField.setText(editContinentList.getItemAt(editContinentList.getSelectedIndex()));
 			editContinentValue.setText(Integer.toString(continent.getContinentValue().get(editContinentList.getItemAt(editContinentList.getSelectedIndex()))));
+    		} else if(actionName.equalsIgnoreCase("editTerritoryList") && editTerritoryList.getSelectedIndex() != -1) {
+    			editTerritoryField.setText(editTerritoryList.getItemAt(editTerritoryList.getSelectedIndex()));
+    		} else if(actionName.equalsIgnoreCase("deleteContinentList")) {
+    		   generateDeleteTerritoryList(deleteContinentList.getItemAt(deleteContinentList.getSelectedIndex()));
+    		} else if(actionName.equalsIgnoreCase("deleteTerritoryList")) {
+     		   generateDeleteAdjTerritoryList(deleteTerritoryList.getItemAt(deleteTerritoryList.getSelectedIndex()));
     		}
 	    
 	}
 	
+	private void generateDeleteAdjTerritoryList(String itemAt) {
+	    // TODO Auto-generated method stub
+	    deleteAdjTerrtList.removeAllItems();
+	    for(Entry<String, ArrayList<String>> entry : territory.getAdjacentTerritory().entrySet()) {
+		if(entry.getKey().equalsIgnoreCase(itemAt)) {
+		    for(int i = 0;i< entry.getValue().size();i++) {
+			deleteAdjTerrtList.addItem(entry.getValue().get(i));
+		    }
+		}
+	    }
+	}
+	private void generateDeleteTerritoryList(String itemAt) {
+	    deleteTerritoryList.removeAllItems();
+	    for(Entry<String, String> entry : territory.getTerritoryCont().entrySet()) {
+		if(entry.getValue().equalsIgnoreCase(itemAt)) {
+		    deleteTerritoryList.addItem(entry.getKey());
+		}
+	    }
+	}
 	private void updateAddAdjTerritoryList() {
 	    // TODO Auto-generated method stub
+	    addAdjTerritoryListA.removeAllItems();
+	    addAdjTerritoryListB.removeAllItems();
 	    for(Entry<String, String> entry : territory.getTerritoryCont().entrySet()) {
-		addAdjTerritoryList.addItem(entry.getKey());
+		addAdjTerritoryListA.addItem(entry.getKey());
+		addAdjTerritoryListB.addItem(entry.getKey());
 		   
 	    }	    
 	}
-	private void updateAddAdjContTerritoryList() {
-	    // TODO Auto-generated method stub
-	    try {
-		addAdjContTerritoryList.removeAllItems();
-		for(Entry<String, String> entry : territory.getTerritoryCont().entrySet()) {
-		    if(entry.getValue().equalsIgnoreCase(addAdjContinentList.getItemAt(addAdjContinentList.getSelectedIndex()))) {
-			addAdjContTerritoryList.addItem(entry.getKey());
-		    }
-		}
-	    }  catch (Exception e) {
-		System.out.println("Exception in updateAddAdjContTerritoryList");
-	    }
-	}
+
 	private void updateAllAdjTerritoryList() {
 	    allAdjTerritoryList.removeAllItems();
 	    try {
@@ -399,42 +418,122 @@ public class NewEditMapPanel implements ActionListener {
 	}
 	private void deleteAdjacentTerritory(String adjacent) {
 	    System.out.println("Enter adjacent Territory  for delete is "+ adjacent);	    
+	    if(deleteAdjTerrtList.getSelectedIndex() != -1) {
+		territory.getAdjacentTerritory().get(deleteTerritoryList.getItemAt(deleteTerritoryList.getSelectedIndex())).remove(adjacent);
+		displaySuccessDeleteDialog();
+		updateAllContinentList();
+	    	updateAddTerrContinentList();
+	    	updateEditContinentList();
+	    	updateAddAdjTerritoryList();
+	    	updateEditTerritoryList();
+	    	updateDeleteContinentList();
+	    }
 	}
 	private void deleteTerritory(String territoryStr) {
 	    System.out.println("Enter  Territory  for delete is "+ territoryStr);
+	    if(deleteTerritoryList.getSelectedIndex() != -1) {
+		territory.getTerritoryCont().remove(territoryStr);
+		territory.getAdjacentTerritory().remove(territoryStr);
+		for(Entry<String, ArrayList<String>> entry : territory.getAdjacentTerritory().entrySet()) {
+    		    ArrayList<String> tempArray = new ArrayList<>();
+    		    for(int i=0;i<entry.getValue().size();i++) {
+    			if(!entry.getValue().get(i).equalsIgnoreCase(territoryStr)) {
+    			    tempArray.add(entry.getValue().get(i));
+    			}   
+    		    }
+    		    entry.setValue(tempArray);
+		}
+		displaySuccessDeleteDialog();
+		updateAllContinentList();
+	    	updateAddTerrContinentList();
+	    	updateEditContinentList();
+	    	updateAddAdjTerritoryList();
+	    	updateEditTerritoryList();
+	    	updateDeleteContinentList();
+	    }
 	}
 	private void deleteContinent(String continentStr) {
-	    System.out.println("Enter  continent  for delete is "+ continentStr);
+	    try {
+		System.out.println("Enter  continent  for delete is "+ continentStr);
+		    if(deleteContinentList.getSelectedIndex() != -1) {
+			continent.getContinentValue().remove(continentStr);
+			Map<String, String> tempMap =territory.getTerritoryCont();
+			Set<String> set = new HashSet<> ();
+			for(Entry<String, String> entry : tempMap.entrySet()) {
+			    if(entry.getValue().equalsIgnoreCase(continentStr)) {
+				territory.getAdjacentTerritory().remove(entry.getKey());
+				set.add(entry.getKey());
+			    }
+			}
+			territory.getTerritoryCont().keySet().removeAll(set);
+			displaySuccessDeleteDialog();
+			updateAllContinentList();
+		    	updateAddTerrContinentList();
+		    	updateEditContinentList();
+		    	updateAddAdjTerritoryList();
+		    	updateEditTerritoryList();
+		    	updateDeleteContinentList();
+		    
+		    }
+	    }
+	    catch(Exception e) {
+		System.out.println("Exception ");
+	    }
+	    
 	}
 	private void updateTerritory(String oldTerritory, String newTerritory) {
-	    System.out.println("Territory Enter is " + oldTerritory + " and New Territory is : "+ newTerritory);	
+	    System.out.println("Territory Enter is " + oldTerritory + " and New Territory is : "+ newTerritory);
+	    if(StringUtils.isNotEmpty(oldTerritory) && StringUtils.isNotEmpty(newTerritory)) {
+		territory.getTerritoryCont().put(newTerritory,territory.getTerritoryCont().remove(oldTerritory));
+		territory.getAdjacentTerritory().put(newTerritory, territory.getAdjacentTerritory().remove(oldTerritory));
+		for(Entry<String, ArrayList<String>> entry : territory.getAdjacentTerritory().entrySet()) {
+    		    ArrayList<String> tempArray = new ArrayList<>();
+    		    for(int i=0;i<entry.getValue().size();i++) {
+    			if(entry.getValue().get(i).equalsIgnoreCase(oldTerritory)) {
+    			    tempArray.add(newTerritory);
+    			} else {
+    			    tempArray.add(entry.getValue().get(i));
+    			}   
+    		    }
+    		    entry.setValue(tempArray);
+		}
+		displaySuccessDialog();
+		updateAllContinentList();
+    	    	updateAddTerrContinentList();
+    	    	updateEditContinentList();
+    	    	updateAddAdjTerritoryList();
+    	    	updateEditTerritoryList();
+    	    	updateDeleteContinentList();	    }
 	}
 	private void updateContinent(String oldContinent, String newContinent, String value) {
 	    System.out.println("Continent Selected is + " + oldContinent + " new one is " + newContinent + " value "+ value);
 	    if(StringUtils.isNotEmpty(oldContinent) && StringUtils.isNotEmpty(newContinent) && StringUtils.isNotEmpty(value) && StringUtils.isNumeric(value) && Integer.parseInt(value) > 0) {
-		//continent.updateContinentValue(oldContinent, newContinent, Integer.parseInt(value));
-		//territory.updateTerritoryContinent(oldContinent, newContinent);
+		continent.updateContinentValue(oldContinent, newContinent, Integer.parseInt(value));
+		territory.updateTerritoryContinent(oldContinent, newContinent);
 		displaySuccessDialog();
 		updateAllContinentList();
-		updateEditContinentList();
-		updateDeleteContinentList();
-		updateAddTerrContinentList();
-		updateAddAdjContinentList();
-	    } else {
+    	    	updateAddTerrContinentList();
+    	    	updateEditContinentList();
+    	    	updateAddAdjTerritoryList();
+    	    	updateEditTerritoryList();
+    	    	updateDeleteContinentList();
+    	    } else {
 		displayErrorDialog();
 	    }
 	    
 	}
-	private void addAdjacentTerritory(String continentStr, String territoryStr, String adjacent) {
-	    System.out.println("Continent selected is " + continentStr + " with Territory " + territoryStr + " and Adjacent of Terriory is " + adjacent);
-	    if(StringUtils.isNotEmpty(continentStr) && StringUtils.isNotEmpty(territoryStr) && StringUtils.isNotEmpty(adjacent) && !territoryStr.equalsIgnoreCase(adjacent) && !territory.getAdjacentTerritory().get(territoryStr).contains(adjacent)) {
+	private void addAdjacentTerritory( String territoryStr, String adjacent) {
+	    System.out.println("Continent is Territory " + territoryStr + " and Adjacent of Terriory is " + adjacent);
+	    if( StringUtils.isNotEmpty(territoryStr) && StringUtils.isNotEmpty(adjacent) && !territoryStr.equalsIgnoreCase(adjacent) && !territory.getAdjacentTerritory().get(territoryStr).contains(adjacent)) {
 		territory.addAdjacentTerritory(territoryStr, adjacent);
+		territory.addAdjacentTerritory(adjacent, territoryStr);
 		displaySuccessDialog();
 		updateAllContinentList();
 		updateEditContinentList();
-		updateDeleteContinentList();
 		updateAddTerrContinentList();
-		updateAddAdjContinentList();
+		updateAddAdjTerritoryList();
+		updateEditTerritoryList();
+		updateDeleteContinentList();
 	    } else {
 		duplicateErrorDialog();
 	    }
@@ -448,7 +547,12 @@ public class NewEditMapPanel implements ActionListener {
 		addContinentField.setText("");
 		addContinentValField.setText("");
 		addTerritoryField.setText("");
-		updateAllTerritoryList();
+		updateAllContinentList();
+    	    	updateAddTerrContinentList();
+    	    	updateEditContinentList();
+    	    	updateAddAdjTerritoryList();
+    	    	updateEditTerritoryList();
+    	    	updateDeleteContinentList();
 	    } else {
 		displayErrorDialog();
 	    }
@@ -463,10 +567,11 @@ public class NewEditMapPanel implements ActionListener {
 			addContinentValField.setText("");
 			addTerritoryField.setText("");
 			updateAllContinentList();
-			updateEditContinentList();
-			updateDeleteContinentList();
-			updateAddTerrContinentList();
-			updateAddAdjContinentList(); 
+	        	updateAddTerrContinentList();
+	        	updateEditContinentList();
+	        	updateAddAdjTerritoryList();
+	        	updateEditTerritoryList();
+	        	updateDeleteContinentList();
 		    } else {
 			duplicateErrorDialog();
 		    }
@@ -475,6 +580,9 @@ public class NewEditMapPanel implements ActionListener {
 		displayErrorDialog();
 	    }
 	}
+	/**
+	 * provide list of territory of particular continent 
+	 */
 	private void updateAllTerritoryList() {
 	    allTerritoryList.removeAllItems();
 	    for(Entry<String, String> entry : territory.getTerritoryCont().entrySet()) {
@@ -483,18 +591,49 @@ public class NewEditMapPanel implements ActionListener {
 		}
 	    }
 	}
+	/**
+	 * Update all Continent List dropdown
+	 */
 	private void updateAllContinentList() {
 	    allContinentList.removeAllItems();
 	    for(Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
 		allContinentList.addItem(entry.getKey());
 	    }
 	}
+	private void updateEditTerritoryList() {
+	    editTerritoryList.removeAllItems();
+	    for(Entry<String,String> entry : territory.getTerritoryCont().entrySet()) {
+		editTerritoryList.addItem(entry.getKey());
+	    }
+	}
+	private void updateEditContinentList() {
+	    editContinentList.removeAllItems();
+	    for(Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
+		editContinentList.addItem(entry.getKey());
+	    }	    
+	}
+	private void updateDeleteContinentList() {
+	    deleteContinentList.removeAllItems();
+	    for(Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
+		deleteContinentList.addItem(entry.getKey());
+	    }
+	}
+	private void updateAddTerrContinentList() {
+	    addTerrContinentList.removeAllItems();
+	    for(Entry<String, Integer> entry : continent.getContinentValue().entrySet()) {
+		addTerrContinentList.addItem(entry.getKey());
+	    }	    
+	}
 	public void displaySuccessDialog() {
 	    JOptionPane.showMessageDialog(null, "Content Added Successfully", "Content Validated", JOptionPane.INFORMATION_MESSAGE);   
+	}
+	public void displaySuccessDeleteDialog() {
+	    JOptionPane.showMessageDialog(null, "Content Deleted Successfully", "Content Validated", JOptionPane.INFORMATION_MESSAGE);   
 	}
 	public void displayErrorDialog(){
 	    JOptionPane.showMessageDialog(null, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 	}
+	
 	public void duplicateErrorDialog(){
 	    JOptionPane.showMessageDialog(null, "Please Enter New Value. Values Already exist", "Content Same", JOptionPane.ERROR_MESSAGE);   
 	}

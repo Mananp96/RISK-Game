@@ -162,5 +162,10 @@ public class Continent {
 	public void setContinentOwnedterritory(Map<String, ArrayList<String>> continentOwnedterritory) {
 		this.continentOwnedTerritory = continentOwnedterritory;
 	}
+	
+	public void updateContinentValue(String oldContinent, String newContinent, int newValue) {
+	    continentValue.remove(oldContinent);
+	    continentValue.put(newContinent, newValue);
+	}
 
 }

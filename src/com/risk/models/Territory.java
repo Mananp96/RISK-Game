@@ -3,6 +3,7 @@ package com.risk.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Territory Model class.
@@ -245,6 +246,13 @@ public class Territory {
 	 */
 	public Map<String,Integer> getNumberOfTerritory(){
 		return territoryNumber;
+	}
+	public void updateTerritoryContinent(String oldContinent, String newContinent) {
+	    for(Entry<String, String> entry : territoryCont.entrySet() ) {
+			if(entry.getValue().equalsIgnoreCase(oldContinent)) {
+			    entry.setValue(newContinent);
+			}
+	    }
 	}
 
 }
