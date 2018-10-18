@@ -54,8 +54,6 @@ public class MapValidatorTest {
 		territory.addAdjacentTerritory("Mauritania", "Algeria");
 		territory.addAdjacentTerritory("Mauritania", "Western Sahara");	
 		
-		
-		
 	}
 	
 	/**
@@ -86,6 +84,15 @@ public class MapValidatorTest {
 		
 	}
 	
+	/**
+	 * This method is used to test
+	 * {@link com.risk.validate.MapValidator#validateContinent()} method of MapValidator.java.
+	 * @throws InvalidMapException
+	 */
+	@Test
+	public void testValidateContinent() {
+		
+	}
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateTerritories()} method of MapValidator.java.
