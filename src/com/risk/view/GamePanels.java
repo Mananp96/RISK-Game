@@ -40,7 +40,6 @@ import javax.swing.text.DefaultCaret;
 import org.apache.commons.lang3.StringUtils;
 
 import com.risk.controller.CreateMapFile;
-import com.risk.controller.EditMapFile;
 import com.risk.controller.InitializeData;
 import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
