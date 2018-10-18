@@ -3,11 +3,8 @@ package com.risk.controller;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map.Entry;
-import java.util.Random;
-
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
 import com.risk.models.Territory;
