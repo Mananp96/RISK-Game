@@ -6,13 +6,14 @@ import java.util.Map.Entry;
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
 import com.risk.models.Territory;
+import com.risk.view.GamePanels;
 
 /**
  * This class is used to Validate Map.
  * @author Manan
  * @version 1.0
  */
-public class MapValidator {
+public class MapValidator extends GamePanels {
 
 	boolean isMapValid;
 	Continent continent;
@@ -131,7 +132,7 @@ public class MapValidator {
 			this.isMapValid = false;
 			throw new InvalidMapException("Territories should not be null");
 		}
-		System.out.println("3."+isMapValid);
+		riskLogger("3."+isMapValid);
 		return isMapValid;
 	}
 
@@ -174,10 +175,10 @@ public class MapValidator {
 			}
 		}
 		if(graph.isGraphStronglyConnected()) {
-			System.out.println("Graph is Connected.");
+			riskLogger("Graph is Connected.");
 			this.isMapValid = true;
 		}else {
-			System.out.println("Graph is not Connected.");
+			riskLogger("Graph is not Connected.");
 			this.isMapValid = false;
 			throw new InvalidMapException("Graph is not connected");
 		}

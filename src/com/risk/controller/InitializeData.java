@@ -3,12 +3,13 @@ package com.risk.controller;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
+import com.risk.view.GamePanels;
 
 /**
  * This class is used to invoke Initial Reinforcement process if data of map file is valid.
  * 
  */
-public class InitializeData {
+public class InitializeData extends GamePanels {
 
 	String filePath;
 	int playerCount;
@@ -141,15 +142,18 @@ public class InitializeData {
 		BoardData boardData = new BoardData(filePath);
 		boolean isMapValid = boardData.generateBoardData();
 		System.out.println(isMapValid);
+		riskLogger("isMapValid "+ isMapValid);
 		if(isMapValid) {
-			System.out.println("Model Data Continent Value: - " + boardData.continentObject.getContinentValue());
-			System.out.println("Model Data Territory with Adjacent: - " + boardData.territoryObject.getAdjacentTerritory());
-			System.out.println("Model Data Territory with Adjacent Size: - " + boardData.territoryObject.getAdjacentTerritory().size());
-			System.out.println("Model Data Continent with Territory: - " + boardData.continentObject.getContinentTerritory());
-			System.out.println("Model Data of Territory List : - " + boardData.territoryObject.getTerritoryList());
-			System.out.println("Model Data of Territory List Size : - " + boardData.territoryObject.getTerritoryList().size());
-			System.out.println("Model Data of Territory with Continents List : - " + boardData.territoryObject.getTerritoryCont());
-			System.out.println("Model Data of Territory with Continents List Size : - " + boardData.territoryObject.getTerritoryCont().size());
+			//System.out.println("Model Data Continent Value: - " + boardData.continentObject.getContinentValue());
+			riskLogger("Model Data Continent Value: - " + boardData.continentObject.getContinentValue());
+			//System.out.println("Model Data Territory with Adjacent: - " + boardData.territoryObject.getAdjacentTerritory());
+			riskLogger("Model Data Territory with Adjacent: - " + boardData.territoryObject.getAdjacentTerritory());
+			riskLogger("Model Data Territory with Adjacent Size: - " + boardData.territoryObject.getAdjacentTerritory().size());
+			riskLogger("Model Data Continent with Territory: - " + boardData.continentObject.getContinentTerritory());
+			riskLogger("Model Data of Territory List : - " + boardData.territoryObject.getTerritoryList());
+			riskLogger("Model Data of Territory List Size : - " + boardData.territoryObject.getTerritoryList().size());
+			riskLogger("Model Data of Territory with Continents List : - " + boardData.territoryObject.getTerritoryCont());
+			riskLogger("Model Data of Territory with Continents List Size : - " + boardData.territoryObject.getTerritoryCont().size());
 
 			continent = boardData.continentObject;
 			territory = boardData.territoryObject;
@@ -163,7 +167,7 @@ public class InitializeData {
 			setPlayers(startUpPhase.players);
 
 		}else {
-			System.out.println("Map is not Valid");
+			riskLogger("Map is not Valid");
 		}
 		return isMapValid;
 	}
