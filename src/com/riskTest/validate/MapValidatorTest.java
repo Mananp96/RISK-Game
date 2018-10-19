@@ -1,7 +1,6 @@
 package com.riskTest.validate;
 
-
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +35,7 @@ public class MapValidatorTest {
 		territory = new Territory();
 		
 		continent.setContinentValue("Northern Africa", 4);
-
+		continent.setContinentValue("Western Africa", 5);
 		
 		continent.addContinentTerritory("Northern Africa", "Morocco");
 		continent.addContinentTerritory("Northern Africa", "Algeria");
@@ -54,6 +53,10 @@ public class MapValidatorTest {
 		territory.addAdjacentTerritory("Mauritania", "Algeria");
 		territory.addAdjacentTerritory("Mauritania", "Western Sahara");	
 		
+		territory.addNumberOfTerritory("Morocco", 0);
+		territory.addNumberOfTerritory("Algeria", 1);
+		territory.addNumberOfTerritory("Western Sahara", 2);
+		territory.addNumberOfTerritory("Mauritania", 3);
 	}
 	
 	/**
@@ -63,7 +66,6 @@ public class MapValidatorTest {
 	 */
 	@Test
 	public void testValidateMap() throws InvalidMapException {
-		continent.setContinentValue("Western Africa", 7);
 		mapValidator = new MapValidator(continent, territory);
 		assertTrue(mapValidator.validateMap());
 	}
@@ -75,13 +77,11 @@ public class MapValidatorTest {
 	 */
 	@Test
 	public void testValidateContinentValue() throws InvalidMapException {
-		continent.setContinentValue("Western Africa", 0);
 		mapValidator = new MapValidator(continent, territory);
-		
-		Assertions.assertThrows(InvalidMapException.class, () -> {
-		    mapValidator.validateContinentValue();
-		  });
-		
+		assertTrue(mapValidator.validateContinentValue());
+//		Assertions.assertThrows(InvalidMapException.class, () -> {
+//		    mapValidator.validateContinentValue();
+//		  });
 	}
 	
 	/**
@@ -90,45 +90,45 @@ public class MapValidatorTest {
 	 * @throws InvalidMapException
 	 */
 	@Test
-	public void testValidateContinent() {
-		
+	public void testValidateContinent() throws InvalidMapException {
+		mapValidator = new MapValidator(continent, territory);
+		assertTrue(mapValidator.validateContinent());
 	}
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateTerritories()} method of MapValidator.java.
+	 * @throws InvalidMapException 
 	 */
 	@Test
-	public void testValidateTerritories() {
-		continent.addContinentTerritory("Southern Africa", "");
+	public void testValidateTerritories() throws InvalidMapException {
 		mapValidator = new MapValidator(continent, territory);
+		assertTrue(mapValidator.validateTerritories());
 		
-		Assertions.assertThrows(InvalidMapException.class, () -> {
-		    mapValidator.validateTerritories();
-		  });
+//		Assertions.assertThrows(InvalidMapException.class, () -> {
+//		    mapValidator.validateTerritories();
+//		  });
 	}
 	
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateAdjcentTerritories()} method of MapValidator.java.
+	 * @throws InvalidMapException 
 	 */
 	@Test
-	public void testValidateAdjcentTerritories() {
-		
+	public void testValidateAdjcentTerritories() throws InvalidMapException {
 		mapValidator = new MapValidator(continent, territory);
-		
-		Assertions.assertThrows(InvalidMapException.class, () -> {
-		    mapValidator.validateAdjcentTerritories();
-		  });
-		
+		assertTrue(mapValidator.validateAdjcentTerritories());
 	}
 	
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#isGraphConnected()} method of MapValidator.java.
+	 * @throws InvalidMapException 
 	 */
 	@Test
-	public void testIsGraphConnected() {
-		
+	public void testIsGraphConnected() throws InvalidMapException {
+		mapValidator = new MapValidator(continent, territory);
+		assertTrue(mapValidator.isGraphConnected());
 	}
 	
 }
