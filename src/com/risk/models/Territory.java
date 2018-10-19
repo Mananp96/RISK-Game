@@ -148,7 +148,8 @@ public class Territory {
 	 * <ul>
 	 * <li>Identify which Territory belongs to which Player</li>
 	 * <li>Update Player when a particular Territory wins by Player</li>
-	 * <ul>
+	 * </ul>
+	 *
 	 * @param user Name of Player. 
 	 * @param territory Name of Territory.
 	 * @return a HashMap contains Players and it's Territories.

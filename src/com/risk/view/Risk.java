@@ -15,6 +15,9 @@ public class Risk {
 	GamePanels gamePanels;
 	/**
 	 * Launch the application.
+	 *
+	 * @param args String array for commandline arguments
+	 *
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

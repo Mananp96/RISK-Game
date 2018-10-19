@@ -107,7 +107,7 @@ public class Continent {
 	 * 
 	 * @param continent Name of Continent
 	 * @param territory Name of Territory
-	 * @param operation 
+	 * @param operation boolean value
 	 * @return a HashMap continentOwnedterritory
 	 */
 	public Map<String, ArrayList<String>> addContinentOwnedTerritory(String continent, String territory, boolean operation) {

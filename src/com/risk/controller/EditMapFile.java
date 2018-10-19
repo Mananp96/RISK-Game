@@ -68,7 +68,7 @@ public class EditMapFile {
      * @param continent Continent Model Object
      * @param territory Territory Model Object
      * @return true if content edit is validated according to Risk Map Otherwise return false;
-     * @throws InvalidMapException
+     * @throws InvalidMapException throws exception when map is invalid
      */
     public boolean saveEditMap(Continent continent,Territory territory) throws InvalidMapException {
 	this.continent = continent;
