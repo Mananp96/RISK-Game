@@ -245,7 +245,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	}
 	/**
 	 * 
-	 * @return
+	 * @return returns Jpanel of logs
 	 */
 	protected JPanel displayLog(){
 		JPanel logPanel = new JPanel();
@@ -981,7 +981,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	}
 	
 	/**
-	 * Method used to display complete details of territory such as which continent it belongs to,<br/>
+	 * Method used to display complete details of territory such as which continent it belongs to,
 	 * which player has occupied it with how many armies.
 	 */
 	public  void displayTerritoryDetails() {

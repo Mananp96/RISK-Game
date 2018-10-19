@@ -35,9 +35,8 @@ public class MapValidator extends GamePanels {
 
 	/**
 	 * Validate the Content of Map.
-	 * @return isMapValid
-	 * @throws InvalidMapException 
-	 *
+	 * @throws InvalidMapException throws exception when map is invalid
+	 * @return true if map is valid after validation else false
 	 */
 	public boolean validateMap() throws InvalidMapException {
 		if(continentValue != null) {
@@ -52,8 +51,8 @@ public class MapValidator extends GamePanels {
 	/**
 	 * Validate continent Winning Value. Winning Value must be at-least one.
 	 * 
-	 * @throws InvalidMapException
-	 *             invalid map exception
+	 * @throws InvalidMapException throws exception when map is invalid
+	 * @return true if continent value is greater than zero else false
 	 */
 	public boolean validateContinentValue() throws InvalidMapException {
 		for (Entry<String, Integer> entry : continentValue.entrySet()) {
@@ -73,9 +72,9 @@ public class MapValidator extends GamePanels {
 	 * This method validate the Continents. 
 	 * Continents at the upper parts with value and Continents at bottom parts with Territories 
 	 * should be equals in size and also according to names.
-	 * 
-	 * @return isMapValid returns true if continents are valid,else false.
-	 * @throws InvalidMapException
+	 *
+	 * @throws InvalidMapException throws exception when map is invalid
+	 * @return isMapValid returns true if continents configurations are valid else false.
 	 */
 	public boolean validateContinent() throws InvalidMapException {
 		if(continentTerritories != null) {
@@ -105,8 +104,8 @@ public class MapValidator extends GamePanels {
 	 * Validate continent. It should have at-least one territory.
 	 * and territory should not be in unique Continent.
 	 * 
-	 * @throws InvalidMapException
-	 *             invalid map exception
+	 * @throws InvalidMapException invalid map exception
+	 * @return true if one territory is present in one continent else false
 	 */
 	public boolean validateTerritories() throws InvalidMapException {
 
@@ -140,8 +139,8 @@ public class MapValidator extends GamePanels {
 	/**
 	 * Validate Territories. It should have at-least one adjacent territory.
 	 *
-	 * @throws InvalidMapException
-	 *             invalid map exception
+	 * @throws InvalidMapException invalid map exception
+	 * @return true if adjacent territories configurations are valid else false
 	 */
 	public boolean validateAdjcentTerritories() throws InvalidMapException {
 		if(adjcentTerritories != null) {
@@ -160,10 +159,9 @@ public class MapValidator extends GamePanels {
 
 	/**
 	 * this method is used to check if Graph is Connected or not.
-	 * returns true if it is connected else returns false.
-	 * 
+	 *
+	 * @throws InvalidMapException invalid map exception
 	 * @return isMapValid  returns true if graph is connected else false
-	 * @throws InvalidMapException
 	 */
 	public boolean isGraphConnected() throws InvalidMapException {
 

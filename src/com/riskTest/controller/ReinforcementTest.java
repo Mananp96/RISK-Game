@@ -20,9 +20,9 @@ public class ReinforcementTest {
 	Reinforcement reinforcement;
 	
 	/**
-	 * This method is to test number of reinforcement armies of Player.<br/>
-	 * Calculation : reinforcement armies = Number of territory owned by Player / 3.<br/>
-	 * e.g Number of Territory owned by Player : 12<br/>
+	 * This method is to test number of reinforcement armies of Player.
+	 * Calculation : reinforcement armies = Number of territory owned by Player / 3.
+	 * e.g Number of Territory owned by Player : 12
 	 * 	   Reinforcement Armies  = 12/3 = 4 armies
 	 */
 	@Test
