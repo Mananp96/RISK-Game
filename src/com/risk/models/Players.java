@@ -21,6 +21,7 @@ public class Players {
 	Map<String, Integer> playerArmy;  // 
 	ArrayList<String> playerList; 
 	ArrayList<String> playerPlaying;
+	String currentPhase;
 
 	public Players() {
 		playerContinent = new HashMap<>();
@@ -172,5 +173,19 @@ public class Players {
 		return playerList.get(number);	
 	}
 
+	/**
+	 * This method is used to assign the current phase of game.
+	 * @param currentPhase Assign the current phase of game.
+	 */
+    public void setCurrentPhase(String currentPhase) {
+		this.currentPhase = currentPhase;
+    }
 
+	/**
+	 * Returns the current phase of game.
+	 * @return  currentPhase of player.
+	 */
+	public String getCurrentPhase() {
+    	return currentPhase;
+	}
 }

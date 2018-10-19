@@ -8,8 +8,9 @@ import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
+import com.risk.view.GamePanels;
 
-public class StartUpPhase {
+public class StartUpPhase extends GamePanels {
 
 	Players players;
 	Continent continent;
@@ -42,22 +43,23 @@ public class StartUpPhase {
 		}else {
 			armies = new ArmiesSelection(playerSize);
 		}
-		System.out.println("Initial StartUp Started");
-		System.out.println("Player in Game : " + playerSize);
+		riskLogger("Initial StartUp Started");
+		riskLogger("Player in Game : " + playerSize);
 
 		for (int i = 0; i < playerSize; i++) {
 			String playerName = players.getPlayerList().get(i);
+			players.setCurrentPhase("StartUp Phase");
 			players.addPlayerContinent(playerName, new Continent());
 			players.initialArmy(playerName, armies.getPlayerArmies());
-			System.out.println(playerName + " Assigned with Continent Object");
-			System.out.println(playerName + " Assigned with Initial Army of " + players.getPlayerArmy(playerName));
+			riskLogger(playerName + " Assigned with Continent Object");
+			riskLogger(playerName + " Assigned with Initial Army of " + players.getPlayerArmy(playerName));
 		}
 
 		Map<String, String> territoryContinent = territory.getTerritoryCont();
 		int playerCount = 0;
 		for (int i = 0; i < territory.getTerritoryList().size(); i++) {
 			String playerName = players.getPlayerList().get(playerCount);
-			// Retrieve Random Territory
+			// Retrieve Random Territory 
 			Object randomTerritory = territoryContinent.keySet().toArray()[new Random().nextInt(territoryContinent.keySet().toArray().length)];
 			if (players.getPlayerArmy(playerName) >= 1) {
 				Continent tempContinent = players.getPlayerContinent(playerName);

@@ -42,6 +42,7 @@ public class CreateMapFile {
 	/**
 	 * This method is used to create a new File and write the mapData (User input to create a new map file)
 	 * to file. checks if newly created file has valid map data or not? 
+	 * @return returns true if map is created successfully else false
 	 */
 	public boolean createMap() {
 		

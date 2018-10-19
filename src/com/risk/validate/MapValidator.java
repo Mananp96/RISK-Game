@@ -6,13 +6,14 @@ import java.util.Map.Entry;
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
 import com.risk.models.Territory;
+import com.risk.view.GamePanels;
 
 /**
  * This class is used to Validate Map.
  * @author Manan
  * @version 1.0
  */
-public class MapValidator {
+public class MapValidator extends GamePanels {
 
 	boolean isMapValid;
 	Continent continent;
@@ -34,9 +35,8 @@ public class MapValidator {
 
 	/**
 	 * Validate the Content of Map.
-	 * @return isMapValid
-	 * @throws InvalidMapException 
-	 *
+	 * @throws InvalidMapException throws exception when map is invalid
+	 * @return true if map is valid after validation else false
 	 */
 	public boolean validateMap() throws InvalidMapException {
 		if(continentValue != null) {
@@ -51,8 +51,8 @@ public class MapValidator {
 	/**
 	 * Validate continent Winning Value. Winning Value must be at-least one.
 	 * 
-	 * @throws InvalidMapException
-	 *             invalid map exception
+	 * @throws InvalidMapException throws exception when map is invalid
+	 * @return true if continent value is greater than zero else false
 	 */
 	public boolean validateContinentValue() throws InvalidMapException {
 		for (Entry<String, Integer> entry : continentValue.entrySet()) {
@@ -72,9 +72,9 @@ public class MapValidator {
 	 * This method validate the Continents. 
 	 * Continents at the upper parts with value and Continents at bottom parts with Territories 
 	 * should be equals in size and also according to names.
-	 * 
-	 * @return isMapValid returns true if continents are valid,else false.
-	 * @throws InvalidMapException
+	 *
+	 * @throws InvalidMapException throws exception when map is invalid
+	 * @return isMapValid returns true if continents configurations are valid else false.
 	 */
 	public boolean validateContinent() throws InvalidMapException {
 		if(continentTerritories != null) {
@@ -104,8 +104,8 @@ public class MapValidator {
 	 * Validate continent. It should have at-least one territory.
 	 * and territory should not be in unique Continent.
 	 * 
-	 * @throws InvalidMapException
-	 *             invalid map exception
+	 * @throws InvalidMapException invalid map exception
+	 * @return true if one territory is present in one continent else false
 	 */
 	public boolean validateTerritories() throws InvalidMapException {
 
@@ -131,7 +131,7 @@ public class MapValidator {
 			this.isMapValid = false;
 			throw new InvalidMapException("Territories should not be null");
 		}
-		System.out.println("3."+isMapValid);
+		riskLogger("3."+isMapValid);
 		return isMapValid;
 	}
 
@@ -139,8 +139,8 @@ public class MapValidator {
 	/**
 	 * Validate Territories. It should have at-least one adjacent territory.
 	 *
-	 * @throws InvalidMapException
-	 *             invalid map exception
+	 * @throws InvalidMapException invalid map exception
+	 * @return true if adjacent territories configurations are valid else false
 	 */
 	public boolean validateAdjcentTerritories() throws InvalidMapException {
 		if(adjcentTerritories != null) {
@@ -159,10 +159,9 @@ public class MapValidator {
 
 	/**
 	 * this method is used to check if Graph is Connected or not.
-	 * returns true if it is connected else returns false.
-	 * 
+	 *
+	 * @throws InvalidMapException invalid map exception
 	 * @return isMapValid  returns true if graph is connected else false
-	 * @throws InvalidMapException
 	 */
 	public boolean isGraphConnected() throws InvalidMapException {
 
@@ -174,10 +173,10 @@ public class MapValidator {
 			}
 		}
 		if(graph.isGraphStronglyConnected()) {
-			System.out.println("Graph is Connected.");
+			riskLogger("Graph is Connected.");
 			this.isMapValid = true;
 		}else {
-			System.out.println("Graph is not Connected.");
+			riskLogger("Graph is not Connected.");
 			this.isMapValid = false;
 			throw new InvalidMapException("Graph is not connected");
 		}

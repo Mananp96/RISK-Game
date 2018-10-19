@@ -53,8 +53,6 @@ public class ContinentTest {
 	 */
 	@Test
 	public void testSetContinentValue() {
-	
-		
 		continentValue.put(continentNameOne, controlValueOne);
 		continentValue.put(continentNameTwo, controlValueTwo);
 		continent.setContinentValue(continentNameOne,controlValueOne);

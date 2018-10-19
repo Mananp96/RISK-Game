@@ -15,6 +15,9 @@ public class Risk {
 	GamePanels gamePanels;
 	/**
 	 * Launch the application.
+	 *
+	 * @param args String array for commandline arguments
+	 *
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -45,7 +48,6 @@ public class Risk {
 		frame.setTitle("Risk");
 		frame.setPreferredSize(new Dimension(300, 300));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.setResizable(false);
 		frame.add(gamePanels.mainMenu(frame,players));

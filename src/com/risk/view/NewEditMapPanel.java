@@ -41,7 +41,7 @@ import com.risk.models.Territory;
  * @author Himen Sidhpura
  *
  */
-public class NewEditMapPanel implements ActionListener {
+public class NewEditMapPanel implements ActionListener{
     
         private JRadioButton mapOptA;
         private JLabel fetchFileDataError;
@@ -79,19 +79,19 @@ public class NewEditMapPanel implements ActionListener {
         private JButton deleteContinentBtn;
         private JButton deleteTerritoryBtn;
         private JButton deleteAdjTerrBtn;
-	private Territory territory;
-	private Continent continent;
-	private boolean validFlag;
-	JFrame frame;
-	boolean createNew;
-	
-	/**
-	 * This method UI of New and  Edit Existing Map
-	 * @param frame Current Frame
-	 * @param createNew Used too identify whether player want to create new map or edit existing map
-	 * @return JPanel which is added in current frame
-	 */
-	public JPanel createMapPanel(JFrame frame,boolean createNew){
+		private Territory territory;
+		private Continent continent;
+		private boolean validFlag;
+		JFrame frame;
+		boolean createNew;
+
+		/**
+		 * This method UI of New and  Edit Existing Map
+		 * @param frame Current Frame
+		 * @param createNew Used too identify whether player want to create new map or edit existing map
+		 * @return JPanel which is added in current frame
+		 */
+		public JPanel createMapPanel(JFrame frame,boolean createNew){
             this.frame = frame;
         	this.createNew = createNew;
             JPanel existingMapPanel = new JPanel();
@@ -269,7 +269,7 @@ public class NewEditMapPanel implements ActionListener {
             if(StringUtils.isNotEmpty(filePath)) {
         	EditMapFile editMapFile = new EditMapFile(filePath); 
         	if(editMapFile.generateData()) {
-        	  //  continentArea.setText(editMapFile.getContinentData().toString());
+        	  	//continentArea.setText(editMapFile.getContinentData().toString());
         	    //territoryArea.setText(editMapFile.getTerritoryData().toString());
         	    fetchFileDataError.setText("File Content Data is validated and Ready to Edit");
         	    territory = editMapFile.getTerritory();
@@ -311,9 +311,8 @@ public class NewEditMapPanel implements ActionListener {
 	/**
 	 * The GridBagConstraints is used specifies constraints for components that are laid out using the GridBagLayout class.
 	 * Initialize GridBagConstraint object with all of its fields set to their default value.
-	 * @param insets The initial insets value
-	 * @param fill The initial fill value
-	 * @param anchor The initial anchor value.
+	 * @param insets The initial insets value.
+	 * @param fill The initial fill value.
 	 * @param wx The initial weightx value.
 	 * @param wy The initial weighty value.
 	 * @param x The initial gridx value.
