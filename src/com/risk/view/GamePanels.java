@@ -37,6 +37,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultCaret;
 
+import java.awt.Toolkit;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.risk.controller.CreateMapFile;
@@ -200,6 +202,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		GridBagLayout createMapLayout = new GridBagLayout();
 		createMapPanel.setLayout(createMapLayout);
 		createMapPanel.setSize(new Dimension(400,250));
+		frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 		frame.setResizable(true);
 		JLabel label1 = new JLabel("Enter Continent in Every New Line in Continent=value format and continent must be maximum 32 ", JLabel.CENTER);
 		continentArea = new JTextArea(4,40);
@@ -236,7 +239,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * @return existingMapPanel
 	 */
 	protected JPanel editExistingMapPanel() {
-	    frame.setResizable(true);
+		frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
+		frame.setResizable(true);
+		frame.setVisible(true);
 	    NewEditMapPanel newEditMapPanel=new NewEditMapPanel();
 	    return newEditMapPanel.createMapPanel(frame,false);
 	}
@@ -246,11 +251,10 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * @return GamePanel object which consist portion of Game Play
 	 */
 	protected JPanel gameView() {
-		
-		frame.setPreferredSize(new Dimension(900,800));
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 		frame.setResizable(true);
 		JPanel gamePanel = new JPanel();
 		frame.setLayout(mainLayout);
@@ -350,8 +354,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		territoryBList.addListSelectionListener(this);
 		
 		eventPanel.add(menuBtn, setGridBagConstraints(new Insets(0, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 0));
-		eventPanel.add(cardsList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
-		eventPanel.add(turnInBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 3));
+		//eventPanel.add(cardsList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
+		//eventPanel.add(turnInBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 3));
 		eventPanel.add(selectedLabel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
 		eventPanel.add(continentScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 5));
 		eventPanel.add(reinforceBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 6));
@@ -505,7 +509,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	protected JPanel mainMenu(JFrame frame, Players players){
 		this.players = players;
 		this.frame = frame;
-		frame.setPreferredSize(new Dimension(300, 300));
+		frame.setBounds(0, 0, 300, 300);
+		//frame.setPreferredSize(new Dimension(300, 300));
 		// Creates the panel
 		JPanel menuPanel = new JPanel();
 		// Sets Layout
@@ -515,7 +520,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		newButton = new JButton("Play Game");
 		editButton = new JButton("Edit map");
 		exitButton = new JButton("Quit");
-				
+
 		menuPanel.add(newButton);
 		menuPanel.add(editButton);
 		menuPanel.add(exitButton);
@@ -895,6 +900,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    logArea.setText("");
 	    logArea.append("Current Player : " + players.getPlayerList().get(playerTurn)+"\n");
 	    logArea.append("Current Armies : " + players.getPlayerArmy(players.getPlayerList().get(playerTurn)));
+		logArea.append("Current Phase : " + players.getPlayerArmy(players.getPlayerList().get(playerTurn)));
 	}
 	/**
 	 * Method Allow Player to do Fortification Phase.
