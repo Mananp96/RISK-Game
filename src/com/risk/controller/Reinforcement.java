@@ -1,79 +1,34 @@
 package com.risk.controller;
 
-import java.util.Map;
-import java.util.Random;
+import java.util.Map.Entry;
 
-import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
 
 public class Reinforcement {
-
-	Players players;
-	Continent continent;
-	Territory territory;
-	ArmiesSelection armies;
-
-	/**
-	 * This constructor is used to set the model object continent, players, territory.
-	 * @param players object of model Players.
-	 * @param continent object of model Continent.
-	 * @param territory object of model Territory.
-
-	 */
-	public Reinforcement(Players players, Continent continent, Territory territory) {
-		this.continent = continent;
-		this.territory = territory;
-		this.players = players;
+    
+    Players players; 
+    Territory territory; 
+    Continent continent;
+    String playerName;
+    public Reinforcement(String playerName , Players players, Territory territory, Continent continent) {
+	// TODO Auto-generated constructor stub
+	this.playerName = playerName;
+	this.players = players;
+	this.territory = territory;
+	this.continent = continent;
+	
+    }
+    
+    public int generateArmy() {
+	int count = 0;
+	for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
+	    if(entry.getValue().equalsIgnoreCase(playerName)) {
+		count++;
+	    }
 	}
-
-	/**
-	 * This method is used to start initial Reinforcement process:
-	 * Players are allocated a number of initial armies, depending on the number of players.
-	 * round-robin fashion, the players place their given armies one by one on their own countries. 
-	 * 
-	 */
-	public void initialReinforcement() {
-		int playerSize = players.getPlayerList().size();
-		if (players.getPlayerList().get(2).equals("Neutral Player")){
-			armies = new ArmiesSelection(2);
-		}else {
-			armies = new ArmiesSelection(playerSize);
-		}
-		System.out.println("Initial Reinforcement Started");
-		System.out.println("Player in Game : " + playerSize);
-
-		for (int i = 0; i < playerSize; i++) {
-			String playerName = players.getPlayerList().get(i);
-			players.addPlayerContinent(playerName, new Continent());
-			players.initialArmy(playerName, armies.getPlayerArmies());
-			System.out.println(playerName + " Assigned with Continent Object");
-			System.out.println(playerName + " Assigned with Initial Army of " + players.getPlayerArmy(playerName));
-		}
-
-		Map<String, String> territoryContinent = territory.getTerritoryCont();
-		int playerCount = 0;
-		for (int i = 0; i < territory.getTerritoryList().size(); i++) {
-			String playerName = players.getPlayerList().get(playerCount);
-			// Retrieve Random Territory
-			Object randomTerritory = territoryContinent.keySet().toArray()[new Random().nextInt(territoryContinent.keySet().toArray().length)];
-			if (players.getPlayerArmy(playerName) >= 1) {
-				Continent tempContinent = players.getPlayerContinent(playerName);
-				tempContinent.addContinentOwnedTerritory(territoryContinent.get(randomTerritory), randomTerritory.toString(), true);
-				territoryContinent.remove(randomTerritory);
-				territory.updateTerritoryArmy(randomTerritory.toString(), 1, "ADD");
-				territory.updateTerritoryUser(playerName, randomTerritory.toString());
-				players.updateArmy(playerName, 1, "Remove");
-				players.updatePlayerContinent(playerName, tempContinent);
-				playerCount++;
-				if (playerCount >= playerSize)
-					playerCount = 0;
-			} else {
-				territory.updateTerritoryArmy(randomTerritory.toString(), 0, "ADD");
-				territory.updateTerritoryUser("No Player", randomTerritory.toString());
-			}
-		}
-
-	}
+	Double value = new Double(Math.floor(count/3));
+	return value.intValue() > 3 ? value.intValue() : 3 ;
+    }    
 }
