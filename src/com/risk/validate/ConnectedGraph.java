@@ -7,10 +7,10 @@ import java.util.LinkedList;
 /**
  * Java Program to check if Graph is connected or not.
  */
-class ConnectedGraph 
+public class ConnectedGraph 
 { 
 	private int noOfterritory;   // No. of vertices 
-	private LinkedList<Integer> adjacencyList[]; //Adjacency List 
+	private LinkedList<Integer> adjacencyList[];  
 
 	ConnectedGraph(int territorySize) 
 	{ 
