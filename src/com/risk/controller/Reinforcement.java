@@ -36,7 +36,7 @@ public class Reinforcement {
 	 */
 	public void initialReinforcement() {
 		int playerSize = players.getPlayerList().size();
-		if (players.getPlayerList().get(2).contains("Neutral PLayer")){
+		if (players.getPlayerList().get(2).equals("Neutral Player")){
 			armies = new ArmiesSelection(2);
 		}else {
 			armies = new ArmiesSelection(playerSize);

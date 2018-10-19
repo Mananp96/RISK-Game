@@ -3,6 +3,7 @@ package com.risk.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Territory Model class.
@@ -232,8 +233,8 @@ public class Territory {
 
 	/**
 	 * Give a Number to Territory
-	 * @param string Name of Territory
-	 * @param i Number starting from 0
+	 * @param territory Name of Territory
+	 * @param territoryNum Number starting from 0
 	 */
 	public void addNumberOfTerritory(String territory, int territoryNum) {
 		territoryNumber.put(territory, territoryNum);

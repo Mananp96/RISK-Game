@@ -40,7 +40,6 @@ import javax.swing.text.DefaultCaret;
 import org.apache.commons.lang3.StringUtils;
 
 import com.risk.controller.CreateMapFile;
-import com.risk.controller.EditMapFile;
 import com.risk.controller.InitializeData;
 import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
@@ -238,7 +237,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	protected JPanel editExistingMapPanel() {
 	    frame.setResizable(true);
 	    NewEditMapPanel newEditMapPanel=new NewEditMapPanel();
-	    return newEditMapPanel.createMapPanel(frame,false);
+	    return newEditMapPanel.createMapPanel(frame,true);
 	}
 	
 	/**
@@ -576,6 +575,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			public void itemStateChanged(ItemEvent e) {
 
 				if(mapOptB.isSelected()) {
+				    existingMapFilePath = "previous.map";
 					randomMap = false;
 				}
 			}
@@ -695,7 +695,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 			}
 			 
-		} else if (actionName.equals("Update Map Data")) {
+		}/* else if (actionName.equals("Update Map Data")) {
 			
 			System.out.println("Editing New Map");
 			defaultMapTag = "[Map]\n"+
@@ -712,7 +712,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 			}
 			 
-		}  else if (actionName.equals(exitBtnName)){
+		} */ else if (actionName.equals(exitBtnName)){
 			System.out.println("Quit Game");
 			System.exit(0);
 		} else if (actionName.equals("Start Game")){
