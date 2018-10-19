@@ -134,7 +134,7 @@ public class InitializeData {
 	 * if map is valid then it starts the process of Initial Reinforcement: invoke
 	 * the method {@linkplain Reinforcement#initialReinforcement()} of class Reinforcement.
 	 * 
-	 * 
+	 * need to change
 	 * @return true if map Data is Valid else, return false.
 	 */
 	public boolean generateData(){
@@ -155,11 +155,14 @@ public class InitializeData {
 			continent = boardData.continentObject;
 			territory = boardData.territoryObject;
 			players.selectPlayers(players.getPlayerList(), playerCount);
-			Reinforcement reinforcement = new Reinforcement(players,continent,territory);
-			reinforcement.initialReinforcement();
-			setContinent(reinforcement.continent);
-			setPlayers(reinforcement.players);
-			setTerritory(reinforcement.territory);
+			StartUpPhase startUpPhase = new StartUpPhase(players,continent,territory);
+			startUpPhase.initialStartUpPhase();
+			setContinent(startUpPhase.continent);
+			setTerritory(startUpPhase.territory);
+			Reinforcement reinforcement = new Reinforcement(players.getPlayers(0),players, getTerritory(), getContinent());
+			players.updateArmy(players.getPlayers(0), reinforcement.generateArmy(),"ADD");
+			setPlayers(startUpPhase.players);
+
 		}else {
 			System.out.println("Map is not Valid");
 		}
