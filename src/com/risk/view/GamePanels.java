@@ -807,6 +807,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	}
 	
 	private void goForAttack() {
+		players.setCurrentPhase("Attack");
+		updateLogArea();
 	    JOptionPane.showMessageDialog(frame,"Attack Phase is in Progress");
 	    fortifyBtn.setEnabled(true);
 	    endTurnBtn.setEnabled(true);
@@ -819,6 +821,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * @param flag used to identify whether player can do reinforcement or not.
 	 */
 	public void goForReinforcement(boolean flag) {
+		players.setCurrentPhase("Reinforcement");
+		updateLogArea();
 	    String name = players.getPlayerPlaying().get(playerTurn);
 	    if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){	    
 		String[] terrName = territoryAList.getSelectedValue().split("---");
@@ -861,6 +865,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * It also used to disable reinforcement button and enable fortify button if player has no army  
 	 */
 	public void enableReinforcementBtn() {
+		players.setCurrentPhase("Reinforcement");
+		updateLogArea();
 	    String name = players.getPlayerPlaying().get(playerTurn);
 	    System.out.println("enableReinforcementBtn :  Name " +name);
 	    riskLogger("enableReinforcementBtn :  Name " +name);
@@ -888,6 +894,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * method use to enable list of current territory owned by current player to move army from one  territory to another.   
 	 */
 	public void startFortificationPhase() {
+		players.setCurrentPhase("Fortification");
+		updateLogArea();
 	    attackBtn.setEnabled(false);
 	   addTerritoryADropDown();
 	   
@@ -981,7 +989,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	}
 	
 	/**
-	 * Method used to display complete details of territory such as which continent it belongs to, which player has occupied it with how many armies.
+	 * Method used to display complete details of territory such as which continent it belongs to,<br/>
+	 * which player has occupied it with how many armies.
 	 */
 	public  void displayTerritoryDetails() {
 		// TODO Auto-generated method stub
