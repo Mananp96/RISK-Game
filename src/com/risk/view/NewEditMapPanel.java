@@ -41,7 +41,7 @@ import com.risk.models.Territory;
  * @author Himen Sidhpura
  *
  */
-public class NewEditMapPanel implements ActionListener {
+public class NewEditMapPanel implements ActionListener{
     
         private JRadioButton mapOptA;
         private JLabel fetchFileDataError;
@@ -269,7 +269,7 @@ public class NewEditMapPanel implements ActionListener {
             if(StringUtils.isNotEmpty(filePath)) {
         	EditMapFile editMapFile = new EditMapFile(filePath); 
         	if(editMapFile.generateData()) {
-        	  //  continentArea.setText(editMapFile.getContinentData().toString());
+        	  	//continentArea.setText(editMapFile.getContinentData().toString());
         	    //territoryArea.setText(editMapFile.getTerritoryData().toString());
         	    fetchFileDataError.setText("File Content Data is validated and Ready to Edit");
         	    territory = editMapFile.getTerritory();

@@ -31,7 +31,6 @@ public class Reinforcement {
 		this.players = players;
 		this.territory = territory;
 		this.continent = continent;
-
 	}
 
 	/**
