@@ -131,7 +131,6 @@ public class MapValidator extends GamePanels {
 			this.isMapValid = false;
 			throw new InvalidMapException("Territories should not be null");
 		}
-		riskLogger("3."+isMapValid);
 		return isMapValid;
 	}
 
@@ -173,10 +172,10 @@ public class MapValidator extends GamePanels {
 			}
 		}
 		if(graph.isGraphStronglyConnected()) {
-			riskLogger("Graph is Connected.");
+			
 			this.isMapValid = true;
 		}else {
-			riskLogger("Graph is not Connected.");
+			
 			this.isMapValid = false;
 			throw new InvalidMapException("Graph is not connected");
 		}

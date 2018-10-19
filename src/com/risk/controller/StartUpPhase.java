@@ -43,18 +43,21 @@ public class StartUpPhase extends GamePanels {
 		}else {
 			armies = new ArmiesSelection(playerSize);
 		}
-		riskLogger("Initial StartUp Started");
 		riskLogger("Player in Game : " + playerSize);
+		riskLogger("------------------");
+		
+	
 
 		for (int i = 0; i < playerSize; i++) {
 			String playerName = players.getPlayerList().get(i);
 			players.setCurrentPhase("StartUp Phase");
 			players.addPlayerContinent(playerName, new Continent());
 			players.initialArmy(playerName, armies.getPlayerArmies());
-			riskLogger(playerName + " Assigned with Continent Object");
+			
 			riskLogger(playerName + " Assigned with Initial Army of " + players.getPlayerArmy(playerName));
 		}
-
+		riskLogger("------------------");
+		riskLogger("Initial StartUp Started");
 		Map<String, String> territoryContinent = territory.getTerritoryCont();
 		int playerCount = 0;
 		for (int i = 0; i < territory.getTerritoryList().size(); i++) {
@@ -64,6 +67,7 @@ public class StartUpPhase extends GamePanels {
 			if (players.getPlayerArmy(playerName) >= 1) {
 				Continent tempContinent = players.getPlayerContinent(playerName);
 				tempContinent.addContinentOwnedTerritory(territoryContinent.get(randomTerritory), randomTerritory.toString(), true);
+				riskLogger(playerName+" assigned Territory: "+ randomTerritory);
 				territoryContinent.remove(randomTerritory);
 				territory.updateTerritoryArmy(randomTerritory.toString(), 1, "ADD");
 				territory.updateTerritoryUser(playerName, randomTerritory.toString());
@@ -77,6 +81,7 @@ public class StartUpPhase extends GamePanels {
 				territory.updateTerritoryUser("No Player", randomTerritory.toString());
 			}
 		}
+		
 		for(int i = 0;i < playerSize;i++) {
 		    String name = players.getPlayers(i);
 		    int armiesNo = players.getPlayerArmy(name);
@@ -94,6 +99,8 @@ public class StartUpPhase extends GamePanels {
 		    }
 
 		}
-
+		players.setCurrentPhase("Reinforcement");
+		riskLogger(" ");
+		riskLogger("Reinforcement phase started");
 	}
 }
