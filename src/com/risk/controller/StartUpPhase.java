@@ -8,8 +8,9 @@ import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
+import com.risk.view.GamePanels;
 
-public class StartUpPhase extends GamePanels{
+public class StartUpPhase extends GamePanels {
 
 	Players players;
 	Continent continent;
