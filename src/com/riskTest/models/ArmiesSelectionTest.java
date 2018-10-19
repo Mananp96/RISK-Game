@@ -35,6 +35,7 @@ public class ArmiesSelectionTest {
 	
 	/**
 	 * This method is to test the selection of Number of armies according to Player.
+	 * 
 	 */
 	@Test public void testArmiesSelection() {
 		
