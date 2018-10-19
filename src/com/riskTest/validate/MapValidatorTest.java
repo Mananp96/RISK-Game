@@ -62,7 +62,7 @@ public class MapValidatorTest {
 	/**
 	 * This method is used to test
 	 * {@linkplain com.risk.validate.MapValidator#validateMap()} method of MapValidator.java.
-	 * @throws InvalidMapException 
+	 * @throws InvalidMapException map file should not be null.
 	 */
 	@Test
 	public void testValidateMap() throws InvalidMapException {
@@ -73,7 +73,7 @@ public class MapValidatorTest {
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateContinentValue()} method of MapValidator.java.
-	 * @throws InvalidMapException 
+	 * @throws InvalidMapException Continent Control value should be more than 1.
 	 */
 	@Test
 	public void testValidateContinentValue() throws InvalidMapException {
@@ -87,7 +87,7 @@ public class MapValidatorTest {
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateContinent()} method of MapValidator.java.
-	 * @throws InvalidMapException
+	 * @throws InvalidMapException Continent should be unique
 	 */
 	@Test
 	public void testValidateContinent() throws InvalidMapException {
@@ -97,7 +97,7 @@ public class MapValidatorTest {
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateTerritories()} method of MapValidator.java.
-	 * @throws InvalidMapException 
+	 * @throws InvalidMapException Territory should not be null. 
 	 */
 	@Test
 	public void testValidateTerritories() throws InvalidMapException {
@@ -112,7 +112,7 @@ public class MapValidatorTest {
 	/**
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#validateAdjcentTerritories()} method of MapValidator.java.
-	 * @throws InvalidMapException 
+	 * @throws InvalidMapException Adjacent should not be null.
 	 */
 	@Test
 	public void testValidateAdjcentTerritories() throws InvalidMapException {
@@ -124,6 +124,7 @@ public class MapValidatorTest {
 	 * This method is used to test
 	 * {@link com.risk.validate.MapValidator#isGraphConnected()} method of MapValidator.java.
 	 * @throws InvalidMapException 
+	 * 							Graph is not Connected.
 	 */
 	@Test
 	public void testIsGraphConnected() throws InvalidMapException {

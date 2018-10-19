@@ -26,7 +26,8 @@ public class TerritoryTest {
 	Territory territory;
 	
 	Map<String, ArrayList<String>> adjacentTerritory; 
-	ArrayList<String> territoryList; 
+	ArrayList<String> territoryList;
+	Map<String, Integer> territoryArmy;
 	/**
 	 * This method is invoked at the start of all the test methods.
 	 */
@@ -35,6 +36,8 @@ public class TerritoryTest {
 		territory = new Territory();
 		adjacentTerritory = new HashMap<>();
 		territoryList = new ArrayList<>();
+		territoryArmy = new HashMap<>();
+		
 		territoryList.add(territoryTwo);
 		territoryList.add(territoryThree);
 		adjacentTerritory.put(territoryOne, territoryList);
@@ -44,6 +47,9 @@ public class TerritoryTest {
 		territoryList.add(territoryFour);
 		territoryList.add(territoryOne);
 		adjacentTerritory.put(territoryTwo, territoryList);
+		
+		territoryArmy.put(territoryOne, 3);
+		territoryArmy.put(territoryTwo, 1);
 	}
 	
 	/**
@@ -66,16 +72,13 @@ public class TerritoryTest {
 	 */
 	@Test
 	public void testUpdateTerritoryArmy() {
+		territory.updateTerritoryArmy(territoryOne, 3, "add");
+		territory.updateTerritoryArmy(territoryTwo, 1, "add");
+		assertEquals(territoryArmy,territory.getTerritoryArmy());
 		
+		territoryArmy.replace(territoryOne, 3, 2);
+		territory.updateTerritoryArmy(territoryOne, 1, "update");
+		assertEquals(territoryArmy,territory.getTerritoryArmy());
 	}
-	
-	/**
-	 * This method is to test update Player of Territory functionality.
-	 */
-	@Test
-	public void testUpdateTerritoryUser() {
-		
-	}
-	
 	
 }
