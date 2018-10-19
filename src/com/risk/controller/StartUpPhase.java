@@ -8,6 +8,7 @@ import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
+import com.risk.view.GamePanels;
 
 public class StartUpPhase {
 
@@ -47,6 +48,7 @@ public class StartUpPhase {
 
 		for (int i = 0; i < playerSize; i++) {
 			String playerName = players.getPlayerList().get(i);
+			players.setCurrentPhase("StartUp Phase");
 			players.addPlayerContinent(playerName, new Continent());
 			players.initialArmy(playerName, armies.getPlayerArmies());
 			System.out.println(playerName + " Assigned with Continent Object");

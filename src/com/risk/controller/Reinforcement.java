@@ -12,6 +12,7 @@ public class Reinforcement {
     Territory territory; 
     Continent continent;
     String playerName;
+
     public Reinforcement(String playerName , Players players, Territory territory, Continent continent) {
 	// TODO Auto-generated constructor stub
 	this.playerName = playerName;

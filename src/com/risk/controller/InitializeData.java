@@ -132,9 +132,8 @@ public class InitializeData {
 	 * {@link BoardData#generateBoardData()} of class BoardData
 	 * for the purpose of Generate Data and Validate map Data from map file. 
 	 * if map is valid then it starts the process of Initial Reinforcement: invoke
-	 * the method {@linkplain Reinforcement#initialReinforcement()} of class Reinforcement.
-	 * 
-	 * need to change
+	 * the method {@linkplain Reinforcement#generateArmy()} of class Reinforcement.
+	 *
 	 * @return true if map Data is Valid else, return false.
 	 */
 	public boolean generateData(){
