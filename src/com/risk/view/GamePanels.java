@@ -105,7 +105,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private String defaultMapTag;
 	private String finalMapData;
 
-	public JTextArea log = new JTextArea(37,20);
+	public static JTextArea log = new JTextArea(25,20);
 
 	
 	/**
@@ -237,10 +237,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		JPanel gamePanel = new JPanel();
 		frame.setLayout(mainLayout);
 		
-		gamePanel.add(displayLog(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_START, 0.5, 0.5, 0, 0));
+		gamePanel.add(displayLog(),setGridBagConstraints(new Insets(25, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_START, 0.5, 0.5, 0, 0));
 		gamePanel.add(eventScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.CENTER, 0.5, 0.5, 1, 0));
 		gamePanel.add(countryScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
-		gamePanel.add(logScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.SOUTHWEST, 0.5, 0.5, 0, 1));
 
 		return gamePanel;
 	}
@@ -250,16 +249,35 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 */
 	protected JPanel displayLog(){
 		JPanel logPanel = new JPanel();
-		logPanel.setSize(new Dimension(400, 600));
+		logPanel.setSize(new Dimension(300, 600));
+		GridBagLayout eventLayout = new GridBagLayout();
+		logPanel.setLayout(eventLayout);
+
+		menuBtn = new JButton("Menu");
+		menuBtn.setActionCommand(backBtnName);
+		menuBtn.addActionListener(this);
+
+		logArea = new JTextArea(4,20);
+		logArea.setFocusable(false);
+		logArea.setLineWrap(true);
+		logArea.setWrapStyleWord(true);
+		caret = (DefaultCaret)logArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		JScrollPane logScrollPane = new JScrollPane(logArea);
+		logScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		updateLogArea();
 
 		JScrollPane jScrollPane = new JScrollPane(log);
 		jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		logPanel.add(jScrollPane);
+
+		logPanel.add(menuBtn, setGridBagConstraints(new Insets(5, 0, 20, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 0));
+		logPanel.add(logScrollPane, setGridBagConstraints(new Insets(0,5, 5, 5), GridBagConstraints.BOTH, 0.5,5, 0, 1));
+		logPanel.add(jScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
 
 		return logPanel;
 	}
 
-	public void riskLogger(String logString){
+	public static void riskLogger(String logString){
 		log.append(logString + "\n");
 	}
 
@@ -274,10 +292,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		GridBagLayout eventLayout = new GridBagLayout();
 		eventPanel.setLayout(eventLayout);
 		
-		JLabel selectedLabel = new JLabel("Selected Territory:");
-		JLabel targetLabel = new JLabel("Adjacent Territory:");
-		
-		menuBtn = new JButton("Menu");
+		JLabel selectedLabel = new JLabel("SELECTED TERRITORY");
+		JLabel targetLabel = new JLabel("ADJACENT TERRITORY");
+
 		turnInBtn = new JButton("Turn In Cards");
 		turnInBtn.setEnabled(false);
 		reinforceBtn = new JButton("Place Reinforcements");
@@ -289,13 +306,11 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		    fortifyBtn.setEnabled(false);
 		    endTurnBtn.setEnabled(false);
 		}
-		 
-		menuBtn.setActionCommand(backBtnName);
+
 		reinforceBtn.setActionCommand("placeReinforcement");
 		attackBtn.setActionCommand("attackBtn");
 		fortifyBtn.setActionCommand("startFortification");
 		endTurnBtn.setActionCommand("endTurn");
-		menuBtn.addActionListener(this);
 		reinforceBtn.addActionListener(this);
 		fortifyBtn.addActionListener(this);
 		attackBtn.addActionListener(this);
@@ -308,13 +323,13 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		territoryAList = new JList<>(territoryAModel);
 		for (Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 			if(entry.getValue().equalsIgnoreCase(players.getPlayerPlaying().get(playerTurn))) {
-				territoryAModel.addElement(entry.getKey() +"---" +territory.getTerritoryArmy().get(entry.getKey()));
+				territoryAModel.addElement(entry.getKey() +" -- " +territory.getTerritoryArmy().get(entry.getKey()));
 			}
 		}		
 		
 		territoryAList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		territoryAList.setLayoutOrientation(JList.VERTICAL);
-		territoryAList.setVisibleRowCount(42);
+		territoryAList.setVisibleRowCount(40);
 		territoryBModel = new DefaultListModel<>();
 		territoryBList = new JList<>(territoryBModel);
 		territoryBList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -329,21 +344,20 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 				// TODO Auto-generated method stub
 				territoryBModel.removeAllElements();
 				if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){
-				    String[] territorySelected = territoryAList.getSelectedValue().split("---");
+				    String[] territorySelected = territoryAList.getSelectedValue().split(" -- ");
 				    ArrayList<String> tempAdjacentTerritory = territory.getAdjacentTerritory().get(territorySelected[0]);
 				    for(int i=0;i<tempAdjacentTerritory.size();i++) {
-					territoryBModel.addElement(tempAdjacentTerritory.get(i)+ "---" +territory.getTerritoryArmy().get(tempAdjacentTerritory.get(i)));
+					territoryBModel.addElement(tempAdjacentTerritory.get(i)+ " -- " +territory.getTerritoryArmy().get(tempAdjacentTerritory.get(i)));
 				    }
 				}	
 			}
 		});
 		territoryBList.addListSelectionListener(this);
-		
-		eventPanel.add(menuBtn, setGridBagConstraints(new Insets(0, 5, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 0));
+
 		//eventPanel.add(cardsList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
 		//eventPanel.add(turnInBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 3));
-		eventPanel.add(selectedLabel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
-		eventPanel.add(continentScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 5));
+		eventPanel.add(selectedLabel, setGridBagConstraints(new Insets(25, 5, 21, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
+		eventPanel.add(continentScrollPane, setGridBagConstraints(new Insets(5, 5, 25, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 5));
 		eventPanel.add(reinforceBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 6));
 		eventPanel.add(targetLabel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 7));
 		eventPanel.add(territoryScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 8));
@@ -470,28 +484,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    return fortificationPanel;
 	}
 
-	/**
-	 * Display who is current with his total number of army
-	 * @return logPanel
-	 */
-	protected JPanel logScreen(){
-		
-		JPanel logPanel = new JPanel();
-		GridBagLayout logLayout = new GridBagLayout();
-		logPanel.setLayout(logLayout);
-		logPanel.setSize(new Dimension(400,250));
-		logArea = new JTextArea(4,40);
-		logArea.setFocusable(false);
-		logArea.setLineWrap(true);
-		logArea.setWrapStyleWord(true);
-		caret = (DefaultCaret)logArea.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		JScrollPane logScrollPane = new JScrollPane(logArea);
-		logPanel.add(logScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.WEST, 0.5,14, 0, 0));
-		updateLogArea();
-
-		return logPanel;
-	}
 	/**
 	 * Frame consist of Start button, Edit Button and Quit Button
 	 * @param frame current frame
@@ -1080,5 +1072,10 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub	
 	}
+
+	/*@Override
+	public void update(Observable o, Object arg) {
+		log.append(((Logger) o).getLog() + "\n");
+	}*/
 
 }
