@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3107be0-8a67-43f0-9922-97a094fdd559" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/RISK-Game.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RISK-Game.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/org.eclipse.jdt.junit5.runtime_1.0.100.v20171124-1029.jar" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,14 +41,14 @@
           <entry key="classpath" value="3" />
           <entry key="gitignore" value="1" />
           <entry key="iml" value="1" />
-          <entry key="java" value="105" />
-          <entry key="map" value="3" />
+          <entry key="java" value="110" />
+          <entry key="map" value="4" />
           <entry key="md" value="1" />
           <entry key="prefs" value="2" />
           <entry key="project" value="2" />
           <entry key="properties" value="1" />
           <entry key="txt" value="2" />
-          <entry key="xml" value="13" />
+          <entry key="xml" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -67,27 +64,75 @@
           <entry key="Eclipse" value="5" />
           <entry key="IDEA_MODULE" value="1" />
           <entry key="Image" value="2" />
-          <entry key="JAVA" value="105" />
+          <entry key="JAVA" value="110" />
           <entry key="Markdown" value="1" />
-          <entry key="PLAIN_TEXT" value="9" />
+          <entry key="PLAIN_TEXT" value="10" />
           <entry key="Properties" value="1" />
-          <entry key="XML" value="13" />
+          <entry key="XML" value="15" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/riskTest/RiskTestSuite.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/risk/view/GamePanels.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+            <state relative-caret-position="300">
+              <caret line="485" selection-start-line="485" selection-end-line="485" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/PlayersTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2">
+              <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/ArmiesSelectionTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="299">
+              <caret line="39" column="52" selection-start-line="39" selection-start-column="52" selection-end-line="39" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/risk/models/ArmiesSelection.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="42" />
+              <folding>
+                <element signature="e#573#574#0" expanded="true" />
+                <element signature="e#593#594#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/riskTest/RiskTestSuite.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.idea/libraries/jUnitLib.xml">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -222,7 +267,24 @@
             <path>
               <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
               <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+              <item name="documentation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="jUnitLib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
@@ -314,44 +376,6 @@
               <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="JUnit5.2" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="JUnit5.2" type="70bed36:NamedLibraryElementNode" />
-              <item name="junit-platform-commons-1.3.1.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="JUnit5.2" type="70bed36:NamedLibraryElementNode" />
-              <item name="junit-platform-commons-1.3.1.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="commons" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="JUnit5.2" type="70bed36:NamedLibraryElementNode" />
-              <item name="opentest4j-1.1.1.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="JUnit5.2" type="70bed36:NamedLibraryElementNode" />
-              <item name="opentest4j-1.1.1.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="META-INF" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="JUnit5.2" type="70bed36:NamedLibraryElementNode" />
-              <item name="opentest4j-1.1.1.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="opentest4j" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -402,7 +426,7 @@
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/shalin_patel/Documents/GitHub/RISK-Game/src/com/risk/view/NewEditMapPanel.java" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540017411439" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540020738692" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -420,7 +444,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Risk">
+  <component name="RunManager" selected="JUnit.RiskTestSuite">
     <configuration name="Risk" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.risk.view.Risk" />
       <module name="RISK-Game" />
@@ -469,8 +493,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Risk" />
         <item itemvalue="JUnit.RiskTestSuite" />
+        <item itemvalue="Application.Risk" />
         <item itemvalue="JUnit.ArmiesSelectionTest" />
       </list>
     </recent_temporary>
@@ -489,12 +513,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ArmiesSelectionTest - 2018.10.17 at 14h 52m 16s.xml">
-      <configuration name="ArmiesSelectionTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ArmiesSelectionTest - 2018.10.17 at 14h 52m 18s.xml">
-      <configuration name="ArmiesSelectionTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="ArmiesSelectionTest - 2018.10.17 at 14h 53m 19s.xml">
       <configuration name="ArmiesSelectionTest" configurationId="JUnit" />
     </history-entry>
@@ -519,6 +537,12 @@
     <history-entry file="ArmiesSelectionTest - 2018.10.17 at 15h 09m 01s.xml">
       <configuration name="ArmiesSelectionTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="RiskTestSuite - 2018.10.20 at 03h 16m 09s.xml">
+      <configuration name="RiskTestSuite" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="RiskTestSuite - 2018.10.20 at 03h 16m 33s.xml">
+      <configuration name="RiskTestSuite" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="0" />
@@ -534,12 +558,12 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3299363" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3299363" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.3299363" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.3299363" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.3299363" />
@@ -586,21 +610,12 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/ArmiesSelection.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/Players.java" />
     <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/Territory.java" />
     <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/Continent.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/Before.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="14" column="26" lean-forward="true" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/risk/models/ArmiesSelection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
         </state>
       </provider>
     </entry>
@@ -611,13 +626,6 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/riskTest/validate/ConnectedGraph.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/ArmiesSelectionTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="9" column="3" lean-forward="true" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/TerritoryTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -701,16 +709,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/risk/view/GamePanels.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5688">
-          <caret line="485" selection-start-line="485" selection-end-line="485" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/risk/controller/InitializeData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1272">
@@ -758,18 +756,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6665" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/PlayersTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/risk/models/Players.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -867,15 +853,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/riskTest/RiskTestSuite.java">
+    <entry file="file://$PROJECT_DIR$/src/com/risk/view/GamePanels.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+        <state relative-caret-position="300">
+          <caret line="485" selection-start-line="485" selection-end-line="485" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/PlayersTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/ArmiesSelectionTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="39" column="52" selection-start-line="39" selection-start-column="52" selection-end-line="39" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/risk/models/ArmiesSelection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="42" />
+          <folding>
+            <element signature="e#573#574#0" expanded="true" />
+            <element signature="e#593#594#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/riskTest/RiskTestSuite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-14371" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mapFile291.map">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/jUnitLib.xml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">
@@ -941,7 +973,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>common-lang3</last-edited>
+          <last-edited>junit5</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

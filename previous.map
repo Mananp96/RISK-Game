@@ -1,0 +1,55 @@
+[Map]
+author=Unknown
+warn=yes
+image=previous.bmp
+wrap=no
+[Continents]
+Western Africa=7
+Eastern Africa=3
+Southern Africa=3
+The Congo=5
+The Horn=3
+Central Africa=6
+Northern Africa 1=4
+[Territories]
+Benin,0,0,Western Africa,Burkina Faso,Niger,Nigeria,Ghana
+Cameroon,0,0,Central Africa,Nigeria,Chad,Central African Rep.,Rep. of the Congo,Gabon
+Eritrea,0,0,The Horn,North Sudan,Somalia,Ethiopia
+Angola,0,0,The Congo,D.R.O.T. Congo,Zambia,Namibia,Botswana
+Guinea,0,0,Western Africa,Senegal,Mali,Ivory Coast,Sierra Leone,Liberia
+Egypt,0,0,Northern Africa 1,Libya,North Sudan
+Chad,0,0,Central Africa,Libya,North Sudan,South Sudan,Central African Rep.,Cameroon,Nigeria,Niger
+Somalia,0,0,The Horn,Eritrea,Ethiopia,Kenya
+Sierra Leone,0,0,Western Africa,Guinea,Liberia
+Madagascar,0,0,Southern Africa,Mozambique
+Ivory Coast,0,0,Western Africa,Liberia,Guinea,Mali,Burkina Faso,Ghana
+Libya,0,0,Northern Africa 1,North Sudan,Tunisia,Algeria,Niger,Chad,Egypt
+Gabon,0,0,The Congo,Cameroon,Rep. of the Congo
+Mozambique,0,0,Southern Africa,Tanzania,Malawi,Madagascar,Zambia,Zimbabwe,South Africa
+Morocco,0,0,Northern Africa 1,Western Sahara,Algeria
+Mali,0,0,Western Africa,Senegal,Mauritania,Algeria,Niger,Burkina Faso,Ivory Coast,Guinea
+Rep. of the Congo,0,0,The Congo,Cameroon,Central African Rep.,D.R.O.T. Congo,Gabon
+Malawi,0,0,Eastern Africa,Tanzania,Mozambique,Zambia
+Algeria,0,0,Northern Africa 1,Morocco,Western Sahara,Mauritania,Mali,Niger,Libya,Tunisia
+Nigeria,0,0,Central Africa,Niger,Chad,Cameroon,Benin
+Tunisia,0,0,Northern Africa 1,Algeria,Libya
+Western Sahara,0,0,Western Africa,Morocco,Algeria,Mauritania
+D.R.O.T. Congo,0,0,The Congo,Central African Rep.,South Sudan,Uganda,Tanzania,Zambia,Angola,Rep. of the Congo
+South Sudan,0,0,The Horn,North Sudan,Ethiopia,Kenya,Uganda,D.R.O.T. Congo,Central African Rep.,Chad
+Niger,0,0,Central Africa,Mali,Algeria,Libya,Chad,Nigeria,Benin,Burkina Faso
+North Sudan,0,0,The Horn,Egypt,Libya,Eritrea,Ethiopia,South Sudan,Chad
+Tanzania,0,0,Eastern Africa,Uganda,Kenya,Mozambique,Malawi,D.R.O.T. Congo,Zambia
+Ghana,0,0,Western Africa,Burkina Faso,Benin,Ivory Coast
+Zambia,0,0,The Congo,D.R.O.T. Congo,Tanzania,Malawi,Mozambique,Zimbabwe,Botswana,Angola
+Kenya,0,0,Eastern Africa,South Sudan,Ethiopia,Somalia,Tanzania,Uganda
+Liberia,0,0,Western Africa,Sierra Leone,Guinea,Ivory Coast
+Mauritania,0,0,Western Africa,Western Sahara,Algeria,Mali,Senegal
+Burkina Faso,0,0,Western Africa,Mali,Niger,Benin,Ghana,Ivory Coast
+Senegal,0,0,Western Africa,Mauritania,Mali,Guinea
+Namibia,0,0,Southern Africa,Angola,Botswana,South Africa
+Botswana,0,0,Southern Africa,Angola,Zambia,Zimbabwe,South Africa,Namibia
+Uganda,0,0,Eastern Africa,South Sudan,Kenya,Tanzania,D.R.O.T. Congo
+Zimbabwe,0,0,Southern Africa,Zambia,Mozambique,South Africa,Botswana
+South Africa,0,0,Southern Africa,Namibia,Botswana,Zimbabwe,Mozambique
+Central African Rep.,0,0,Central Africa,Chad,South Sudan,D.R.O.T. Congo,Rep. of the Congo,Cameroon
+Ethiopia,0,0,The Horn,Eritrea,Somalia,Kenya,South Sudan,North Sudan
