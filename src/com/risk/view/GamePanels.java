@@ -102,9 +102,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	private JLabel fortErrorMsg;
 	private JTextArea continentArea;
 	private JTextArea territoryArea;
-	private String defaultMapTag;
-	private String finalMapData;
-
 	public static JTextArea log = new JTextArea(25,20);
 
 	
@@ -220,8 +217,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 		frame.setResizable(true);
 		frame.setVisible(true);
-	    NewEditMapPanel newEditMapPanel=new NewEditMapPanel();
-	    return newEditMapPanel.createMapPanel(frame,true);
+		NewEditMapPanel newEditMapPanel=new NewEditMapPanel();
+		return newEditMapPanel.createMapPanel(frame,true);
 	}
 	
 	/**
@@ -302,9 +299,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		fortifyBtn = new JButton("Fortify");
 		endTurnBtn = new JButton("End Turn");
 		if(reinforceBtn.isEnabled()) {
-		    attackBtn.setEnabled(false);
-		    fortifyBtn.setEnabled(false);
-		    endTurnBtn.setEnabled(false);
+			attackBtn.setEnabled(false);
+			fortifyBtn.setEnabled(false);
+			endTurnBtn.setEnabled(false);
 		}
 
 		reinforceBtn.setActionCommand("placeReinforcement");
@@ -341,14 +338,13 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		territoryAList.addListSelectionListener(new ListSelectionListener() {			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				// TODO Auto-generated method stub
 				territoryBModel.removeAllElements();
 				if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){
-				    String[] territorySelected = territoryAList.getSelectedValue().split(" -- ");
-				    ArrayList<String> tempAdjacentTerritory = territory.getAdjacentTerritory().get(territorySelected[0]);
-				    for(int i=0;i<tempAdjacentTerritory.size();i++) {
-					territoryBModel.addElement(tempAdjacentTerritory.get(i)+ " -- " +territory.getTerritoryArmy().get(tempAdjacentTerritory.get(i)));
-				    }
+					String[] territorySelected = territoryAList.getSelectedValue().split(" -- ");
+					ArrayList<String> tempAdjacentTerritory = territory.getAdjacentTerritory().get(territorySelected[0]);
+					for(int i=0;i<tempAdjacentTerritory.size();i++) {
+						territoryBModel.addElement(tempAdjacentTerritory.get(i)+ " -- " +territory.getTerritoryArmy().get(tempAdjacentTerritory.get(i)));
+					}
 				}	
 			}
 		});
@@ -397,17 +393,16 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		    @Override
 		    public void valueChanged(ListSelectionEvent e) {
 			if(StringUtils.isNotEmpty(continentInfoList.getSelectedValue())) {
-			    territoryInfoModel.removeAllElements();
-			    String continentSelected = continentInfoList.getSelectedValue().trim();
-			    ArrayList<String> tempContinentTerritory = continent.getContinentTerritory().get(continentSelected);
-			    for(int i=0;i<tempContinentTerritory.size();i++) {
-				String territoryName = tempContinentTerritory.get(i).trim();
-				territoryInfoModel.addElement(territoryName.trim()+ " -- " +territory.getTerritoryUser().get(territoryName));
+				territoryInfoModel.removeAllElements();
+			 	String continentSelected = continentInfoList.getSelectedValue().trim();
+				ArrayList<String> tempContinentTerritory = continent.getContinentTerritory().get(continentSelected);
+				for(int i=0;i<tempContinentTerritory.size();i++) {
+					String territoryName = tempContinentTerritory.get(i).trim();
+					territoryInfoModel.addElement(territoryName.trim()+ " -- " +territory.getTerritoryUser().get(territoryName));
 			    }   
 			}
-		    }
-		});
-		
+			}
+		});		
 		territoryInfoModel = new DefaultListModel<>();
 		territoryInfoList = new JList<>(territoryInfoModel);
 		territoryInfoList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -445,43 +440,43 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * @return fortificationPanel for movement of army
 	 */
 	private JPanel fortificationPanel() {
-	    // TODO Auto-generated method stub
-	    JPanel fortificationPanel = new JPanel();
-	    fortificationPanel.setLayout(new GridLayout(9, 1));
-	    JLabel territoryALabel = new JLabel("Territory List");
-	    territoryADropDown = new JComboBox<>();
-	    JLabel territoryBLabel = new JLabel("Adjacent Territory List");
-	    territoryBDropDown = new JComboBox<>();
-	    fortErrorMsg = new JLabel("Select Army : ");
-	    selectArmyModel = new SpinnerNumberModel();
-	    JSpinner selectArmy = new JSpinner(selectArmyModel);
+		// TODO Auto-generated method stub
+		JPanel fortificationPanel = new JPanel();
+		fortificationPanel.setLayout(new GridLayout(9, 1));
+		JLabel territoryALabel = new JLabel("Territory List");
+		territoryADropDown = new JComboBox<>();
+		JLabel territoryBLabel = new JLabel("Adjacent Territory List");
+		territoryBDropDown = new JComboBox<>();
+		fortErrorMsg = new JLabel("Select Army : ");
+		selectArmyModel = new SpinnerNumberModel();
+		JSpinner selectArmy = new JSpinner(selectArmyModel);
 		fortificationPanel.add(new JLabel(""));
-	    fortificationPanel.add(territoryALabel);
-	    fortificationPanel.add(territoryADropDown);
+		fortificationPanel.add(territoryALabel);
+		fortificationPanel.add(territoryADropDown);
 		fortificationPanel.add(new JLabel(""));
-	    fortificationPanel.add(territoryBLabel);
-	    fortificationPanel.add(territoryBDropDown);
+		fortificationPanel.add(territoryBLabel);
+		fortificationPanel.add(territoryBDropDown);
 		fortificationPanel.add(new JLabel(""));
-	    fortificationPanel.add(fortErrorMsg);
-	    fortificationPanel.add(selectArmy);
-	    territoryADropDown.addItemListener(new ItemListener() {
-	        
-	        @Override
-	        public void itemStateChanged(ItemEvent e) {
-	    	// TODO Auto-generated method stub
-	        addTerritoryBDropDown();
-	        }       
-	    });
-	    territoryBDropDown.addItemListener(new ItemListener() {
-	        
-	        @Override
-	        public void itemStateChanged(ItemEvent e) {
-	    	// TODO Auto-generated method stub
-	            enterArmyToMove();
-	    	
-	        }
-	    });
-	    return fortificationPanel;
+		fortificationPanel.add(fortErrorMsg);
+		fortificationPanel.add(selectArmy);
+		territoryADropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				addTerritoryBDropDown();
+			}       
+		});
+		territoryBDropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				enterArmyToMove();
+
+			}
+		});
+		return fortificationPanel;
 	}
 
 	/**
@@ -530,8 +525,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		int playerCount = count;
 		JPanel userPanel = new JPanel();
 		userPanel.setLayout(new GridLayout(6 + count, 1, 5, 5));
-		System.out.println("No. of Players : " + playerCount);
-//		riskLogger("No. of Players : " + playerCount);
 		mapOptA = new JRadioButton("Choose Your Own Map");
 		mapOptA.setActionCommand("Own Map");
 		JFileChooser chooseMap = new JFileChooser("D:");
@@ -551,7 +544,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				// TODO Auto-generated method stub
 				if(mapOptA.isSelected() && chooseMap.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					mapFilePath = chooseMap.getSelectedFile().getPath();
 					randomMap = true;
@@ -604,15 +596,15 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * @return GridBagConstraints object with all of its fields set to the passed-in arguments
 	 */
 	public GridBagConstraints setGridBagConstraints(Insets insets,int fill,int anchor, double wx, double wy, int x, int y) {
-	    	c = new GridBagConstraints();
-	    	c.fill = fill;
-	    	c.anchor = anchor;
-	    	c.insets = insets;
-	    	c.weightx = wx;
-	    	c.weighty = wy;
-	    	c.gridx = x;
-	    	c.gridy = y;
-	    	return c;
+		c = new GridBagConstraints();
+		c.fill = fill;
+		c.anchor = anchor;
+		c.insets = insets;
+		c.weightx = wx;
+		c.weighty = wy;
+		c.gridx = x;
+		c.gridy = y;
+		return c;
 	}
 	/**
 	 * The GridBagConstraints is used specifies constraints for components that are laid out using the GridBagLayout class.
@@ -626,23 +618,22 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * @return GridBagConstraints object with all of its fields set to the passed-in arguments
 	 */
 	public GridBagConstraints setGridBagConstraints(Insets insets,int fill, double wx, double wy, int x, int y) {
-	    	c = new GridBagConstraints();
-	    	c.fill = fill;
-	    	c.insets = insets;
-	    	c.weightx = wx;
-	    	c.weighty = wy;
-	    	c.gridx = x;
-	    	c.gridy = y;
-	    	return c;
+		c = new GridBagConstraints();
+		c.fill = fill;
+		c.insets = insets;
+		c.weightx = wx;
+		c.weighty = wy;
+		c.gridx = x;
+		c.gridy = y;
+		return c;
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
 		String actionName = arg0.getActionCommand();
-		
+
 		if(actionName.equalsIgnoreCase(newBtnName)){
-			System.out.println("Play Game");
 			riskLogger("Play Game");
 			players = new Players();
 			players.addPlayers("Manan");
@@ -650,108 +641,84 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.setContentPane(playerMenu());
 			frame.invalidate();
 			frame.validate();
-		} else if(actionName.equals(editMapBtnName)){
-					
+		} else if(actionName.equals(editMapBtnName)){					
 			frame.setContentPane(editMapPanel());
 			frame.invalidate();
 			frame.validate();
 			
 		} else if (actionName.equals(editExistingMapBtnName)) {
-			
-			System.out.println("Editing Existing Map");
 			riskLogger("Editing Existing Map");
 			frame.setContentPane(editExistingMapPanel());
 			frame.invalidate();
 			frame.validate();
 		
 		} else if (actionName.equals(createNewMapBtnName)) {
-			
-			System.out.println("Creating New Map");
 			riskLogger("Creating New Map");
 			frame.setContentPane(createMapPanel());
 			frame.invalidate();
 			frame.validate();
 		
 		} else if (actionName.equals(saveBtnName)) {
-			System.out.println("Saving New Map");
 			riskLogger("Saving New Map");
-			defaultMapTag = "[Map]\n"+
+			String defaultMapTag = "[Map]\n"+
 					"author=Sean O'Connor\n"+
 					"warn=yes\n"+
 					"image=Africa.bmp\n"+
 					"wrap=no\n";
-			finalMapData = String.format("%s%n[Continents]%n%s%n%n[Territories]%n%s", defaultMapTag, continentArea.getText(),territoryArea.getText());
+			String finalMapData = String.format("%s%n[Continents]%n%s%n%n[Territories]%n%s", defaultMapTag, continentArea.getText(),territoryArea.getText());
 			CreateMapFile createMapFile = new CreateMapFile(finalMapData);
 			boolean createMapFlag = createMapFile.createMap();
 			if(createMapFlag) {
-			    JOptionPane.showMessageDialog(frame, "File is Created  with Name : " + createMapFile.getFileName(),"Content Validated",JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(frame, "File is Created  with Name : " + createMapFile.getFileName(),"Content Validated",JOptionPane.OK_OPTION);
 			} else {
-			    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+				JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 			}
 			 
-		}/* else if (actionName.equals("Update Map Data")) {
-			
-			System.out.println("Editing New Map");
-			defaultMapTag = "[Map]\n"+
-					"author=Sean O'Connor\n"+
-					"warn=yes\n"+
-					"image=Africa.bmp\n"+
-					"wrap=no\n";
-			finalMapData = String.format("%s%n[Continents]%n%s%n%n[Territories]%n%s", defaultMapTag, continentArea.getText(),territoryArea.getText());
-			EditMapFile editMapFile = new EditMapFile(existingMapFilePath);
-			boolean editMapFlag = editMapFile.editMap(finalMapData);
-			if(editMapFlag) {
-			    JOptionPane.showMessageDialog(frame, "File is Updated : " + editMapFile.getFilePath(),"Content Validated",JOptionPane.OK_OPTION);
-			} else {
-			    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
-			}
-			 
-		} */ else if (actionName.equals(exitBtnName)){
-			System.out.println("Quit Game");
+		} else if (actionName.equals(exitBtnName)){
 			riskLogger("Quit Game");
 			System.exit(0);
 			riskLogger("0");
 		} else if (actionName.equals("Start Game")){
-		    if(randomMap) {
-			if(StringUtils.isNotEmpty(mapFilePath)) {
-				ArmiesSelection armies = new ArmiesSelection(playerPlaying);
-				InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
-				boolean isMapValid = initializeData.generateData();
-				if(isMapValid) {
-				    continent = initializeData.getContinent();
-				    players = initializeData.getPlayers();
-				    territory = initializeData.getTerritory();
-				    frame.setContentPane(gameView());
-				    frame.invalidate();
-				    frame.validate();
+			if(randomMap) {
+				if(StringUtils.isNotEmpty(mapFilePath)) {
+					ArmiesSelection armies = new ArmiesSelection(playerPlaying);
+					InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
+					boolean isMapValid = initializeData.generateData();
+					if(isMapValid) {
+						continent = initializeData.getContinent();
+						players = initializeData.getPlayers();
+						territory = initializeData.getTerritory();
+						frame.setContentPane(gameView());
+						frame.invalidate();
+						frame.validate();
+					} else {
+						JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+					}
 				} else {
-				    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+					JOptionPane.showMessageDialog(frame, "No Map Selected.", "Content Invalid", JOptionPane.ERROR_MESSAGE);    
 				}
+
 			} else {
-			    JOptionPane.showMessageDialog(frame, "No Map Selected.", "Content Invalid", JOptionPane.ERROR_MESSAGE);    
-			}
-			
-		    } else {
-			if(StringUtils.isNotEmpty(existingMapFilePath)) {
-			    ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
-				InitializeData initializeData = new InitializeData( existingMapFilePath, playerPlaying , armies.getPlayerArmies(), players);
-				boolean isEditMapValid = initializeData.generateData();
-				if(isEditMapValid) {
-				    continent = initializeData.getContinent();
-				    players = initializeData.getPlayers();
-				    territory = initializeData.getTerritory();
-				    frame.setContentPane(gameView());
-				    frame.invalidate();
-				    frame.validate();
+				if(StringUtils.isNotEmpty(existingMapFilePath)) {
+					ArmiesSelection armies = new ArmiesSelection(playerPlaying); 
+					InitializeData initializeData = new InitializeData( existingMapFilePath, playerPlaying , armies.getPlayerArmies(), players);
+					boolean isEditMapValid = initializeData.generateData();
+					if(isEditMapValid) {
+						continent = initializeData.getContinent();
+						players = initializeData.getPlayers();
+						territory = initializeData.getTerritory();
+						frame.setContentPane(gameView());
+						frame.invalidate();
+						frame.validate();
+					} else {
+						JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+					}
 				} else {
-				    JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+					JOptionPane.showMessageDialog(frame, "No Map Edited Previously.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 				}
-			} else {
-			    JOptionPane.showMessageDialog(frame, "No Map Edited Previously.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
+
 			}
 
-		    }
-			
 		} else if(actionName.equals(twoPlayersBtnName)){
 			System.out.println("Two Player Game");
 			riskLogger("Two Player Game");
@@ -784,28 +751,32 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			frame.invalidate();
 			frame.validate();
 		} else if(actionName.equals("placeReinforcement")) {
-		    	goForReinforcement(true);
+			goForReinforcement(true);
 		} else if(actionName.equals("attackBtn")) {
-		    	goForAttack();
+			goForAttack();
 		} else if(actionName.equals("startFortification")) {
-		    	goForFortification();
+			goForFortification();
 		} else if(actionName.equals("endTurn")) {
-				riskLogger("Player Turn ended.");
-				riskLogger("");
-		    	changePlayerTurn();
+			riskLogger("Player Turn ended.");
+			riskLogger("");
+			changePlayerTurn();
 		} else if(actionName.equals(backBtnName)){
 			frame.setContentPane(mainMenu(frame,players));
 			frame.invalidate();
 			frame.validate();
 		}
 	}
-	
+
+	/**
+	 * Attack phase.
+	 * Invoke the fortification phase.
+	 */
 	private void goForAttack() {
 		players.setCurrentPhase("Attack");
 		updateLogArea();
-	    JOptionPane.showMessageDialog(frame,"Attack Phase is in Progress");
-	    fortifyBtn.setEnabled(true);
-	    endTurnBtn.setEnabled(true);
+		JOptionPane.showMessageDialog(frame,"Attack Phase is in Progress");
+		fortifyBtn.setEnabled(true);
+		endTurnBtn.setEnabled(true);
 		startFortificationPhase();
 
 	}
@@ -817,45 +788,40 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	public void goForReinforcement(boolean flag) {
 		players.setCurrentPhase("Reinforcement");
 		updateLogArea();
-	    String name = players.getPlayerPlaying().get(playerTurn);
-	    if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){	    
-		String[] terrName = territoryAList.getSelectedValue().split("---");
-	    	String message = flag ? "Add Armies in " + terrName[0] : "Add Armies Again in " + terrName[0];
-	    	int army = players.getPlayerArmy(name);
-	    	String title = "Add Armies upto " + army;
-	    	System.out.println("Player Name " + players.getPlayerPlaying().get(playerTurn));
-	    	riskLogger("Player Turn: " + players.getPlayerPlaying().get(playerTurn));
-	    	riskLogger("Reinforcement phase");
-	    	System.out.println("Player Army " + players.getPlayerArmy(players.getPlayerPlaying().get(playerTurn)));
-	    	riskLogger("Reinforcement armies" + players.getPlayerArmy(players.getPlayerPlaying().get(playerTurn)));
-	    	
-	    	String output = JOptionPane.showInputDialog(frame, message, title, JOptionPane.OK_CANCEL_OPTION);
-	    	if (StringUtils.isNumeric(output)) {
-	    	    if(Integer.parseInt(output) > 0 && Integer.parseInt(output) <= army) {
-					players.updateArmy(name,Integer.parseInt(output) , "DELETE");
-					territory.updateTerritoryArmy(terrName[0], Integer.parseInt(output), "ADD");
-					riskLogger("armies updated :"+terrName[0]+" to "+territory.getTerritoryArmy().get(terrName[0]));
-					System.out.println("Armies Updates " + players.getPlayerArmy(name));
-					//riskLogger("Armies Updates " + players.getPlayerArmy(name));
-					territoryAModel.removeAllElements();
-					territoryBModel.removeAllElements();
-					territoryInfoModel.removeAllElements();
-					continentInfoModel.removeAllElements();
-					updateTerritoryAList();
-					updateContinentInfoList();
-					enableReinforcementBtn();
-					updateLogArea();
-	    	    } else {
-	    	    	System.out.println("Input armies are out of range");
-	    	    	riskLogger("Input armies are out of range");
-    	    		goForReinforcement(false);
-	    	    }
-	    	} else {
-	    	    System.out.println("Input armies are not properly entered");
-	    	    riskLogger("Input armies are not properly entered");
-	    		goForReinforcement(false);
-	    	}
-	    }
+		String name = players.getPlayerPlaying().get(playerTurn);
+		if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){	    
+		String[] terrName = territoryAList.getSelectedValue().split("--");
+			String message = flag ? "Add Armies in " + terrName[0] : "Add Armies Again in " + terrName[0];
+			int army = players.getPlayerArmy(name);
+			String title = "Add Armies upto " + army;
+			riskLogger("Player Name " + players.getPlayerPlaying().get(playerTurn));
+			riskLogger("Player Army " + players.getPlayerArmy(players.getPlayerPlaying().get(playerTurn)));
+			String output = JOptionPane.showInputDialog(frame, message, title, JOptionPane.OK_CANCEL_OPTION);
+	 		if (StringUtils.isNotEmpty(output) && StringUtils.isNumeric(output)) {
+				if(Integer.parseInt(output) > 0 && Integer.parseInt(output) <= army) {
+				riskLogger("Territories on which Army Place   " + terrName[0] + " "+ territory.getTerritoryArmy().get(terrName[0].trim()));
+			riskLogger("Armies Updates " + players.getPlayerArmy(name));
+			players.updateArmy(name,Integer.parseInt(output) , "DELETE");
+			territory.updateTerritoryArmy(terrName[0].trim(), Integer.parseInt(output), "ADD");
+			riskLogger("Territories on which Army Place   " + terrName[0]  + " "+ territory.getTerritoryArmy().get(terrName[0].trim()));
+			riskLogger("Armies Updates " + players.getPlayerArmy(name));
+			territoryAModel.removeAllElements();
+			territoryBModel.removeAllElements();
+			territoryInfoModel.removeAllElements();
+			continentInfoModel.removeAllElements();
+			updateTerritoryAList();
+			updateContinentInfoList();
+			enableReinforcementBtn();
+			updateLogArea();
+				} else {
+					riskLogger("Input armies are out of range ot not properly enter");
+					goForReinforcement(false);
+				}
+			} else {
+				riskLogger("Input armies  entered is null or cancel button is clicked");
+				JOptionPane.showMessageDialog(null, "Input armies  entered is null or cancel button is clicked","Invalid Content",JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 	/**
 	 * method used to enable reinforcement button and disable fortify button if player has 1 or more army
@@ -864,23 +830,19 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	public void enableReinforcementBtn() {
 		players.setCurrentPhase("Reinforcement");
 		updateLogArea();
-	    String name = players.getPlayerPlaying().get(playerTurn);
-	    System.out.println("enableReinforcementBtn :  Name " +name);
-	    System.out.println("enableReinforcementBtn :  playerTurn " +playerTurn);
-	    System.out.println("enableReinforcementBtn :  player " +players.getPlayerList());
-	    System.out.println("enableReinforcementBtn :  player aRMY " +players.getPlayerArmy(name));
-	    if(StringUtils.isNotEmpty(name)) {
-			if(players.getPlayerArmy(name) == 0) {
-				reinforceBtn.setEnabled(false);
-				attackBtn.setEnabled(true);
-				endTurnBtn.setEnabled(true);
-				fortifyBtn.setEnabled(false);
-			} else {
-			    attackBtn.setEnabled(false);
-				fortifyBtn.setEnabled(false);
-				endTurnBtn.setEnabled(false);
-				reinforceBtn.setEnabled(true);
-			}
+		String name = players.getPlayerPlaying().get(playerTurn);
+		if(StringUtils.isNotEmpty(name)) {
+		if(players.getPlayerArmy(name) == 0) {
+			reinforceBtn.setEnabled(false);
+		    attackBtn.setEnabled(true);
+		    endTurnBtn.setEnabled(true);
+		    fortifyBtn.setEnabled(false);
+		} else {
+		    attackBtn.setEnabled(false);
+		    fortifyBtn.setEnabled(false);
+		    endTurnBtn.setEnabled(false);
+		    reinforceBtn.setEnabled(true);
+		}
 	    }
 	}
 	/**
@@ -890,8 +852,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		riskLogger("Fortification phase");
 		players.setCurrentPhase("Fortification");
 		updateLogArea();
-	    attackBtn.setEnabled(false);
-	    addTerritoryADropDown();
+		attackBtn.setEnabled(false);
+		addTerritoryADropDown();
 	   
 	}
 
@@ -901,28 +863,32 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	public void changePlayerTurn() {
 	    playerTurn++;
 	    if(playerTurn < players.getPlayerList().size()) {
-			Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
-			players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
-			territoryAModel.removeAllElements();
+		Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
+		players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
+		territoryAModel.removeAllElements();
     		territoryBModel.removeAllElements();
     		territoryInfoModel.removeAllElements();
     		continentInfoModel.removeAllElements();
+    		territoryADropDown.removeAllItems();
+    		territoryBDropDown.removeAllItems();
     		updateTerritoryAList();
     		updateContinentInfoList();    
     		enableReinforcementBtn();
     		updateLogArea();
 	    } else {
-			playerTurn = 0;
-			Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
-			players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
-			territoryAModel.removeAllElements();
+		playerTurn = 0;
+		Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
+		players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
+		territoryAModel.removeAllElements();
     		territoryBModel.removeAllElements();
     		territoryInfoModel.removeAllElements();
     		continentInfoModel.removeAllElements();
+    		territoryADropDown.removeAllItems();
+    		territoryBDropDown.removeAllItems();
     		updateTerritoryAList();
     		updateContinentInfoList();    
     		enableReinforcementBtn();
-			updateLogArea();
+    		updateLogArea();
 	    }
 	}
 	
@@ -933,7 +899,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    logArea.setText("");
 	    logArea.append("Current Player : " + players.getPlayerList().get(playerTurn)+"\n");
 	    logArea.append("Current Armies : " + players.getPlayerArmy(players.getPlayerList().get(playerTurn))+"\n");
-		logArea.append("Current Phase : " + players.getCurrentPhase());
+	    logArea.append("Current Phase : " + players.getCurrentPhase());
 	}
 	/**
 	 * Method Allow Player to do Fortification Phase.
@@ -945,7 +911,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			int fromArmy = territory.getTerritoryArmy().get(fromTerritory);
 			int getArmySelect = (int) selectArmyModel.getValue();
 			if(getArmySelect < fromArmy && getArmySelect >= 1) {
-				
 				territory.updateTerritoryArmy(fromTerritory, getArmySelect, "DELETE");
 				territory.updateTerritoryArmy(toTerritory, getArmySelect, "ADD");
 				riskLogger("Armies moved from "+fromTerritory+" to "+toTerritory);
@@ -966,23 +931,23 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    boolean flag = false;
 	    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 			if(entry.getValue().equalsIgnoreCase(players.getPlayerPlaying().get(playerTurn))) {
-				if(territory.getTerritoryArmy().get(entry.getKey()) > 1) {
+			    if(territory.getTerritoryArmy().get(entry.getKey()) > 1) {
 				flag = true;
 				break;
-				}
+			    }
 			}
 	    }
 	    if(!flag) {
-			fortifyBtn.setEnabled(false);
+		fortifyBtn.setEnabled(false);
 	    }
 	    else {
-			territoryAModel.removeAllElements();
+		territoryAModel.removeAllElements();
     		territoryBModel.removeAllElements();
     		territoryInfoModel.removeAllElements();
     		continentInfoModel.removeAllElements();
     		updateTerritoryAList();
     		updateContinentInfoList(); 
-			startFortificationPhase();
+		startFortificationPhase();
 	    }
 		
 	}
@@ -992,20 +957,17 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * which player has occupied it with how many armies.
 	 */
 	public  void displayTerritoryDetails() {
-		// TODO Auto-generated method stub
 	    try {
 			territoryDetails.setText("");
 			System.out.println("territoryInfoList.getSelectedValue() " +territoryInfoList.getSelectedValue());
-			riskLogger("territoryInfoList.getSelectedValue() " +territoryInfoList.getSelectedValue());
 			if(territoryInfoList.getSelectedValue() != null) {
-				String[] territoryName = territoryInfoList.getSelectedValue().split("---");
-				territoryDetails.append("Continent  : " + continentInfoList.getSelectedValue() + "\n");
-				territoryDetails.append("Territory  : " + territoryName[0]+"\n");
-				territoryDetails.append("Player     : " + territory.getTerritoryUser().get(territoryName[0].trim())+"\n");
-				territoryDetails.append("Army       : " + territory.getTerritoryArmy().get(territoryName[0].trim()));
+			    String[] territoryName = territoryInfoList.getSelectedValue().split("--");
+			    territoryDetails.append("Continent  : " + continentInfoList.getSelectedValue() + "\n");
+			    territoryDetails.append("Territory  : " + territoryName[0]+"\n");
+			    territoryDetails.append("Player     : " + territory.getTerritoryUser().get(territoryName[0].trim())+"\n");
+			    territoryDetails.append("Army       : " + territory.getTerritoryArmy().get(territoryName[0].trim()));
 			}
 	    } catch(Exception ex) {
-			System.out.println("Handles Null Values");
 			riskLogger("Handles Null Values");
 	    }			
 	}
@@ -1018,7 +980,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    
 	    for (Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 		if(entry.getValue().equals(players.getPlayerList().get(playerTurn)))	
-		    territoryAModel.addElement(entry.getKey());
+		    territoryAModel.addElement(entry.getKey()+ " -- "+territory.getTerritoryArmy().get(entry.getKey()));
 	    }
 	}
 	/**
@@ -1034,8 +996,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * method use to display list of current territory owned by current player to move army from one  territory to another.   
 	 */
 	public void addTerritoryADropDown() {
-	    System.out.println("Player Playing " + players.getPlayerPlaying().get(playerTurn));
-	   // riskLogger("Player Playing " + players.getPlayerPlaying().get(playerTurn));
 	    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 		if(entry.getValue().equals(players.getPlayerPlaying().get(playerTurn))){
 		    territoryADropDown.addItem(entry.getKey());
