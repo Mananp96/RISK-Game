@@ -19,6 +19,7 @@ import javax.swing.text.DefaultCaret;
 import org.apache.commons.lang3.StringUtils;
 
 import com.risk.controller.CreateMapFile;
+import com.risk.controller.Fortification;
 import com.risk.controller.InitializeData;
 import com.risk.controller.Reinforcement;
 import com.risk.models.ArmiesSelection;
@@ -776,6 +777,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	JOptionPane.showMessageDialog(frame,"Attack Phase is in Progress");
 	fortifyBtn.setEnabled(true);
 	endTurnBtn.setEnabled(true);
+	riskLogger("Fortification Phase Started");
+	updateLogArea();
 	startFortificationPhase();
 
     }
@@ -832,6 +835,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	if(StringUtils.isNotEmpty(name)) {
 	    if(players.getPlayerArmy(name) == 0) {
 		reinforceBtn.setEnabled(false);
+		players.setCurrentPhase("Attack");
+		riskLogger(players.getCurrentPhase()+ " Phase Started");
+		updateLogArea();
 		attackBtn.setEnabled(true);
 		endTurnBtn.setEnabled(true);
 		fortifyBtn.setEnabled(false);
@@ -847,7 +853,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
      * method use to enable list of current territory owned by current player to move army from one  territory to another.   
      */
     public void startFortificationPhase() {
-	riskLogger("Fortification phase");
 	players.setCurrentPhase("Fortification");
 	updateLogArea();
 	attackBtn.setEnabled(false);
@@ -903,14 +908,15 @@ public class GamePanels implements ActionListener, ListSelectionListener {
      * Method Allow Player to do Fortification Phase.
      */
     public void goForFortification() {
+	Fortification fortification = new Fortification(territory);
 	String fromTerritory = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
 	String toTerritory = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
 	if(StringUtils.isNotEmpty(fromTerritory) && StringUtils.isNotEmpty(toTerritory)) {
 	    int fromArmy = territory.getTerritoryArmy().get(fromTerritory);
 	    int getArmySelect = (int) selectArmyModel.getValue();
 	    if(getArmySelect < fromArmy && getArmySelect >= 1) {
-		territory.updateTerritoryArmy(fromTerritory, getArmySelect, "DELETE");
-		territory.updateTerritoryArmy(toTerritory, getArmySelect, "ADD");
+		fortification.startFortification(fromTerritory, toTerritory, getArmySelect);
+		setTerritory(fortification.getTerritory());
 		riskLogger("Armies moved from "+fromTerritory+" to "+toTerritory);
 		riskLogger("Armies at :"+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory));
 		riskLogger("Armies at :"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory));
@@ -920,6 +926,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		JOptionPane.showMessageDialog(frame, "Armies unable to move from " + fromTerritory + " to " + toTerritory +". Please enter no. of  Armies again", "Error Message", JOptionPane.ERROR_MESSAGE);
 	    }
 	    checkFortificationStatus();
+	} else {
+	    JOptionPane.showMessageDialog(null, "Content Invalid");
 	}
     }
     /**
@@ -977,8 +985,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	territoryAModel.removeAllElements();
 
 	for (Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
-	    if(entry.getValue().equals(players.getPlayerList().get(playerTurn)))	
+	    if(entry.getValue().equals(players.getPlayerList().get(playerTurn))) {
 		territoryAModel.addElement(entry.getKey()+ " -- "+territory.getTerritoryArmy().get(entry.getKey()));
+	    }
 	}
     }
     /**
@@ -1024,12 +1033,12 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	if(StringUtils.isNotEmpty(fromTerritory) && StringUtils.isNotEmpty(toTerritory)) {
 	    int fromArmy = territory.getTerritoryArmy().get(fromTerritory) - 1;
 	    System.out.println("Current Army in  " + fromTerritory + " is " + fromArmy);
-	    riskLogger("Current armies in " + fromTerritory + " is " + fromArmy);
 	    if(fromArmy > 1) {
 		fortErrorMsg.setText("You can Move upto " + fromArmy + " Army");
 	    }
-	    else
+	    else {
 		fortErrorMsg.setText("You can't move your Army");
+	    }
 	}
     }
 
@@ -1042,26 +1051,45 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	public void update(Observable o, Object arg) {
 		log.append(((Logger) o).getLog() + "\n");
 	}*/
+    /**
+     * This Method Get Current Player Object
+     * @return Current Player Object
+     */
     public Players getPlayers() {
 	return players;
     }
-
+    /**
+     * This Method Set Current Player Object
+     * @param players Current Player Object
+     */
     public void setPlayers(Players players) {
 	this.players = players;
     }
-
+    /**
+     * This Method Get Current Territory Object
+     * @return  Current Territory Object
+     */
     public Territory getTerritory() {
 	return territory;
     }
-
+    /**
+     * This Method Get Current Territory Object
+     * @param territory Current Territory Object
+     */
     public void setTerritory(Territory territory) {
 	this.territory = territory;
     }
-
+/**
+ * This Method Get Current Player Object
+ * @return Current Continent Object
+ */
     public Continent getContinent() {
 	return continent;
     }
-
+    /**
+     * This Method Set Current Continent Object
+     * @param continent Get Current Continent Object
+     */
     public void setContinent(Continent continent) {
 	this.continent = continent;
     }
