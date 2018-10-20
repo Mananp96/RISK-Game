@@ -17,17 +17,16 @@ import com.risk.models.Territory;
  *
  */
 public class TerritoryTest {
-	
 	String territoryOne = "Morocco";
 	String territoryTwo = "Algeria";
 	String territoryThree = "Western Sahara";
 	String territoryFour = "Mauritania";
-	
 	Territory territory;
 	
 	Map<String, ArrayList<String>> adjacentTerritory; 
 	ArrayList<String> territoryList;
 	Map<String, Integer> territoryArmy;
+	
 	/**
 	 * This method is invoked at the start of all the test methods.
 	 */
@@ -57,13 +56,11 @@ public class TerritoryTest {
 	 */
 	@Test
 	public void testAddAdjacentTerritory() {
-		
 		territory.addAdjacentTerritory(territoryOne,territoryTwo);
 		territory.addAdjacentTerritory(territoryOne, territoryThree);
 		territory.addAdjacentTerritory(territoryTwo, territoryThree);
 		territory.addAdjacentTerritory(territoryTwo, territoryFour);
 		territory.addAdjacentTerritory(territoryTwo, territoryOne);
-		
 		assertEquals(adjacentTerritory,territory.getAdjacentTerritory());
 	}
 	

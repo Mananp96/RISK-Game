@@ -10,11 +10,8 @@ import com.risk.view.GamePanels;
 
 /**
  * This class is used to Validate Map.
- * @author Manan
- * @version 1.0
  */
 public class MapValidator extends GamePanels {
-
 	boolean isMapValid;
 	Continent continent;
 	Territory territory;
@@ -24,8 +21,12 @@ public class MapValidator extends GamePanels {
 	Map<String, ArrayList<String>> adjcentTerritories;
 	Map<String, Integer> territoryNumber;
 
+	/**
+	 * Constructor initialize data
+	 * @param continentObject object of continent
+	 * @param territoryObject object of territory
+	 */
 	public MapValidator(Continent continentObject, Territory territoryObject) {
-
 		this.continentTerritories =  continentObject.getContinentTerritory();
 		this.continentValue = continentObject.getContinentValue();
 		this.adjcentTerritories = territoryObject.getAdjacentTerritory();
@@ -108,7 +109,6 @@ public class MapValidator extends GamePanels {
 	 * @return true if one territory is present in one continent else false
 	 */
 	public boolean validateTerritories() throws InvalidMapException {
-
 		if(continentTerritories.size() > 0) {
 			for(Entry<String, ArrayList<String>> entryContinent : continentTerritories.entrySet()) {
 				if(entryContinent.getValue().size() > 0) {
@@ -163,19 +163,16 @@ public class MapValidator extends GamePanels {
 	 * @return isMapValid  returns true if graph is connected else false
 	 */
 	public boolean isGraphConnected() throws InvalidMapException {
-
 		ConnectedGraph graph = new ConnectedGraph(territoryNumber.size());
 		for(Entry<String,ArrayList<String>> entry : adjcentTerritories.entrySet()) {
 			for(int i = 0; i<entry.getValue().size() ; i++) {
 				graph.addConnectionLine(territoryNumber.get(entry.getKey()),
-				territoryNumber.get(entry.getValue().get(i)));						
+						territoryNumber.get(entry.getValue().get(i)));						
 			}
 		}
 		if(graph.isGraphStronglyConnected()) {
-			
 			this.isMapValid = true;
 		}else {
-			
 			this.isMapValid = false;
 			throw new InvalidMapException("Graph is not connected");
 		}
