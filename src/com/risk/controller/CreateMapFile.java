@@ -10,12 +10,11 @@ import java.util.Random;
  * This class is used to <b>create a new map file</b> from scratch.
  */
 public class CreateMapFile {
-
 	String mapData;
 	String fileName;
 	BufferedWriter bufferedWriter = null;
 	FileWriter fileWriter = null;
-	
+
 	/**
 	 * Set the mapData.
 	 * @param newMapData User entered Input to create a map file.
@@ -23,21 +22,22 @@ public class CreateMapFile {
 	public CreateMapFile(String newMapData) {
 		this.mapData = newMapData;
 	}
+
 	/**
 	 * method used to get File Name which is created
 	 * @return fileName
 	 */
 	public String getFileName() {
-	    return fileName;
+		return fileName;
 	}
+
 	/**
 	 * method used to set fileName
 	 * @param fileName name of file
 	 */
 	public void setFileName(String fileName) {
-	    this.fileName = fileName;
+		this.fileName = fileName;
 	}
-
 
 	/**
 	 * This method is used to create a new File and write the mapData (User input to create a new map file)
@@ -45,13 +45,11 @@ public class CreateMapFile {
 	 * @return returns true if map is created successfully else false
 	 */
 	public boolean createMap() {
-		
 		try {
-		    	
-		    	Random random = new Random();
+			Random random = new Random();
 			fileName = "mapFile_"+ random.nextInt(1000)+".map";
-		    	File file = new File(fileName); 
-		    	System.out.println("File Name ---> "+fileName);
+			File file = new File(fileName); 
+			System.out.println("File Name ---> "+fileName);
 			boolean isFileCreated = file.createNewFile();
 
 			if(isFileCreated) {
@@ -76,7 +74,7 @@ public class CreateMapFile {
 				System.out.println("File already present at the specified location");
 			}
 
-		} catch (IOException exception) {
+		}catch (IOException exception) {
 			exception.printStackTrace();
 		}
 		return false;       

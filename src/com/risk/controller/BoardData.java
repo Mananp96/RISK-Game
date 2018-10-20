@@ -15,10 +15,8 @@ import com.risk.validate.MapValidator;
  *
  */
 public class BoardData {
-
 	private String filePath;
 	int territoryNumber = 0;
-
 	boolean continentFlag = false; 	
 	boolean territoriesFlag = false;
 	boolean isMapValid = false;
@@ -38,29 +36,33 @@ public class BoardData {
 	 * @return continentData
 	 */
 	public StringBuilder getContinentData() {
-	    return continentData;
+		return continentData;
 	}
+	
 	/**
 	 * set Continent Data from file
 	 * @param continentData all continent Data
 	 */
 	public void setContinentData(StringBuilder continentData) {
-	    this.continentData = continentData;
+		this.continentData = continentData;
 	}
+	
 	/**
 	 * Get Territory Data from file
 	 * @return territoryData
 	 */
 	public StringBuilder getTerritoryData() {
-	    return territoryData;
+		return territoryData;
 	}
+	
 	/**
 	 * Set Territory Data from File
 	 * @param territoryData all territory data
 	 */
 	public void setTerritoryData(StringBuilder territoryData) {
-	    this.territoryData = territoryData;
+		this.territoryData = territoryData;
 	}
+	
 	/**
 	 * This constructor set the User specified path of map File.
 	 * @param filePath path of map File.
@@ -78,8 +80,8 @@ public class BoardData {
 	 * @return true if map data is valid, else return false.
 	 */
 	public boolean generateBoardData() {
-	    continentData = new StringBuilder();
-	    territoryData = new StringBuilder();
+		continentData = new StringBuilder();
+		territoryData = new StringBuilder();
 		continentObject = new Continent();
 		territoryObject = new Territory();
 		String currentLine;
@@ -99,7 +101,7 @@ public class BoardData {
 
 				//assign Continents List.
 				if(continentFlag && ! (currentLine.isEmpty()) && ! currentLine.equalsIgnoreCase("[Continents]")) {
-				    	continentData.append(currentLine+"\n");
+					continentData.append(currentLine+"\n");
 					continentsArray = currentLine.split("=");
 					continentObject.setContinentValue(continentsArray[0], Integer.parseInt(continentsArray[1]));
 
@@ -107,7 +109,7 @@ public class BoardData {
 
 				//assign Territories List.
 				if(territoriesFlag && ! (currentLine.isEmpty() || currentLine.equals("[Territories]"))) {
-				    territoryData.append(currentLine +"\n");
+					territoryData.append(currentLine +"\n");
 					territoriesArray = currentLine.split(",");
 					//to assign Adjacent Territories HashMap
 					for(int i = 4; i < territoriesArray.length ; i++) {
@@ -117,9 +119,9 @@ public class BoardData {
 					territoryObject.addTerritoryCont(territoriesArray[0], territoriesArray[3]); //need to refactor 
 					continentObject.addContinentTerritory(territoriesArray[3], territoriesArray[0]);
 					territoryObject.addDuplicateTerritoryContinent(territoriesArray[0], territoriesArray[3]); //need to refactor
-					
+
 					territoryObject.addNumberOfTerritory(territoriesArray[0],territoryNumber++);
-					
+
 				}
 
 			}

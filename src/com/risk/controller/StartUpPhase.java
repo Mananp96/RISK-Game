@@ -11,7 +11,6 @@ import com.risk.models.Territory;
 import com.risk.view.GamePanels;
 
 public class StartUpPhase extends GamePanels {
-
 	Players players;
 	Continent continent;
 	Territory territory;
@@ -77,22 +76,22 @@ public class StartUpPhase extends GamePanels {
 				territory.updateTerritoryUser("No Player", randomTerritory.toString());
 			}
 		}
-		
+
 		for(int i = 0;i < playerSize;i++) {
-		    String name = players.getPlayers(i);
-		    int armiesNo = players.getPlayerArmy(name);
-		    if(armiesNo > 0) {
-			do {
-			    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
-				if(entry.getValue().equalsIgnoreCase(name) &&  players.getPlayerArmy(name) > 0) {
-				    territory.updateTerritoryArmy(entry.getKey(), 1, "ADD");
-				    players.updateArmy(name, 1, "DELETE");
-				}
-			    }
-			    armiesNo = players.getPlayerArmy(name);
-			} while(armiesNo > 0);
-			
-		    }
+			String name = players.getPlayers(i);
+			int armiesNo = players.getPlayerArmy(name);
+			if(armiesNo > 0) {
+				do {
+					for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
+						if(entry.getValue().equalsIgnoreCase(name) &&  players.getPlayerArmy(name) > 0) {
+							territory.updateTerritoryArmy(entry.getKey(), 1, "ADD");
+							players.updateArmy(name, 1, "DELETE");
+						}
+					}
+					armiesNo = players.getPlayerArmy(name);
+				} while(armiesNo > 0);
+
+			}
 
 		}
 		players.setCurrentPhase("Reinforcement");

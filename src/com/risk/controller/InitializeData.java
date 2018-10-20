@@ -10,7 +10,6 @@ import com.risk.view.GamePanels;
  * 
  */
 public class InitializeData extends GamePanels {
-
 	String filePath;
 	int playerCount;
 	int armies;
@@ -142,7 +141,7 @@ public class InitializeData extends GamePanels {
 		BoardData boardData = new BoardData(filePath);
 		boolean isMapValid = boardData.generateBoardData();
 		System.out.println(isMapValid);
-		
+
 		if(isMapValid) {
 			continent = boardData.continentObject;
 			territory = boardData.territoryObject;
