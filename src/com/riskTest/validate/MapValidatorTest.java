@@ -73,9 +73,6 @@ public class MapValidatorTest {
 	public void testValidateContinentValue() throws InvalidMapException {
 		mapValidator = new MapValidator(continent, territory);
 		assertTrue(mapValidator.validateContinentValue());
-		//		Assertions.assertThrows(InvalidMapException.class, () -> {
-		//		    mapValidator.validateContinentValue();
-		//		  });
 	}
 
 	/**
@@ -98,10 +95,6 @@ public class MapValidatorTest {
 	public void testValidateTerritories() throws InvalidMapException {
 		mapValidator = new MapValidator(continent, territory);
 		assertTrue(mapValidator.validateTerritories());
-
-		//		Assertions.assertThrows(InvalidMapException.class, () -> {
-		//		    mapValidator.validateTerritories();
-		//		  });
 	}
 
 	/**

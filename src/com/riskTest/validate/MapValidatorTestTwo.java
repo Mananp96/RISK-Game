@@ -16,9 +16,9 @@ public class MapValidatorTestTwo {
 	BoardData boardDataTwo;
 	BoardData boardDataThree;
 
-	String invalidMapFileOne = "risk/maps/incorrectMapOne.map";
-	String invalidMapFileTwo = "risk/maps/incorrectMapTwo.map";
-	String invalidMapFileThree = "risk/maps/incorrectMapThree.map";
+	String invalidMapFileOne = "maps/incorrectMapOne.map";
+	String invalidMapFileTwo = "maps/incorrectMapTwo.map";
+	String invalidMapFileThree = "maps/incorrectMapThree.map";
 
 	/**
 	 * This method is used to test MapValidator.java.
