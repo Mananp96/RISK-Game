@@ -353,7 +353,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			}
 		});
 		territoryBList.addListSelectionListener(this);
-
+		
 		//eventPanel.add(cardsList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
 		//eventPanel.add(turnInBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 3));
 		eventPanel.add(selectedLabel, setGridBagConstraints(new Insets(25, 5, 21, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
@@ -531,7 +531,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		JPanel userPanel = new JPanel();
 		userPanel.setLayout(new GridLayout(6 + count, 1, 5, 5));
 		System.out.println("No. of Players : " + playerCount);
-		riskLogger("No. of Players : " + playerCount);
+//		riskLogger("No. of Players : " + playerCount);
 		mapOptA = new JRadioButton("Choose Your Own Map");
 		mapOptA.setActionCommand("Own Map");
 		JFileChooser chooseMap = new JFileChooser("D:");
@@ -790,6 +790,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		} else if(actionName.equals("startFortification")) {
 		    	goForFortification();
 		} else if(actionName.equals("endTurn")) {
+				riskLogger("Player Turn ended.");
+				riskLogger("");
 		    	changePlayerTurn();
 		} else if(actionName.equals(backBtnName)){
 			frame.setContentPane(mainMenu(frame,players));
@@ -822,16 +824,19 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    	int army = players.getPlayerArmy(name);
 	    	String title = "Add Armies upto " + army;
 	    	System.out.println("Player Name " + players.getPlayerPlaying().get(playerTurn));
-	    	riskLogger("Player Name " + players.getPlayerPlaying().get(playerTurn));
+	    	riskLogger("Player Turn: " + players.getPlayerPlaying().get(playerTurn));
+	    	riskLogger("Reinforcement phase");
 	    	System.out.println("Player Army " + players.getPlayerArmy(players.getPlayerPlaying().get(playerTurn)));
-	    	riskLogger("Player Army " + players.getPlayerArmy(players.getPlayerPlaying().get(playerTurn)));
+	    	riskLogger("Reinforcement armies" + players.getPlayerArmy(players.getPlayerPlaying().get(playerTurn)));
+	    	
 	    	String output = JOptionPane.showInputDialog(frame, message, title, JOptionPane.OK_CANCEL_OPTION);
 	    	if (StringUtils.isNumeric(output)) {
 	    	    if(Integer.parseInt(output) > 0 && Integer.parseInt(output) <= army) {
 					players.updateArmy(name,Integer.parseInt(output) , "DELETE");
 					territory.updateTerritoryArmy(terrName[0], Integer.parseInt(output), "ADD");
+					riskLogger("armies updated :"+terrName[0]+" to "+territory.getTerritoryArmy().get(terrName[0]));
 					System.out.println("Armies Updates " + players.getPlayerArmy(name));
-					riskLogger("Armies Updates " + players.getPlayerArmy(name));
+					//riskLogger("Armies Updates " + players.getPlayerArmy(name));
 					territoryAModel.removeAllElements();
 					territoryBModel.removeAllElements();
 					territoryInfoModel.removeAllElements();
@@ -861,13 +866,9 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 		updateLogArea();
 	    String name = players.getPlayerPlaying().get(playerTurn);
 	    System.out.println("enableReinforcementBtn :  Name " +name);
-	    riskLogger("enableReinforcementBtn :  Name " +name);
 	    System.out.println("enableReinforcementBtn :  playerTurn " +playerTurn);
-	    riskLogger("enableReinforcementBtn :  playerTurn " +playerTurn);
 	    System.out.println("enableReinforcementBtn :  player " +players.getPlayerList());
-	    riskLogger("enableReinforcementBtn :  player " +players.getPlayerList());
 	    System.out.println("enableReinforcementBtn :  player aRMY " +players.getPlayerArmy(name));
-	    riskLogger("enableReinforcementBtn :  player aRMY " +players.getPlayerArmy(name));
 	    if(StringUtils.isNotEmpty(name)) {
 			if(players.getPlayerArmy(name) == 0) {
 				reinforceBtn.setEnabled(false);
@@ -875,7 +876,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 				endTurnBtn.setEnabled(true);
 				fortifyBtn.setEnabled(false);
 			} else {
-			    	attackBtn.setEnabled(false);
+			    attackBtn.setEnabled(false);
 				fortifyBtn.setEnabled(false);
 				endTurnBtn.setEnabled(false);
 				reinforceBtn.setEnabled(true);
@@ -886,10 +887,11 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 * method use to enable list of current territory owned by current player to move army from one  territory to another.   
 	 */
 	public void startFortificationPhase() {
+		riskLogger("Fortification phase");
 		players.setCurrentPhase("Fortification");
 		updateLogArea();
 	    attackBtn.setEnabled(false);
-	   addTerritoryADropDown();
+	    addTerritoryADropDown();
 	   
 	}
 
@@ -943,8 +945,13 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 			int fromArmy = territory.getTerritoryArmy().get(fromTerritory);
 			int getArmySelect = (int) selectArmyModel.getValue();
 			if(getArmySelect < fromArmy && getArmySelect >= 1) {
+				
 				territory.updateTerritoryArmy(fromTerritory, getArmySelect, "DELETE");
 				territory.updateTerritoryArmy(toTerritory, getArmySelect, "ADD");
+				riskLogger("Armies moved from "+fromTerritory+" to "+toTerritory);
+				riskLogger("Armies at :"+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory));
+				riskLogger("Armies at :"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory));
+				riskLogger("");
 				fortErrorMsg.setText("You can Move upto " + (territory.getTerritoryArmy().get(fromTerritory)-1) + " Army");
 			} else {
 				JOptionPane.showMessageDialog(frame, "Armies unable to move from " + fromTerritory + " to " + toTerritory +". Please enter no. of  Armies again", "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -1028,7 +1035,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	 */
 	public void addTerritoryADropDown() {
 	    System.out.println("Player Playing " + players.getPlayerPlaying().get(playerTurn));
-	    riskLogger("Player Playing " + players.getPlayerPlaying().get(playerTurn));
+	   // riskLogger("Player Playing " + players.getPlayerPlaying().get(playerTurn));
 	    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 		if(entry.getValue().equals(players.getPlayerPlaying().get(playerTurn))){
 		    territoryADropDown.addItem(entry.getKey());
@@ -1059,7 +1066,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    if(StringUtils.isNotEmpty(fromTerritory) && StringUtils.isNotEmpty(toTerritory)) {
 		int fromArmy = territory.getTerritoryArmy().get(fromTerritory) - 1;
 		System.out.println("Current Army in  " + fromTerritory + " is " + fromArmy);
-		riskLogger("Current Army in  " + fromTerritory + " is " + fromArmy);
+		riskLogger("Current armies in " + fromTerritory + " is " + fromArmy);
 		if(fromArmy > 1) {
 		    fortErrorMsg.setText("You can Move upto " + fromArmy + " Army");
 		}
