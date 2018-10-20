@@ -72,7 +72,7 @@ public class EditMapFile {
 
     /**
      * Method set continent
-     * @param continent
+     * @param continent Continent Object
      */
     public void setContinent(Continent continent) {
 	this.continent = continent;

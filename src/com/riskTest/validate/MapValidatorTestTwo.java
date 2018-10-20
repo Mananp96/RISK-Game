@@ -21,7 +21,7 @@ public class MapValidatorTestTwo {
 	String invalidMapFileThree = "risk/maps/incorrectMapThree.map";
 
 	/**
-	 * This method is used to test MapValidator.java.</br>
+	 * This method is used to test MapValidator.java.
 	 * Returns false if map file is not valid.
 	 * @throws InvalidMapException map file should not be null.
 	 */

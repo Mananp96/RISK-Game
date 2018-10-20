@@ -90,7 +90,7 @@ public class NewEditMapPanel implements ActionListener{
     /**
      * This method UI of New and  Edit Existing Map
      * @param frame Current Frame
-     * @param createNew Used too identify whether player want to create new map or edit existing map
+     * @param editMapFileFlag Used too identify whether player want to create new map or edit existing map
      * @return JPanel which is added in current frame
      */
     public JPanel createMapPanel(JFrame frame,boolean editMapFileFlag){
