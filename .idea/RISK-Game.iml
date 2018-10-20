@@ -31,5 +31,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="jUnitLib" level="project" />
+    <orderEntry type="library" name="junit5" level="project" />
   </component>
 </module>
