@@ -10,6 +10,10 @@ import com.risk.models.Players;
 import com.risk.models.Territory;
 import com.risk.view.GamePanels;
 
+/**
+ *This class is used to start start-up phase of game. 
+ *
+ */
 public class StartUpPhase extends GamePanels {
 	Players players;
 	Continent continent;
