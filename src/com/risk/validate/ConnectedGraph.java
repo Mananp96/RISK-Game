@@ -7,13 +7,15 @@ import java.util.LinkedList;
 /**
  * Java Program to check if Graph is connected or not.
  */
-public class ConnectedGraph 
-{ 
+public class ConnectedGraph { 
 	private int noOfterritory;   // No. of vertices 
-	private LinkedList<Integer> adjacencyList[];  
+	private LinkedList<Integer> adjacencyList[];
 
-	ConnectedGraph(int territorySize) 
-	{ 
+	/**
+	 * Constructor initialize territory size of vertices
+	 * @param territorySize number of territory
+	 */
+	ConnectedGraph(int territorySize) { 
 		noOfterritory = territorySize; 
 		adjacencyList = new LinkedList[noOfterritory]; 
 		for (int i=0; i<noOfterritory; ++i) {
@@ -33,16 +35,12 @@ public class ConnectedGraph
 	/**
 	 * This is a recursive function which prints DFS starting from first territory. 
 	 * @param territory Number of Territory
-	 * @param visited
+	 * @param visited mark node as visited
 	 */
-	void DFSTraverse(int territory,Boolean visited[]) 
-	{ 
-		// Mark the current node as visited
-		visited[territory] = true; 
+	void DFSTraverse(int territory,Boolean visited[]) { 
+		visited[territory] = true; // Mark the current node as visited
 		int n; 
-
-		// Recur for all the vertices adjacent to this vertex 
-		Iterator<Integer> i = adjacencyList[territory].iterator(); 
+		Iterator<Integer> i = adjacencyList[territory].iterator(); // Recur for all the vertices adjacent to this vertex
 		while (i.hasNext()) 
 		{ 
 			n = i.next(); 
@@ -56,11 +54,9 @@ public class ConnectedGraph
 	 * This method returns Transpose of Graph.
 	 * @return transpose of graph
 	 */
-	ConnectedGraph getTransposeOfGraph() 
-	{ 
+	ConnectedGraph getTransposeOfGraph() { 
 		ConnectedGraph g = new ConnectedGraph(noOfterritory); 
-		for (int v = 0; v < noOfterritory; v++) 
-		{ 
+		for (int v = 0; v < noOfterritory; v++) { 
 			// Recur for all the vertices adjacent to this vertex 
 			Iterator<Integer> i = adjacencyList[v].listIterator(); 
 			while (i.hasNext()) 
@@ -73,8 +69,7 @@ public class ConnectedGraph
 	 * The function that returns true if map is connected. 
 	 * @return true if graph is connected.
 	 */
-	Boolean isGraphStronglyConnected() 
-	{  
+	Boolean isGraphStronglyConnected() {  
 		Boolean visited[] = new Boolean[noOfterritory]; 
 		for (int i = 0; i < noOfterritory; i++) {
 			visited[i] = false;

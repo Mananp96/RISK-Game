@@ -10,15 +10,13 @@ import com.risk.models.Territory;
 
 /**
  * {@link Reinforcement} Test Class
- *
  */
 public class ReinforcementTest {
-	
 	Continent continent;
 	Players players;
 	Territory territory;
 	Reinforcement reinforcement;
-	
+
 	/**
 	 * This method is to test number of reinforcement armies of Player.
 	 * Calculation : reinforcement armies = Number of territory owned by Player / 3.

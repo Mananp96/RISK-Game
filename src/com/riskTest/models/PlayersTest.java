@@ -17,10 +17,9 @@ import com.risk.models.Players;
  *
  */
 public class PlayersTest {
-	
 	Players players;
 	Map<String, Integer> playerArmy; 
-	
+
 	/**
 	 * This method is invoked at the start of all the test methods.
 	 */
@@ -31,7 +30,7 @@ public class PlayersTest {
 		playerArmy.put("manan", 5);
 		playerArmy.put("prince", 2);
 	}
-	
+
 	/**
 	 * This method is to test updation of armies of Player in particular territory.
 	 */

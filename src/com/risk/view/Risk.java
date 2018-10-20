@@ -7,16 +7,19 @@ import javax.swing.JFrame;
 import com.risk.models.Players;
 import com.risk.view.GamePanels;
 
-
+/**
+ * 
+ *This class launch the game.
+ *
+ */
 public class Risk {
-
 	private JFrame frame;
 	Players players;
 	GamePanels gamePanels;
+
 	/**
 	 * Launch the application.
-	 *
-	 * @param args String array for commandline arguments
+	 *@param args String array for commandline arguments
 	 *
 	 */
 	public static void main(String[] args) {
@@ -52,8 +55,8 @@ public class Risk {
 		frame.setResizable(false);
 		frame.add(gamePanels.mainMenu(frame,players));
 		frame.pack();
-		
+
 	}
-	
+
 
 }

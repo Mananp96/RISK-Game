@@ -12,7 +12,6 @@ import com.risk.models.ArmiesSelection;
  *
  */
 public class ArmiesSelectionTest {
-
 	int twoPlayerArmies = 40;
 	int threePlayerArmies = 35;
 	int fourPlayerArmies = 30;
@@ -38,7 +37,6 @@ public class ArmiesSelectionTest {
 	 * 
 	 */
 	@Test public void testArmiesSelection() {
-		
 		assertEquals(twoPlayerArmies,twoPlayer.getPlayerArmies());
 		assertEquals(threePlayerArmies,threePlayer.getPlayerArmies());
 		assertEquals(fourPlayerArmies,fourPlayer.getPlayerArmies());

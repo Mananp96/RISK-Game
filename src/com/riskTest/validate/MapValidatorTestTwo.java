@@ -10,17 +10,16 @@ import com.risk.exception.InvalidMapException;
  * MapValidator Test class
  * Reading invalid map file test case.
  *
- * @version 1.0
  */
 public class MapValidatorTestTwo {
 	BoardData boardDataOne;
 	BoardData boardDataTwo;
 	BoardData boardDataThree;
-	
+
 	String invalidMapFileOne = "risk/maps/incorrectMapOne.map";
 	String invalidMapFileTwo = "risk/maps/incorrectMapTwo.map";
 	String invalidMapFileThree = "risk/maps/incorrectMapThree.map";
-	
+
 	/**
 	 * This method is used to test MapValidator.java.</br>
 	 * Returns false if map file is not valid.

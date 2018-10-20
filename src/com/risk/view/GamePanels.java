@@ -28,7 +28,7 @@ import com.risk.models.Players;
 import com.risk.models.Territory;
 /**
  * 
- * @author Himen Sidhpura
+ * User Interface for gameplay
  */
 public class GamePanels implements ActionListener, ListSelectionListener {
     /**
