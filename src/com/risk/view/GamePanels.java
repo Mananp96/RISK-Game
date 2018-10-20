@@ -38,6 +38,7 @@ import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultCaret;
 
 import org.apache.commons.lang3.StringUtils;
@@ -518,6 +519,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	mapOptA = new JRadioButton("Choose Your Own Map");
 	mapOptA.setActionCommand("Own Map");
 	JFileChooser chooseMap = new JFileChooser("D:");
+	FileNameExtensionFilter filter = new FileNameExtensionFilter("MAP FILES", "map", "map");
+	chooseMap.setFileFilter(filter);
 	chooseMap.addChoosableFileFilter(new FileFilter() {
 	    public String getDescription() {
 		return "MAP Documents (*.map)";
@@ -656,6 +659,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    if(randomMap) {
 		if(StringUtils.isNotEmpty(mapFilePath)) {
 		    ArmiesSelection armies = new ArmiesSelection(playerPlaying);
+		    System.out.println("Player Playing " + playerPlaying);
 		    InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
 		    boolean isMapValid = initializeData.generateData();
 		    if(isMapValid) {

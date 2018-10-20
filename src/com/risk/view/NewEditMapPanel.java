@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -107,6 +108,8 @@ public class NewEditMapPanel implements ActionListener{
 	mapOptA = new JRadioButton("Choose Your Own Map");
 	mapOptA.setActionCommand("Own Map");
 	JFileChooser chooseMap = new JFileChooser("D:");
+	FileNameExtensionFilter filter = new FileNameExtensionFilter("MAP FILES", "map", "map");
+	chooseMap.setFileFilter(filter);
 	chooseMap.addChoosableFileFilter(new FileFilter() {
 	    public String getDescription() {
 		return "MAP Documents (*.map)";
