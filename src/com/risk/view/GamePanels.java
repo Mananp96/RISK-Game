@@ -1,6 +1,14 @@
 package com.risk.view;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -9,7 +17,23 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -18,7 +42,6 @@ import javax.swing.text.DefaultCaret;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.risk.controller.CreateMapFile;
 import com.risk.controller.Fortification;
 import com.risk.controller.InitializeData;
 import com.risk.controller.Reinforcement;
@@ -67,7 +90,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
     private JButton turnInBtn;
     private JButton createNewMapBtn;
     private JButton editExistingMapBtn;
-    private JButton saveMapBtn;
     private JButton newButton;
     private JButton exitButton;
     private JButton twoPlayersBtn;
@@ -101,8 +123,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
     private JComboBox<String> territoryBDropDown;
     private SpinnerNumberModel selectArmyModel;
     private JLabel fortErrorMsg;
-    private JTextArea continentArea;
-    private JTextArea territoryArea;
     public static JTextArea log = new JTextArea(25,20);
 
 
@@ -174,41 +194,11 @@ public class GamePanels implements ActionListener, ListSelectionListener {
      */
     protected JPanel createMapPanel() {
 
-	JPanel createMapPanel = new JPanel();
-	GridBagLayout createMapLayout = new GridBagLayout();
-	createMapPanel.setLayout(createMapLayout);
-	createMapPanel.setSize(new Dimension(400,250));
 	frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 	frame.setResizable(true);
-	JLabel label1 = new JLabel("Enter Continent in Every New Line in Continent=value format and continent must be maximum 32 ", JLabel.CENTER);
-	continentArea = new JTextArea(4,40);
-	continentArea.setFocusable(true);
-	continentArea.setLineWrap(true);
-	continentArea.setWrapStyleWord(true);
-	JScrollPane editContinentScrollPane = new JScrollPane(continentArea);
-
-	JLabel label2 = new JLabel("Enter Territories in New Line in this format : territory,x coordinate, y coordinat, adjacent territory 1, adjacent territory 2 .........,adjacent territory n, (n<=10) ", JLabel.CENTER);
-	territoryArea = new JTextArea(4,40);
-	territoryArea.setFocusable(true);
-	territoryArea.setLineWrap(true);
-	territoryArea.setWrapStyleWord(true);
-	JScrollPane editTerritoryScrollPane = new JScrollPane(territoryArea);
-
-	saveMapBtn = new JButton("Save");
-	saveMapBtn.addActionListener(this);
-	saveMapBtn.setActionCommand(saveBtnName);
-	backBtn = new JButton("Exit");
-	backBtn.addActionListener(this);
-	backBtn.setActionCommand(backBtnName);
-	createMapPanel.add(label1, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 0));
-	createMapPanel.add(editContinentScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 8, 0, 1));
-	createMapPanel.add(label2, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 2));
-	createMapPanel.add(editTerritoryScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 8, 0, 3));
-	createMapPanel.add(saveMapBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 0, 4));
-	createMapPanel.add(backBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.CENTER, 0.5, 0.5, 1, 4));
-
-	return createMapPanel;
-
+	frame.setVisible(true);
+	NewEditMapPanel newEditMapPanel=new NewEditMapPanel();
+	return newEditMapPanel.createMapPanel(frame,false);
     }
     /**
      * method used for Editing Existing Map
@@ -658,22 +648,6 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    frame.invalidate();
 	    frame.validate();
 
-	} else if (actionName.equals(saveBtnName)) {
-	    riskLogger("Saving New Map");
-	    String defaultMapTag = "[Map]\n"+
-		    "author=Sean O'Connor\n"+
-		    "warn=yes\n"+
-		    "image=Africa.bmp\n"+
-		    "wrap=no\n";
-	    String finalMapData = String.format("%s%n[Continents]%n%s%n%n[Territories]%n%s", defaultMapTag, continentArea.getText(),territoryArea.getText());
-	    CreateMapFile createMapFile = new CreateMapFile(finalMapData);
-	    boolean createMapFlag = createMapFile.createMap();
-	    if(createMapFlag) {
-		JOptionPane.showMessageDialog(frame, "File is Created  with Name : " + createMapFile.getFileName(),"Content Validated",JOptionPane.OK_OPTION);
-	    } else {
-		JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
-	    }
-
 	} else if (actionName.equals(exitBtnName)){
 	    riskLogger("Quit Game");
 	    System.exit(0);
@@ -1079,10 +1053,10 @@ public class GamePanels implements ActionListener, ListSelectionListener {
     public void setTerritory(Territory territory) {
 	this.territory = territory;
     }
-/**
- * This Method Get Current Player Object
- * @return Current Continent Object
- */
+    /**
+     * This Method Get Current Player Object
+     * @return Current Continent Object
+     */
     public Continent getContinent() {
 	return continent;
     }
