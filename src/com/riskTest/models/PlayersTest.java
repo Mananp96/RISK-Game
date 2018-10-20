@@ -1,7 +1,16 @@
 package com.riskTest.models;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.risk.models.Continent;
+import com.risk.models.Players;
 
 /**
  * Players Model Test class.
@@ -9,36 +18,18 @@ import org.junit.jupiter.api.Test;
  */
 public class PlayersTest {
 	
+	Players players;
+	Map<String, Integer> playerArmy; 
+	
 	/**
 	 * This method is invoked at the start of all the test methods.
 	 */
-	@Before
+	@BeforeEach
 	public void beforeTest() {
-		
-	}
-	
-	/**
-	 * This method is to test update Players Continent functionality.
-	 */
-	@Test
-	public void testUpdatePlayerContinent() {
-		
-	}
-	
-	/**
-	 * This method is to test add Continent of Players functionality,
-	 */
-	@Test
-	public void testAddPlayerContinent() {
-		
-	}
-	
-	/**
-	 * This method is to test number of initial armies assigned to player.
-	 */
-	@Test
-	public void testInitialArmy() {
-		
+		players = new Players();
+		playerArmy = new HashMap<>();
+		playerArmy.put("manan", 5);
+		playerArmy.put("prince", 2);
 	}
 	
 	/**
@@ -46,6 +37,9 @@ public class PlayersTest {
 	 */
 	@Test
 	public void testUpdateArmy() {
-		
+		players.initialArmy("manan", 4);
+		players.initialArmy("prince", 3);
+		players.updateArmy("manan", 1, "add");
+		assertEquals(playerArmy, players.updateArmy("prince", 1, "delete"));
 	}
 }

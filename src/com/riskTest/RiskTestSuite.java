@@ -10,4 +10,5 @@ import org.junit.runner.RunWith;
  * Test suite class.
  */
 public class RiskTestSuite {
+	
 }

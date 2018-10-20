@@ -144,17 +144,6 @@ public class InitializeData extends GamePanels {
 		System.out.println(isMapValid);
 		
 		if(isMapValid) {
-//			//System.out.println("Model Data Continent Value: - " + boardData.continentObject.getContinentValue());
-//			riskLogger("Model Data Continent Value: - " + boardData.continentObject.getContinentValue());
-//			//System.out.println("Model Data Territory with Adjacent: - " + boardData.territoryObject.getAdjacentTerritory());
-//			riskLogger("Model Data Territory with Adjacent: - " + boardData.territoryObject.getAdjacentTerritory());
-//			riskLogger("Model Data Territory with Adjacent Size: - " + boardData.territoryObject.getAdjacentTerritory().size());
-//			riskLogger("Model Data Continent with Territory: - " + boardData.continentObject.getContinentTerritory());
-//			riskLogger("Model Data of Territory List : - " + boardData.territoryObject.getTerritoryList());
-//			riskLogger("Model Data of Territory List Size : - " + boardData.territoryObject.getTerritoryList().size());
-//			riskLogger("Model Data of Territory with Continents List : - " + boardData.territoryObject.getTerritoryCont());
-//			riskLogger("Model Data of Territory with Continents List Size : - " + boardData.territoryObject.getTerritoryCont().size());
-
 			continent = boardData.continentObject;
 			territory = boardData.territoryObject;
 			players.selectPlayers(players.getPlayerList(), playerCount);

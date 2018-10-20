@@ -45,15 +45,11 @@ public class StartUpPhase extends GamePanels {
 		}
 		riskLogger("Player in Game : " + playerSize);
 		riskLogger("------------------");
-		
-	
-
 		for (int i = 0; i < playerSize; i++) {
 			String playerName = players.getPlayerList().get(i);
 			players.setCurrentPhase("StartUp Phase");
 			players.addPlayerContinent(playerName, new Continent());
 			players.initialArmy(playerName, armies.getPlayerArmies());
-			
 			riskLogger(playerName + " Assigned with Initial Army of " + players.getPlayerArmy(playerName));
 		}
 		riskLogger("------------------");

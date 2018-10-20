@@ -119,15 +119,6 @@ public class Players {
 		return playerContinent.get(name);
 	}
 
-	/*	public Map<String, ArrayList<String>>  updateUserContinent(String player,String continent){
-		if(!playerContinent.containsKey(continent)) {
-			ArrayList<String> tempArray = new ArrayList<>();
-			tempArray.add(continent);
-			playerContinent.put(continent, tempArray);
-		}
-		return playerContinent;
-	}
-	 */	
 	/**
 	 * This method used to assign the armies by player the name of Player.
 	 * @param name Name of player
@@ -148,6 +139,7 @@ public class Players {
 		return playerArmy.get(name);
 	}
 
+	
 	/**
 	 * This method update the Map playerArmy.
 	 * @param name Name of Player
