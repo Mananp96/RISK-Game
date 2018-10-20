@@ -73,6 +73,9 @@ public class EditMapFile {
     public boolean saveEditMap(Continent continent,Territory territory) throws InvalidMapException {
 	this.continent = continent;
 	this.territory = territory;
+	for(int i=0;i<territory.getTerritoryList().size();i++ ) {
+	    territory.addNumberOfTerritory(territory.getTerritoryList().get(i),i);
+	}
 	MapValidator mapValidator = new MapValidator(continent, territory);
 	boolean flag = mapValidator.validateMap();
 	if(flag) {
