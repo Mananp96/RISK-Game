@@ -659,7 +659,7 @@ public class NewEditMapPanel implements ActionListener{
 	 */
 	public void addContinent(String continentStr, String value) {
 	    System.out.println("Continent Enter is " + continentStr + " with value " + value);
-	    if(StringUtils.isNotEmpty(continentStr) && StringUtils.isNotEmpty(value) && StringUtils.isNumeric(value) && Integer.parseInt(value) > 1) {
+	    if(StringUtils.isNotEmpty(continentStr) && StringUtils.isNotEmpty(value) && StringUtils.isNumeric(value) && Integer.parseInt(value) > 0) {
 		    if(!continent.getContinentValue().containsKey(continentStr)) {
 			continent.setContinentValue(continentStr, Integer.parseInt(value));
 			displaySuccessDialog();

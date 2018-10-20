@@ -168,7 +168,7 @@ public class MapValidator extends GamePanels {
 		for(Entry<String,ArrayList<String>> entry : adjcentTerritories.entrySet()) {
 			for(int i = 0; i<entry.getValue().size() ; i++) {
 				graph.addConnectionLine(territoryNumber.get(entry.getKey()),
-						territoryNumber.get(entry.getValue().get(i)));						
+				territoryNumber.get(entry.getValue().get(i)));						
 			}
 		}
 		if(graph.isGraphStronglyConnected()) {
