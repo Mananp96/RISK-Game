@@ -52,7 +52,7 @@ import com.risk.models.Players;
 import com.risk.models.Territory;
 /**
  * 
- * User Interface for gameplay
+ * User Interface for Game Play
  */
 public class GamePanels implements ActionListener, ListSelectionListener {
     /**
@@ -843,36 +843,27 @@ public class GamePanels implements ActionListener, ListSelectionListener {
      */
     public void changePlayerTurn() {
 	playerTurn++;
-	if(playerTurn < players.getPlayerList().size()) {
-	    Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
-	    players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
-	    territoryAModel.removeAllElements();
-	    territoryBModel.removeAllElements();
-	    territoryInfoModel.removeAllElements();
-	    continentInfoModel.removeAllElements();
-	    territoryADropDown.removeAllItems();
-	    territoryBDropDown.removeAllItems();
-	    updateTerritoryAList();
-	    updateContinentInfoList();    
-	    enableReinforcementBtn();
-	    updateLogArea();
-	} else {
-	    playerTurn = 0;
-	    Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
-	    players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
-	    territoryAModel.removeAllElements();
-	    territoryBModel.removeAllElements();
-	    territoryInfoModel.removeAllElements();
-	    continentInfoModel.removeAllElements();
-	    territoryADropDown.removeAllItems();
-	    territoryBDropDown.removeAllItems();
-	    updateTerritoryAList();
-	    updateContinentInfoList();    
-	    enableReinforcementBtn();
-	    updateLogArea();
-	}
+	playerTurn = playerTurn < players.getPlayerList().size() ? playerTurn : 0;
+	Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
+	players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
+	removeElements();
+	updateTerritoryAList();
+	updateContinentInfoList();    
+	enableReinforcementBtn();
+	updateLogArea();
     }
-
+    
+    /**
+     * This method remove elements from  territoryAModel, territoryBModel, territoryInfoModel, continentInfoModel, territoryADropDown and territoryBDropDown
+     */
+    public void removeElements() {
+	territoryAModel.removeAllElements();
+	territoryBModel.removeAllElements();
+	territoryInfoModel.removeAllElements();
+	continentInfoModel.removeAllElements();
+	territoryADropDown.removeAllItems();
+	territoryBDropDown.removeAllItems();
+    }
     /**
      * Used to Display Detail of Current Player.
      */
