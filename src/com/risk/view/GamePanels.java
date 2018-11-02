@@ -38,6 +38,7 @@ import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultCaret;
 
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +52,7 @@ import com.risk.models.Players;
 import com.risk.models.Territory;
 /**
  * 
- * User Interface for gameplay
+ * User Interface for Game Play
  */
 public class GamePanels implements ActionListener, ListSelectionListener {
     /**
@@ -518,6 +519,8 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	mapOptA = new JRadioButton("Choose Your Own Map");
 	mapOptA.setActionCommand("Own Map");
 	JFileChooser chooseMap = new JFileChooser("D:");
+	FileNameExtensionFilter filter = new FileNameExtensionFilter("MAP FILES", "map", "map");
+	chooseMap.setFileFilter(filter);
 	chooseMap.addChoosableFileFilter(new FileFilter() {
 	    public String getDescription() {
 		return "MAP Documents (*.map)";
@@ -656,6 +659,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    if(randomMap) {
 		if(StringUtils.isNotEmpty(mapFilePath)) {
 		    ArmiesSelection armies = new ArmiesSelection(playerPlaying);
+		    System.out.println("Player Playing " + playerPlaying);
 		    InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
 		    boolean isMapValid = initializeData.generateData();
 		    if(isMapValid) {
@@ -839,36 +843,27 @@ public class GamePanels implements ActionListener, ListSelectionListener {
      */
     public void changePlayerTurn() {
 	playerTurn++;
-	if(playerTurn < players.getPlayerList().size()) {
-	    Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
-	    players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
-	    territoryAModel.removeAllElements();
-	    territoryBModel.removeAllElements();
-	    territoryInfoModel.removeAllElements();
-	    continentInfoModel.removeAllElements();
-	    territoryADropDown.removeAllItems();
-	    territoryBDropDown.removeAllItems();
-	    updateTerritoryAList();
-	    updateContinentInfoList();    
-	    enableReinforcementBtn();
-	    updateLogArea();
-	} else {
-	    playerTurn = 0;
-	    Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
-	    players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
-	    territoryAModel.removeAllElements();
-	    territoryBModel.removeAllElements();
-	    territoryInfoModel.removeAllElements();
-	    continentInfoModel.removeAllElements();
-	    territoryADropDown.removeAllItems();
-	    territoryBDropDown.removeAllItems();
-	    updateTerritoryAList();
-	    updateContinentInfoList();    
-	    enableReinforcementBtn();
-	    updateLogArea();
-	}
+	playerTurn = playerTurn < players.getPlayerList().size() ? playerTurn : 0;
+	Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
+	players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");
+	removeElements();
+	updateTerritoryAList();
+	updateContinentInfoList();    
+	enableReinforcementBtn();
+	updateLogArea();
     }
-
+    
+    /**
+     * This method remove elements from  territoryAModel, territoryBModel, territoryInfoModel, continentInfoModel, territoryADropDown and territoryBDropDown
+     */
+    public void removeElements() {
+	territoryAModel.removeAllElements();
+	territoryBModel.removeAllElements();
+	territoryInfoModel.removeAllElements();
+	continentInfoModel.removeAllElements();
+	territoryADropDown.removeAllItems();
+	territoryBDropDown.removeAllItems();
+    }
     /**
      * Used to Display Detail of Current Player.
      */
