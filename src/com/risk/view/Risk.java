@@ -1,11 +1,9 @@
 package com.risk.view;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-
 import com.risk.models.Players;
-import com.risk.view.GamePanels;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * 
@@ -57,6 +55,5 @@ public class Risk {
 		frame.pack();
 
 	}
-
 
 }

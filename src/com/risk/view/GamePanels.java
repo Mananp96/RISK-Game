@@ -1,48 +1,5 @@
 package com.risk.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Map.Entry;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.Border;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.DefaultCaret;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.risk.controller.Fortification;
 import com.risk.controller.InitializeData;
 import com.risk.controller.Reinforcement;
@@ -50,6 +7,23 @@ import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.DefaultCaret;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 /**
  * 
  * User Interface for Game Play
@@ -77,6 +51,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
     String editExistingMapBtnName = "Edit Existing Map";
     String saveBtnName = "Save";
     String backBtnName = "backBtn";
+    String turnCardBtnName = "turnCardBtn";
     String existingMapFilePath;
 
     private String editMapBtnName = "Edit Button";
@@ -100,6 +75,7 @@ public class GamePanels implements ActionListener, ListSelectionListener {
     private JButton backBtn;
     private JButton editButton;
     private JButton startGameBtn;
+    private JButton turnCardBtn;
 
     private JTextArea territoryDetails;
     private JTextArea logArea;
@@ -189,6 +165,23 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	return editMapPanel;
 
     }
+
+	protected JPanel turnCardPanel() {
+
+    // Creates the panel
+    JPanel turnCardPanel = new JPanel();
+    // Sets Layout
+    GridLayout editMapLayout = new GridLayout(2, 1, 5, 5);
+    turnCardPanel.setLayout(editMapLayout);
+    // Creates button
+    turnCardBtn = new JButton("Turn Card");
+
+    turnCardPanel.add(turnCardBtn);
+    turnCardBtn.addActionListener(this);
+    turnCardBtn.setActionCommand(turnCardBtnName);
+    return turnCardPanel;
+	}
+
     /**
      * method used for Creating new Map from scratch
      * @return createMapPanel
@@ -490,19 +483,23 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	// Creates buttons
 	newButton = new JButton("Play Game");
 	editButton = new JButton("Edit map");
+	turnCardBtn = new JButton("Turn Card");
 	exitButton = new JButton("Quit");
 
 	menuPanel.add(newButton);
 	menuPanel.add(editButton);
 	menuPanel.add(exitButton);
+	menuPanel.add(turnCardBtn);
 
 	newButton.addActionListener(this);
 	editButton.addActionListener(this);
 	exitButton.addActionListener(this);
+	turnCardBtn.addActionListener(this);
 
 	newButton.setActionCommand(newBtnName);
 	editButton.setActionCommand(editMapBtnName);
 	exitButton.setActionCommand(exitBtnName);
+	turnCardBtn.setActionCommand(turnCardBtnName);
 	return menuPanel;
     }
 
@@ -634,10 +631,19 @@ public class GamePanels implements ActionListener, ListSelectionListener {
 	    frame.setContentPane(playerMenu());
 	    frame.invalidate();
 	    frame.validate();
-	} else if(actionName.equals(editMapBtnName)){					
+	} else if(actionName.equals(editMapBtnName)){
 	    frame.setContentPane(editMapPanel());
 	    frame.invalidate();
 	    frame.validate();
+
+	}else if(actionName.equals(turnCardBtnName)){
+        String[] choices = { "A", "B", "C", "D", "E", "F" };
+        String input = (String) JOptionPane.showInputDialog(null, "Choose now...",
+                "The Choice of a Lifetime", JOptionPane.QUESTION_MESSAGE, null, // Use
+                // default
+                // icon
+                choices, // Array of choices
+                choices[1]); // Initial choice
 
 	} else if (actionName.equals(editExistingMapBtnName)) {
 	    riskLogger("Editing Existing Map");
