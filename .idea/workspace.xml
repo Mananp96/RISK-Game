@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f3107be0-8a67-43f0-9922-97a094fdd559" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/documentation/Architecture Design Deocumentation.docx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/documentation/Architecture Design Documentation.docx" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,14 +17,14 @@
     <session id="1773840551">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="12" />
+          <entry key="project.closed" value="14" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.3" value="2" />
           <entry key="project.open.time.4" value="4" />
-          <entry key="project.open.time.5" value="4" />
+          <entry key="project.open.time.5" value="5" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="14" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -178,37 +177,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="docs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="docs" type="462c0819:PsiDirectoryNode" />
-              <item name="documentation" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -248,6 +216,37 @@
           <select />
         </subPane>
       </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+              <item name="documentation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -255,7 +254,7 @@
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/shalin_patel/Documents/GitHub/RISK-Game/src/com/risk/view/NewEditMapPanel.java" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540021007527" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540021589416" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -273,7 +272,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.RiskTestSuite">
+  <component name="RunManager" selected="Application.Risk">
     <configuration name="Risk" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.risk.view.Risk" />
       <module name="RISK-Game" />
@@ -322,8 +321,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.RiskTestSuite" />
         <item itemvalue="Application.Risk" />
+        <item itemvalue="JUnit.RiskTestSuite" />
         <item itemvalue="JUnit.ArmiesSelectionTest" />
       </list>
     </recent_temporary>
@@ -342,9 +341,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ArmiesSelectionTest - 2018.10.17 at 14h 53m 32s.xml">
-      <configuration name="ArmiesSelectionTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="ArmiesSelectionTest - 2018.10.17 at 14h 56m 19s.xml">
       <configuration name="ArmiesSelectionTest" configurationId="JUnit" />
     </history-entry>
@@ -372,11 +368,14 @@
     <history-entry file="RiskTestSuite - 2018.10.20 at 03h 32m 25s.xml">
       <configuration name="RiskTestSuite" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="RiskTestSuite - 2018.10.20 at 03h 46m 25s.xml">
+      <configuration name="RiskTestSuite" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49936306" visible="true" weight="0.28540772" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49936306" visible="true" weight="0.28898427" />
       <window_info id="Structure" order="1" sideWeight="0.50063694" side_tool="true" weight="0.28540772" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -499,19 +498,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1274">
           <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/risk/controller/CreateMapFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/risk/controller/CreateMapFile.java" />
     <entry file="file://$PROJECT_DIR$/src/com/risk/view/NewEditMapPanel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -519,9 +509,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/riskTest/test.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/riskTest/test.txt" />
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/src.zip!/java/util/Observable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
@@ -543,13 +531,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/risk/utils/Logger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/risk/utils/Logger.java" />
     <entry file="file://$PROJECT_DIR$/src/com/risk/controller/BoardData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
@@ -588,9 +570,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="775">
           <caret line="171" column="54" selection-start-line="171" selection-start-column="54" selection-end-line="171" selection-end-column="54" />
-          <folding>
-            <element signature="e#4760#4761#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -645,38 +624,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/libraries/junit5_master.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-29" />
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/org.eclipse.jdt.junit5.runtime_1.0.100.v20171124-1029.jar!/plugin.properties">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/org.eclipse.jdt.junit5.runtime_1.0.100.v20171124-1029.jar!/org/eclipse/jdt/internal/junit5/runner/JUnit5TestLoader.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/libraries/org_eclipse_jdt_junit5_runtime_1_0_100_v20171124_1029.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/org.eclipse.jdt.junit5.runtime_1.0.100.v20171124-1029.jar!/.api_description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/junit5_master.xml" />
+    <entry file="jar://$PROJECT_DIR$/lib/org.eclipse.jdt.junit5.runtime_1.0.100.v20171124-1029.jar!/plugin.properties" />
+    <entry file="jar://$PROJECT_DIR$/lib/org.eclipse.jdt.junit5.runtime_1.0.100.v20171124-1029.jar!/org/eclipse/jdt/internal/junit5/runner/JUnit5TestLoader.class" />
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/org_eclipse_jdt_junit5_runtime_1_0_100_v20171124_1029.xml" />
+    <entry file="jar://$PROJECT_DIR$/lib/org.eclipse.jdt.junit5.runtime_1.0.100.v20171124-1029.jar!/.api_description" />
     <entry file="file://$PROJECT_DIR$/src/com/riskTest/validate/MapValidatorTestTwo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-151">
           <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -685,9 +641,7 @@
         <state relative-caret-position="-14371" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mapFile291.map">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/mapFile291.map" />
     <entry file="file://$PROJECT_DIR$/docs/javaDoc/allclasses-noframe.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -706,9 +660,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -716,10 +667,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="42" />
-          <folding>
-            <element signature="e#573#574#0" expanded="true" />
-            <element signature="e#593#594#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -741,9 +688,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="485" selection-start-line="485" selection-end-line="485" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
