@@ -1,5 +1,7 @@
 package com.risk.controller;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.risk.models.Continent;
@@ -94,9 +96,21 @@ public class Reinforcement {
 		}
 
 		Double value = new Double(Math.floor(count/3));
-		return value.intValue() > 3 ? value.intValue() : 3 ;
+		return value.intValue() > 3 ? (value.intValue() + checkContinentAcquired())   : (3 + checkContinentAcquired()) ;
 	}
-
+	/**
+	 * This method add armies to current player if a particular continent is Acquired fully by player
+	 */
+	public int checkContinentAcquired(){
+	    int count = 0;
+	    Map<String, ArrayList<String>> tempData = players.getPlayerContinent(playerName).getContinentOwnedterritory();
+	    for(Entry<String,ArrayList<String>> entry : tempData.entrySet()) {
+		if(entry.getValue().size() == continent.getContTerrValue().get(entry.getKey())) {
+		    count += continent.getContinentValue().get(entry.getKey());
+		}
+	    }
+	    return count > 0 ? count : 0;
+	}
 	/**
 	 * This method allow player to perform Reinforcement Phase of Game
 	 * @param currentPlayer Player Name 
@@ -108,7 +122,6 @@ public class Reinforcement {
 		players.updateArmy(currentPlayer,army , "DELETE");
 		territory.updateTerritoryArmy(territoryName, army, "ADD");
 	}
-
 	/**
 	 * This method return the current phase
 	 * @return Current Phase of Player

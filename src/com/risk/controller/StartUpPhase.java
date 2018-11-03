@@ -98,7 +98,6 @@ public class StartUpPhase extends GamePanels {
 			}
 
 		}
-		players.setCurrentPhase("Reinforcement");
 		riskLogger(" ");
 		riskLogger("Reinforcement phase started");
 	}

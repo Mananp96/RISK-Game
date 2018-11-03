@@ -33,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.risk.controller.EditMapFile;
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
-import com.risk.models.Players;
 import com.risk.models.Territory;
 
 
@@ -344,7 +343,7 @@ public class NewEditMapPanel implements ActionListener{
 	System.out.println("Action Name " + actionName);
 	if(actionName.equalsIgnoreCase(backBtnName)){
 	    GamePanels gamePanels = new GamePanels();
-	    frame.setContentPane(gamePanels.mainMenu(frame, new Players()));
+	    frame.setContentPane(gamePanels.mainMenu(frame));
 	    frame.invalidate();
 	    frame.validate();
 	} else if(actionName.equalsIgnoreCase("Add Continent")){
