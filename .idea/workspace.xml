@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f3107be0-8a67-43f0-9922-97a094fdd559" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/risk/view/GamePanels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/risk/view/GamePanels.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,20 +18,20 @@
     <session id="1773840551">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="15" />
+          <entry key="project.closed" value="16" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.3" value="2" />
+          <entry key="project.open.time.3" value="3" />
           <entry key="project.open.time.4" value="5" />
           <entry key="project.open.time.5" value="6" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="class" value="2" />
-          <entry key="java" value="2425" />
+          <entry key="java" value="2945" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -42,7 +43,7 @@
           <entry key="gitignore" value="1" />
           <entry key="html" value="1" />
           <entry key="iml" value="1" />
-          <entry key="java" value="110" />
+          <entry key="java" value="111" />
           <entry key="map" value="4" />
           <entry key="md" value="1" />
           <entry key="prefs" value="2" />
@@ -56,7 +57,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CLASS" value="2" />
-          <entry key="JAVA" value="2425" />
+          <entry key="JAVA" value="2945" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -66,7 +67,7 @@
           <entry key="HTML" value="1" />
           <entry key="IDEA_MODULE" value="1" />
           <entry key="Image" value="2" />
-          <entry key="JAVA" value="110" />
+          <entry key="JAVA" value="111" />
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="10" />
           <entry key="Properties" value="1" />
@@ -76,7 +77,21 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/risk/view/GamePanels.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="445" column="4" selection-start-line="445" selection-start-column="4" selection-end-line="445" selection-end-column="4" />
+              <folding>
+                <element signature="e#22754#22755#0" expanded="true" />
+                <element signature="e#22787#22788#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -87,11 +102,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>object</find>
-      <find>50</find>
-      <find>playerPlaying</find>
-      <find>players</find>
-      <find>armies</find>
       <find>update</find>
       <find>1000</find>
       <find>800</find>
@@ -114,6 +124,14 @@
       <find>sys</find>
       <find>risk</find>
       <find>menuBtn</find>
+      <find>turnin</find>
+      <find>skip</find>
+      <find>attackb</find>
+      <find>attack</find>
+      <find>attackBtn</find>
+      <find>continentScrollPane</find>
+      <find>targetLabel</find>
+      <find>cardsList</find>
     </findStrings>
     <replaceStrings>
       <replace>850</replace>
@@ -138,8 +156,8 @@
         <option value="$PROJECT_DIR$/src/com/risk/controller/InitializeData.java" />
         <option value="$PROJECT_DIR$/src/com/risk/controller/StartUpPhase.java" />
         <option value="$PROJECT_DIR$/src/com/risk/validate/MapValidator.java" />
-        <option value="$PROJECT_DIR$/src/com/risk/view/GamePanels.java" />
         <option value="$PROJECT_DIR$/src/com/riskTest/RiskTestSuite.java" />
+        <option value="$PROJECT_DIR$/src/com/risk/view/GamePanels.java" />
       </list>
     </option>
   </component>
@@ -156,6 +174,71 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="risk" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="risk" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="risk" type="462c0819:PsiDirectoryNode" />
+              <item name="observer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="risk" type="462c0819:PsiDirectoryNode" />
+              <item name="validate" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="risk" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -211,55 +294,6 @@
               <item name="RISK-Game" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="RISK-Game" type="2674bda8:ScopeViewTreeModel$GroupNode" />
               <item name="maps" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="risk" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="risk" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="risk" type="462c0819:PsiDirectoryNode" />
-              <item name="validate" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
@@ -392,8 +426,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49936306" visible="true" weight="0.29756796" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49936306" visible="true" weight="0.3018598" />
       <window_info id="Structure" order="1" sideWeight="0.50063694" side_tool="true" weight="0.28540772" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -403,7 +438,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3299363" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3299363" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -704,8 +739,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/risk/view/GamePanels.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="485" selection-start-line="485" selection-end-line="485" />
+        <state relative-caret-position="144">
+          <caret line="445" column="4" selection-start-line="445" selection-start-column="4" selection-end-line="445" selection-end-column="4" />
+          <folding>
+            <element signature="e#22754#22755#0" expanded="true" />
+            <element signature="e#22787#22788#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
