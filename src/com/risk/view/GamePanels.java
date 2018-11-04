@@ -1,38 +1,16 @@
 package com.risk.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Map.Entry;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.SpinnerNumberModel;
+import com.risk.controller.InitializeData;
+import com.risk.models.ArmiesSelection;
+import com.risk.models.Continent;
+import com.risk.models.Players;
+import com.risk.models.Territory;
+import com.risk.observer.Observer;
+import com.risk.observer.Subject;
+import com.risk.strategy.Context;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -42,17 +20,14 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.risk.controller.InitializeData;
-import com.risk.models.ArmiesSelection;
-import com.risk.models.Continent;
-import com.risk.models.Players;
-import com.risk.models.Territory;
-import com.risk.observer.Observer;
-import com.risk.observer.Subject;
-import com.risk.strategy.Context;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 /**
  * 
  * User Interface for Game Play
@@ -88,10 +63,13 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     private GridLayout mainLayout;
     private JButton reinforceBtn;
     private JButton attackBtn;
+	private JButton attackSkipBtn;
+	private JButton fortifySkipBtn;
     private JButton fortifyBtn;
     private JButton endTurnBtn;
     private JButton menuBtn;
     private JButton turnInBtn;
+    private JButton tradeCardBtn;
     private JButton createNewMapBtn;
     private JButton editExistingMapBtn;
     private JButton newButton;
@@ -126,6 +104,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
     private JComboBox<String> territoryADropDown;
     private JComboBox<String> territoryBDropDown;
+	private JComboBox<Integer> attackerDiceDropDown;
+	private JComboBox<Integer> defenderDiceDropDown;
     private SpinnerNumberModel selectArmyModel;
     private JLabel fortErrorMsg;
     private Context context;
@@ -302,7 +282,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	turnInBtn = new JButton("Turn In Cards");
 	turnInBtn.setEnabled(false);
 	reinforceBtn = new JButton("Place Reinforcements");
-	attackBtn = new JButton("Attack!");
+	attackBtn = new JButton("Attack");
+	attackSkipBtn = new JButton("Attack Skip");
+	fortifySkipBtn = new JButton("Fortify Skip");
 	fortifyBtn = new JButton("Fortify");
 	endTurnBtn = new JButton("End Turn");
 	if(reinforceBtn.isEnabled()) {
@@ -357,16 +339,33 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	});
 	territoryBList.addListSelectionListener(this);
 
+	JPanel attackButtonPanel = new JPanel();
+	JPanel attackContainerPanel = new JPanel();
+		attackButtonPanel.add(attackBtn);
+		attackButtonPanel.add(attackSkipBtn);
+		attackButtonPanel.setPreferredSize(new Dimension(300,600));
+		attackContainerPanel.add(attackButtonPanel);
+
+		JPanel fortifyButtonPanel = new JPanel();
+		JPanel fortifyContainerPanel = new JPanel();
+		fortifyButtonPanel.add(fortifyBtn);
+		fortifyButtonPanel.add(fortifySkipBtn);
+		fortifyButtonPanel.setPreferredSize(new Dimension(300,600));
+		fortifyContainerPanel.add(fortifyButtonPanel);
+
 	//eventPanel.add(cardsList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
-	//eventPanel.add(turnInBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 3));
 	eventPanel.add(selectedLabel, setGridBagConstraints(new Insets(25, 5, 21, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
 	eventPanel.add(continentScrollPane, setGridBagConstraints(new Insets(5, 5, 25, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 5));
 	eventPanel.add(reinforceBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 6));
-	eventPanel.add(targetLabel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 7));
-	eventPanel.add(territoryScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 8));
-	eventPanel.add(attackBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 9));
-	eventPanel.add(fortifyBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 10));
-	eventPanel.add(endTurnBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 11));
+	eventPanel.add(turnInBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 7));
+	eventPanel.add(targetLabel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 8));
+	eventPanel.add(territoryScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 9));
+	eventPanel.add(attackContainerPanel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 10));
+		eventPanel.add(fortifyContainerPanel, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 11));
+	//eventPanel.add(attackBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 9));
+	//eventPanel.add(skipBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 9));
+	//eventPanel.add(fortifyBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 10));
+	eventPanel.add(endTurnBtn, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 12));
 
 	return eventPanel;
     }
@@ -442,56 +441,173 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	countryPanel.add(territoryLabel, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,1, 1, 0));
 	countryPanel.add(continentInfoScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 1));
 	countryPanel.add(territoryInfoScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 1, 1));
-	countryPanel.add(fortificationPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
+	//countryPanel.add(fortificationPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
+	//countryPanel.add(attackPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
+	countryPanel.add(cardPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
 	countryPanel.add(logScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 1, 2));
 	return countryPanel;
     }
+
+	private JPanel cardPanel() {
+		JPanel cardPanel = new JPanel();
+		cardPanel.setLayout(new GridLayout(10, 1));
+
+		JLabel attackerLabel = new JLabel("Card 1");
+		territoryADropDown = new JComboBox<>();
+
+		JLabel defenderLabel = new JLabel("Card 2");
+		territoryBDropDown = new JComboBox<>();
+
+		JLabel attackerDiceLable = new JLabel("Card 3");
+		attackerDiceDropDown = new JComboBox<>();
+
+		tradeCardBtn = new JButton("Trade Cards");
+
+		cardPanel.add(attackerLabel);
+		cardPanel.add(territoryADropDown);
+
+		cardPanel.add(new JLabel(""));
+		cardPanel.add(defenderLabel);
+		cardPanel.add(territoryBDropDown);
+
+		cardPanel.add(new JLabel(""));
+		cardPanel.add(attackerDiceLable);
+		cardPanel.add(attackerDiceDropDown);
+
+		cardPanel.add(new JLabel(""));
+		cardPanel.add(tradeCardBtn);
+
+		territoryADropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+
+			}
+		});
+		territoryBDropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+
+
+			}
+		});
+		territoryADropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+
+			}
+		});
+
+		return cardPanel;
+	}
+
+	private JPanel attackPanel() {
+		JPanel attackPanel = new JPanel();
+		attackPanel.setLayout(new GridLayout(8, 1));
+
+		JLabel attackerLabel = new JLabel("Attacker Territory");
+		territoryADropDown = new JComboBox<>();
+
+		JLabel defenderLabel = new JLabel("Defender Territory");
+		territoryBDropDown = new JComboBox<>();
+
+		JLabel attackerDiceLable = new JLabel("Attacker Dice");
+		attackerDiceDropDown = new JComboBox<>();
+
+		JLabel defenderDiceLable = new JLabel("Defender dice");
+		defenderDiceDropDown = new JComboBox<>();
+
+		attackPanel.add(attackerLabel);
+		attackPanel.add(territoryADropDown);
+
+		attackPanel.add(defenderLabel);
+		attackPanel.add(territoryBDropDown);
+
+		attackPanel.add(attackerDiceLable);
+		attackPanel.add(attackerDiceDropDown);
+
+		attackPanel.add(defenderDiceLable);
+		attackPanel.add(defenderDiceDropDown);
+
+		territoryADropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+
+			}
+		});
+		territoryBDropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+
+
+			}
+		});
+		territoryADropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+
+			}
+		});
+		territoryBDropDown.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+
+
+			}
+		});
+		return attackPanel;
+	}
 
     /**
      * Display list of territory and it's adjacent territory of current Player 
      * @return fortificationPanel for movement of army
      */
     private JPanel fortificationPanel() {
-	JPanel fortificationPanel = new JPanel();
-	fortificationPanel.setLayout(new GridLayout(9, 1));
-	JLabel territoryALabel = new JLabel("Territory List");
-	territoryADropDown = new JComboBox<>();
-	JLabel territoryBLabel = new JLabel("Adjacent Territory List");
-	territoryBDropDown = new JComboBox<>();
-	fortErrorMsg = new JLabel("Select Army : ");
-	selectArmyModel = new SpinnerNumberModel();
-	JSpinner selectArmy = new JSpinner(selectArmyModel);
-	fortificationPanel.add(new JLabel(""));
-	fortificationPanel.add(territoryALabel);
-	fortificationPanel.add(territoryADropDown);
-	fortificationPanel.add(new JLabel(""));
-	fortificationPanel.add(territoryBLabel);
-	fortificationPanel.add(territoryBDropDown);
-	fortificationPanel.add(new JLabel(""));
-	fortificationPanel.add(fortErrorMsg);
-	fortificationPanel.add(selectArmy);
-	territoryADropDown.addItemListener(new ItemListener() {
+		JPanel fortificationPanel = new JPanel();
+		fortificationPanel.setLayout(new GridLayout(9, 1));
+		JLabel territoryALabel = new JLabel("Territory List");
+		territoryADropDown = new JComboBox<>();
+		JLabel territoryBLabel = new JLabel("Adjacent Territory List");
+		territoryBDropDown = new JComboBox<>();
+		fortErrorMsg = new JLabel("Select Army : ");
+		selectArmyModel = new SpinnerNumberModel();
+		JSpinner selectArmy = new JSpinner(selectArmyModel);
+		fortificationPanel.add(new JLabel(""));
+		fortificationPanel.add(territoryALabel);
+		fortificationPanel.add(territoryADropDown);
+		fortificationPanel.add(new JLabel(""));
+		fortificationPanel.add(territoryBLabel);
+		fortificationPanel.add(territoryBDropDown);
+		fortificationPanel.add(new JLabel(""));
+		fortificationPanel.add(fortErrorMsg);
+		fortificationPanel.add(selectArmy);
+		territoryADropDown.addItemListener(new ItemListener() {
 
-	    @Override
-	    public void itemStateChanged(ItemEvent e) {
-		addTerritoryBDropDown();
-	    }       
-	});
-	territoryBDropDown.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+			addTerritoryBDropDown();
+			}
+		});
+		territoryBDropDown.addItemListener(new ItemListener() {
 
-	    @Override
-	    public void itemStateChanged(ItemEvent e) {
-		enterArmyToMove();
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+			enterArmyToMove();
 
-	    }
-	});
-	return fortificationPanel;
+			}
+		});
+		return fortificationPanel;
     }
 
     /**
      * Frame consist of Start button, Edit Button and Quit Button
      * @param frame current frame
-     * @param players player object
      * @return menuPanel 
      */ 
     protected JPanel mainMenu(JFrame frame){
