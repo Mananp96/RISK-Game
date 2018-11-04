@@ -1,6 +1,8 @@
 package com.risk.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,6 +27,7 @@ public class Players implements Strategy {
 	ArrayList<String> playerPlaying;
 	String currentPhase;
 	Map<String,Territory> playerCard;
+	private boolean isAttackWon;
 
 	public Players() {
 		playerContinent = new HashMap<>();
@@ -213,26 +216,92 @@ public class Players implements Strategy {
     	return currentPhase;
 	}
 
-
-	@Override
-	public void doAttack() {
-	    // TODO Auto-generated method stub
-
+	/**
+	 * return if attack is won.
+	 * @return true if attack is won, else false;
+	 */
+	public boolean isAttackWon() {
+		return isAttackWon;
 	}
 
+	/**
+	 * set default value of isAttackWon is false;
+	 * @param isAttackWon attack is won or not?
+	 */
+	public void setAttackWon(boolean isAttackWon) {
+		this.isAttackWon = isAttackWon;
+	}
+
+	/**
+	 * Attack phase
+	 */
+	@Override
+	public void doAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDice, int defenderDice) {
+	    // TODO Auto-generated method stub
+		isAttackWon = false;
+		ArrayList<Integer> attackerDiceList = new ArrayList<>();
+		ArrayList<Integer> defenderDiceList = new ArrayList<>();
+		int[] attackerDiceArray = new int[attackerDice];
+		int[] defenderDiceArray = new int[defenderDice];
+		for(int i=0;i<attackerDice;i++) {
+			attackerDiceArray[i] = (int)(Math.random()*6+1);
+			System.out.println("DIE "+i+" "+attackerDiceArray[i]);
+			attackerDiceList.add(attackerDiceArray[i]);
+			
+		}
+		
+		for(int j=0;j<defenderDice;j++) {
+			defenderDiceArray[j] = (int)(Math.random()*6+1);
+			System.out.println("DIE "+j+" "+defenderDiceArray[j]);
+			defenderDiceList.add(defenderDiceArray[j]);
+		}
+	    
+		Collections.sort(attackerDiceList);
+		Collections.sort(defenderDiceList);
+		Collections.reverse(attackerDiceList);
+		Collections.reverse(defenderDiceList);
+		int maximumAttack = attackerDiceList.size() >= defenderDiceList.size() ? defenderDiceList.size() : attackerDiceList.size();  
+		System.out.println(attackerDiceList);
+		System.out.println(defenderDiceList);
+		System.out.println(maximumAttack);
+		
+		for(int i=0;i<maximumAttack;i++) {
+			if(attackerDiceList.get(i) > defenderDiceList.get(i)) {
+				currentTerritory.updateTerritoryArmy(toTerritory, 1, "DELETE");
+			}else {
+				currentTerritory.updateTerritoryArmy(fromTerritory, 1, "DELETE");
+			}
+		}
+		
+		if(currentTerritory.getTerritoryArmy().get(toTerritory) == 0) {
+			isAttackWon = true;
+			currentTerritory.updateTerritoryUser(currentTerritory.getTerritoryUser().get(fromTerritory),toTerritory);
+		}
+		
+	}
+	
+	/**
+	 * do Fortification
+	 */
 	@Override
 	public void doForitification(Territory currentTerritory, String fromTerritory, String toTerritory, int getArmySelect) {
 	    currentTerritory.updateTerritoryArmy(fromTerritory, getArmySelect, "DELETE");
 	    currentTerritory.updateTerritoryArmy(toTerritory, getArmySelect, "ADD");
 
 	}
-
+	
+	/**
+	 * do Reinforcement
+	 */
 	@Override
 	public void doReinforcement(String currentPlayer, String currentTerritoryName, int army, Territory currentTerritory) {
 	    updateArmy(currentPlayer, army, "DELETE");
 	    currentTerritory.updateTerritoryArmy(currentTerritoryName, army, "ADD");	    
 	}
-
+	
+	/**
+	 * generate Reinforcement Army
+	 */
 	@Override
 	public void generateReinforcementArmy(String currentPlayer, Continent currentContinent) {
 	    int count = 0;
