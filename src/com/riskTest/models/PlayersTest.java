@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.risk.models.Continent;
 import com.risk.models.Players;
+import com.risk.observer.Subject;
 
 /**
  * Players Model Test class.

@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import com.risk.models.Players;
+import com.risk.observer.Subject;
 import com.risk.view.GamePanels;
 
 /**
@@ -46,14 +47,16 @@ public class Risk {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		gamePanels = new GamePanels();
+	      Subject observerSubject = new Subject();
+
+		gamePanels = new GamePanels(observerSubject);
 		frame = new JFrame();
 		frame.setTitle("Risk");
 		frame.setPreferredSize(new Dimension(300, 300));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setResizable(false);
-		frame.add(gamePanels.mainMenu(frame,players));
+		frame.add(gamePanels.mainMenu(frame));
 		frame.pack();
 
 	}

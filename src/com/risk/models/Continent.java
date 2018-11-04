@@ -15,34 +15,45 @@ public class Continent {
 	 * @param continentValue value of armies when continent is fully acquired by player.
 	 * @param continentTerritory no.of territories for each continent
 	 * @param continentOwnedTerritory no. of territories owned by player for particular continent
-	 * @param playerOwnedContTerr no. of territory owned by player
+	 * @param contTerrValue no. of Territories in Continent	
 	 */
 	Map<String, Integer> continentValue; 
 	Map<String, ArrayList<String>> continentTerritory;
 	Map<String, ArrayList<String>> continentOwnedTerritory;
-	Map<String, Territory> playerOwnedContTerr;
+	Map<String, Integer> contTerrValue;
+	
+	/**
+	 *  This method increment territory number in particular continent
+	 * @param continent continent in which one territory is identified
+	 */
+	public void  addContTerritoryValue(String continent) {
+	    if(contTerrValue.containsKey(continent)) {
+		contTerrValue.replace(continent, contTerrValue.get(continent), contTerrValue.get(continent) + 1 );
+	    } else {
+		contTerrValue.put(continent, 1);
+	    }
+	}
+	/**
+	 * 
+	 * @return contTerrValue
+	 */
+	public Map<String, Integer> getContTerrValue() {
+	    return contTerrValue;
+	}
+	/**
+	 * 
+	 * @param contTerrValue no. of Territories in Particular Continent
+	 */
+	public void setContTerrValue(Map<String, Integer> contTerrValue) {
+	    this.contTerrValue = contTerrValue;
+	}
 
 	public Continent() {
 		continentValue = new HashMap<>();
 		continentTerritory = new HashMap<>();
 		continentOwnedTerritory = new HashMap<>();
-		playerOwnedContTerr = new HashMap<>();
+		contTerrValue = new HashMap<>();
 	}
-
-	/**
-	 * @return Map playerOwnedTerr
-	 */
-	public Map<String, Territory> getPlayerOwnedContTerr() {
-		return playerOwnedContTerr;
-	}
-
-	/**
-	 * @param playerOwnedContTerr a HashMap contains No. of territories owned by player for particular continent
-	 */
-	public void setPlayerOwnedContTerr(Map<String, Territory> playerOwnedContTerr) {
-		this.playerOwnedContTerr = playerOwnedContTerr;
-	}
-
 	/**
 	 * 
 	 * @return Map continentValue 
@@ -69,6 +80,7 @@ public class Continent {
 	 * @param continent name of Continent
 	 * @param territory name of Territory
 	 * @return a Map continentTerritory
+	 * 
 	 */
 	public Map<String, ArrayList<String>> addContinentTerritory(String continent, String territory) {
 		if(continentTerritory.containsKey(continent)) {
@@ -103,7 +115,7 @@ public class Continent {
 	/**
 	 * Used to identify which continent has how many territory of particular player
 	 * and store it to HashMap continentOwnedterritory
-	 * used to add or remove  territory of particular player
+	 * used to add or remove  territory from continent of particular player
 	 * 
 	 * @param continent Name of Continent
 	 * @param territory Name of Territory

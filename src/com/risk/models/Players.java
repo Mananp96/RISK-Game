@@ -3,31 +3,49 @@ package com.risk.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import com.risk.strategy.Strategy;
 
 /**
  * This is a model class for playerContinent, playerArmy,
  * playerList, playerPlaying as its data member.
  *
  */
-public class Players {
-
+public class Players implements Strategy {
 	/**
 	 * @param playerContinent player had territories in particular continent
 	 * @param playerArmy player having no. of armies
 	 * @param playerList no. of player currently playing game
 	 * @param playerPlaying no. of player playing game
+	 * @param playerCard no. of card player has
 	 */
-	Map<String, Continent> playerContinent; // 
-	Map<String, Integer> playerArmy;  // 
+	Map<String, Continent> playerContinent; 
+	Map<String, Integer> playerArmy;   
 	ArrayList<String> playerList; 
 	ArrayList<String> playerPlaying;
 	String currentPhase;
+	Map<String,Territory> playerCard;
 
 	public Players() {
 		playerContinent = new HashMap<>();
 		playerArmy = new HashMap<>();
 		playerList = new ArrayList<>();
 		playerPlaying = new ArrayList<>();
+	}
+
+	/**
+	 * 
+	 * @return playerContinent player had territories in particular continent
+	 */
+	public Map<String, Continent> getPlayerContinent() {
+	    return playerContinent;
+	}
+	/**
+	 * This method set territories in particular continent
+	 * @param playerContinent Territories in particular continent
+	 */
+	public void setPlayerContinent(Map<String, Continent> playerContinent) {
+	    this.playerContinent = playerContinent;
 	}
 
 	/**
@@ -108,9 +126,23 @@ public class Players {
 		playerContinent.put(name, continent);
 		return playerContinent;
 	}
+/**
+ * This method get number of card player has.
+ * @return playerCard number of card which player has
+ */
+	public Map<String, Territory> getPlayerCard() {
+	    return playerCard;
+	}
+	/**
+	 * This method is used to set card for player
+	 * @param playerCard card which you need to add in player
+	 */
+	public void setPlayerCard(Map<String, Territory> playerCard) {
+	    this.playerCard = playerCard;
+	}
 
 	/**
-	 * This method returns the Territories aquired by particular player.
+	 * This method returns the Territories acquired by particular player.
 	 * @param name Name of Player
 	 * @return a Map PlayerContinent
 	 */
@@ -169,7 +201,7 @@ public class Players {
 	 * This method is used to assign the current phase of game.
 	 * @param currentPhase Assign the current phase of game.
 	 */
-    public void setCurrentPhase(String currentPhase) {
+	public void setCurrentPhase(String currentPhase) {
 		this.currentPhase = currentPhase;
     }
 
@@ -179,5 +211,56 @@ public class Players {
 	 */
 	public String getCurrentPhase() {
     	return currentPhase;
+	}
+
+
+	@Override
+	public void doAttack() {
+	    // TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void doForitification(Territory currentTerritory, String fromTerritory, String toTerritory, int getArmySelect) {
+	    currentTerritory.updateTerritoryArmy(fromTerritory, getArmySelect, "DELETE");
+	    currentTerritory.updateTerritoryArmy(toTerritory, getArmySelect, "ADD");
+
+	}
+
+	@Override
+	public void doReinforcement(String currentPlayer, String currentTerritoryName, int army, Territory currentTerritory) {
+	    updateArmy(currentPlayer, army, "DELETE");
+	    currentTerritory.updateTerritoryArmy(currentTerritoryName, army, "ADD");	    
+	}
+
+	@Override
+	public void generateReinforcementArmy(String currentPlayer, Continent currentContinent) {
+	    int count = 0;
+	    setCurrentPhase("Reinforcement");
+	    Map<String, ArrayList<String>> tempData = getPlayerContinent().get(currentPlayer).getContinentOwnedterritory(); 
+	    for(Entry<String, ArrayList<String>> entry : tempData.entrySet()) {
+		if(!entry.getValue().isEmpty()) {
+		    count+=entry.getValue().size();
+		}
+	    }
+
+	    Double value = new Double(Math.floor(count/3));
+	    updateArmy(currentPlayer, value.intValue() > 3 ? (value.intValue() + checkContinentAcquired(currentPlayer,currentContinent))   : (3 + checkContinentAcquired(currentPlayer, currentContinent)), "ADD");	    
+	}
+	/**
+	 * This method add armies to current player if a particular continent is Acquired fully by player
+	 * @param currentPlayer
+	 * @param currentContinent
+	 * @return
+	 */
+	public int checkContinentAcquired(String currentPlayer, Continent currentContinent){
+	    int count = 0;
+	    Map<String, ArrayList<String>> tempData = getPlayerContinent(currentPlayer).getContinentOwnedterritory();
+	    for(Entry<String,ArrayList<String>> entry : tempData.entrySet()) {
+		if(entry.getValue().size() == currentContinent.getContTerrValue().get(entry.getKey())) {
+		    count += currentContinent.getContinentValue().get(entry.getKey());
+		}
+	    }
+	    return count > 0 ? count : 0;
 	}
 }

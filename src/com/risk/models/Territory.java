@@ -17,16 +17,19 @@ public class Territory {
 	 * @param territoryArmy Armies for particular territory
 	 * @param adjacentTerritory Adjacent territory of territory
 	 * @param territoryList List of total territory
+	 * @param territoryCard card for particular territory
+	 * @param cardValue armies for particular card
 	 */
 	Map<String, String> territoryUser; 
 	Map<String, String> territoryCont; 
 	Map<String, Integer> territoryArmy; 
 	Map<String, ArrayList<String>> adjacentTerritory; 
+	Map<String, String> territoryCard;
 	Map<String, ArrayList<String>> duplicateTerritoryContinent; //to be used only for validation to check duplicacy.
 	Map<String, Integer> territoryNumber; // territory with Number
-	
+	Map<Integer,String> cardValue;
 	ArrayList<String> territoryList; 
-	
+
 	boolean flag = false;
 	
 	public Territory() {
@@ -35,11 +38,34 @@ public class Territory {
 		territoryCont = new HashMap<>();
 		territoryArmy = new HashMap<>();
 		adjacentTerritory = new HashMap<>();
+		territoryCard = new HashMap<>();
+		cardValue = new HashMap<>();
 		territoryList = new ArrayList<>();
 		duplicateTerritoryContinent = new HashMap<>();
 		territoryNumber = new HashMap<>();
 	}
-	
+	/**
+	 * 
+	 * @return cardValue number of armies for particular card
+	 */
+	public Map<Integer, String> getCardValue() {
+	    return cardValue;
+	}
+	/**
+	 * This method set card with armies 
+	 * @param cardValue armies for particular card
+	 */
+	public void setCardValue(Map<Integer, String> cardValue) {
+	    this.cardValue = cardValue;
+	}
+	/**
+	 * This method add armies for particular card
+	 * @param cardName name of card
+	 * @param armies no. of armies for particular card
+	 */
+	public void addCardValue(String cardName, int armies) {
+	    cardValue.put(armies, cardName);
+	}
 	/**
 	 * 
 	 * @return list of all territories
@@ -55,7 +81,27 @@ public class Territory {
 	public void setTerritoryList(ArrayList<String> territoryList) {
 		this.territoryList = territoryList;
 	}
-	
+	/*
+	 * This Method is used to get card of territory
+	 */
+	public Map<String, String> getTerritoryCard() {
+	    return territoryCard;
+	}
+	/**
+	 * This method is used to set card for particular territory.
+	 * @param territoryCard card for particular territory
+	 */
+	public void setTerritoryCard(Map<String, String> territoryCard) {
+	    this.territoryCard = territoryCard;
+	}
+	/**
+	 * This method add card for particular territory 
+	 * @param territory Territory Name
+	 * @param cardName Card Name
+	 */
+	public void addTerritoryCard(String territory, String cardName) {
+	    territoryCard.put(territory, cardName);
+	}
 	/**
 	 * 
 	 * @return User owned Territories
@@ -248,6 +294,11 @@ public class Territory {
 	public Map<String,Integer> getNumberOfTerritory(){
 		return territoryNumber;
 	}
+	/**
+	 * 
+	 * @param oldContinent Continent Name
+	 * @param newContinent Continent Name which replace old continent
+	 */
 	public void updateTerritoryContinent(String oldContinent, String newContinent) {
 	    for(Entry<String, String> entry : territoryCont.entrySet() ) {
 			if(entry.getValue().equalsIgnoreCase(oldContinent)) {

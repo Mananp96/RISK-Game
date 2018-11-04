@@ -3,6 +3,9 @@ package com.risk.controller;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.logging.Logger;
 
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
@@ -28,8 +31,9 @@ public class BoardData {
 	StringBuilder territoryData;
 	BufferedReader reader;
 
-	public Continent continentObject;
-	public Territory territoryObject;
+	Continent continentObject;
+	Territory territoryObject;
+	private static final Logger LOGGER = Logger.getLogger(BoardData.class.getName());
 
 	/**
 	 * Get Continent Data from file
@@ -84,12 +88,22 @@ public class BoardData {
 		territoryData = new StringBuilder();
 		continentObject = new Continent();
 		territoryObject = new Territory();
-		String currentLine;
+		territoryObject.addCardValue("Infantry", 1);
+		territoryObject.addCardValue("Cavalry", 5);
+		territoryObject.addCardValue("Artillery", 10);
+		territoryObject.addCardValue("Wild Card", 0);
+		ArrayList<String> tempCardName = new ArrayList<>();
+		tempCardName.add("Infantry");
+		tempCardName.add("Cavalry");
+		tempCardName.add("Artillery");
+		int cardNo = 0;
+
+ 		String currentLine;
 		try 
 		{
 			reader = new BufferedReader(new FileReader(filePath));
 			while((currentLine = reader.readLine()) != null) {	
-
+			    
 				if(currentLine.equals("[Continents]")) {
 					continentFlag = true;
 					territoriesFlag = false;
@@ -106,7 +120,6 @@ public class BoardData {
 					continentObject.setContinentValue(continentsArray[0], Integer.parseInt(continentsArray[1]));
 
 				}
-
 				//assign Territories List.
 				if(territoriesFlag && ! (currentLine.isEmpty() || currentLine.equals("[Territories]"))) {
 					territoryData.append(currentLine +"\n");
@@ -115,22 +128,26 @@ public class BoardData {
 					for(int i = 4; i < territoriesArray.length ; i++) {
 						territoryObject.addAdjacentTerritory(territoriesArray[0], territoriesArray[i]);						
 					}
+					continentObject.addContTerritoryValue(territoriesArray[3]);
 					territoryObject.addTerritory(territoriesArray[0]);
 					territoryObject.addTerritoryCont(territoriesArray[0], territoriesArray[3]); //need to refactor 
+					territoryObject.addTerritoryCard(territoriesArray[0], tempCardName.get(cardNo));
+					cardNo++;	
+					if(cardNo >= 3)
+					    cardNo =  0 ;
 					continentObject.addContinentTerritory(territoriesArray[3], territoriesArray[0]);
 					territoryObject.addDuplicateTerritoryContinent(territoriesArray[0], territoriesArray[3]); //need to refactor
-
 					territoryObject.addNumberOfTerritory(territoriesArray[0],territoryNumber++);
-
 				}
-
+				
 			}
-
+			territoryObject.addTerritoryCard("Wild Card 1","Wild Card");
+			territoryObject.addTerritoryCard("Wild Card 2","Wild Card");
 			MapValidator mapValidator = new MapValidator(continentObject,territoryObject);
 			isMapValid = mapValidator.validateMap();
 			reader.close();
 		}catch(IOException | InvalidMapException e) {
-			e.printStackTrace();
+		    LOGGER.warning("Map is Not Validated. Please Check data");
 		}
 		return isMapValid;
 	}
