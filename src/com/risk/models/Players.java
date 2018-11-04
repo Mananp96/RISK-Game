@@ -40,14 +40,14 @@ public class Players implements Strategy {
 	 * @return playerContinent player had territories in particular continent
 	 */
 	public Map<String, Continent> getPlayerContinent() {
-	    return playerContinent;
+		return playerContinent;
 	}
 	/**
 	 * This method set territories in particular continent
 	 * @param playerContinent Territories in particular continent
 	 */
 	public void setPlayerContinent(Map<String, Continent> playerContinent) {
-	    this.playerContinent = playerContinent;
+		this.playerContinent = playerContinent;
 	}
 
 	/**
@@ -128,19 +128,19 @@ public class Players implements Strategy {
 		playerContinent.put(name, continent);
 		return playerContinent;
 	}
-/**
- * This method get number of card player has.
- * @return playerCard number of card which player has
- */
+	/**
+	 * This method get number of card player has.
+	 * @return playerCard number of card which player has
+	 */
 	public Map<String, Territory> getPlayerCard() {
-	    return playerCard;
+		return playerCard;
 	}
 	/**
 	 * This method is used to set card for player
 	 * @param playerCard card which you need to add in player
 	 */
 	public void setPlayerCard(Map<String, Territory> playerCard) {
-	    this.playerCard = playerCard;
+		this.playerCard = playerCard;
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class Players implements Strategy {
 		return playerArmy.get(name);
 	}
 
-	
+
 	/**
 	 * This method update the Map playerArmy.
 	 * @param name Name of Player
@@ -205,14 +205,14 @@ public class Players implements Strategy {
 	 */
 	public void setCurrentPhase(String currentPhase) {
 		this.currentPhase = currentPhase;
-    }
+	}
 
 	/**
 	 * Returns the current phase of game.
 	 * @return  currentPhase of player.
 	 */
 	public String getCurrentPhase() {
-    	return currentPhase;
+		return currentPhase;
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class Players implements Strategy {
 	 */
 	@Override
 	public void doAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDice, int defenderDice) {
-	    // TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 		isAttackWon = false;
 		ArrayList<Integer> attackerDiceList = new ArrayList<>();
 		ArrayList<Integer> defenderDiceList = new ArrayList<>();
@@ -246,15 +246,15 @@ public class Players implements Strategy {
 			attackerDiceArray[i] = (int)(Math.random()*6+1);
 			System.out.println("DIE "+i+" "+attackerDiceArray[i]);
 			attackerDiceList.add(attackerDiceArray[i]);
-			
+
 		}
-		
+
 		for(int j=0;j<defenderDice;j++) {
 			defenderDiceArray[j] = (int)(Math.random()*6+1);
 			System.out.println("DIE "+j+" "+defenderDiceArray[j]);
 			defenderDiceList.add(defenderDiceArray[j]);
 		}
-	    
+
 		Collections.sort(attackerDiceList);
 		Collections.sort(defenderDiceList);
 		Collections.reverse(attackerDiceList);
@@ -263,7 +263,7 @@ public class Players implements Strategy {
 		System.out.println(attackerDiceList);
 		System.out.println(defenderDiceList);
 		System.out.println(maximumAttack);
-		
+
 		for(int i=0;i<maximumAttack;i++) {
 			if(attackerDiceList.get(i) > defenderDiceList.get(i)) {
 				currentTerritory.updateTerritoryArmy(toTerritory, 1, "DELETE");
@@ -271,49 +271,49 @@ public class Players implements Strategy {
 				currentTerritory.updateTerritoryArmy(fromTerritory, 1, "DELETE");
 			}
 		}
-		
+
 		if(currentTerritory.getTerritoryArmy().get(toTerritory) == 0) {
 			isAttackWon = true;
 			currentTerritory.updateTerritoryUser(currentTerritory.getTerritoryUser().get(fromTerritory),toTerritory);
 		}
-		
+
 	}
-	
+
 	/**
 	 * do Fortification
 	 */
 	@Override
 	public void doForitification(Territory currentTerritory, String fromTerritory, String toTerritory, int getArmySelect) {
-	    currentTerritory.updateTerritoryArmy(fromTerritory, getArmySelect, "DELETE");
-	    currentTerritory.updateTerritoryArmy(toTerritory, getArmySelect, "ADD");
+		currentTerritory.updateTerritoryArmy(fromTerritory, getArmySelect, "DELETE");
+		currentTerritory.updateTerritoryArmy(toTerritory, getArmySelect, "ADD");
 
 	}
-	
+
 	/**
 	 * do Reinforcement
 	 */
 	@Override
 	public void doReinforcement(String currentPlayer, String currentTerritoryName, int army, Territory currentTerritory) {
-	    updateArmy(currentPlayer, army, "DELETE");
-	    currentTerritory.updateTerritoryArmy(currentTerritoryName, army, "ADD");	    
+		updateArmy(currentPlayer, army, "DELETE");
+		currentTerritory.updateTerritoryArmy(currentTerritoryName, army, "ADD");	    
 	}
-	
+
 	/**
 	 * generate Reinforcement Army
 	 */
 	@Override
 	public void generateReinforcementArmy(String currentPlayer, Continent currentContinent) {
-	    int count = 0;
-	    setCurrentPhase("Reinforcement");
-	    Map<String, ArrayList<String>> tempData = getPlayerContinent().get(currentPlayer).getContinentOwnedterritory(); 
-	    for(Entry<String, ArrayList<String>> entry : tempData.entrySet()) {
-		if(!entry.getValue().isEmpty()) {
-		    count+=entry.getValue().size();
+		int count = 0;
+		setCurrentPhase("Reinforcement");
+		Map<String, ArrayList<String>> tempData = getPlayerContinent().get(currentPlayer).getContinentOwnedterritory(); 
+		for(Entry<String, ArrayList<String>> entry : tempData.entrySet()) {
+			if(!entry.getValue().isEmpty()) {
+				count+=entry.getValue().size();
+			}
 		}
-	    }
 
-	    Double value = new Double(Math.floor(count/3));
-	    updateArmy(currentPlayer, value.intValue() > 3 ? (value.intValue() + checkContinentAcquired(currentPlayer,currentContinent))   : (3 + checkContinentAcquired(currentPlayer, currentContinent)), "ADD");	    
+		Double value = new Double(Math.floor(count/3));
+		updateArmy(currentPlayer, value.intValue() > 3 ? (value.intValue() + checkContinentAcquired(currentPlayer,currentContinent))   : (3 + checkContinentAcquired(currentPlayer, currentContinent)), "ADD");	    
 	}
 	/**
 	 * This method add armies to current player if a particular continent is Acquired fully by player
@@ -322,13 +322,13 @@ public class Players implements Strategy {
 	 * @return
 	 */
 	public int checkContinentAcquired(String currentPlayer, Continent currentContinent){
-	    int count = 0;
-	    Map<String, ArrayList<String>> tempData = getPlayerContinent(currentPlayer).getContinentOwnedterritory();
-	    for(Entry<String,ArrayList<String>> entry : tempData.entrySet()) {
-		if(entry.getValue().size() == currentContinent.getContTerrValue().get(entry.getKey())) {
-		    count += currentContinent.getContinentValue().get(entry.getKey());
+		int count = 0;
+		Map<String, ArrayList<String>> tempData = getPlayerContinent(currentPlayer).getContinentOwnedterritory();
+		for(Entry<String,ArrayList<String>> entry : tempData.entrySet()) {
+			if(entry.getValue().size() == currentContinent.getContTerrValue().get(entry.getKey())) {
+				count += currentContinent.getContinentValue().get(entry.getKey());
+			}
 		}
-	    }
-	    return count > 0 ? count : 0;
+		return count > 0 ? count : 0;
 	}
 }
