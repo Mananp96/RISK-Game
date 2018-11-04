@@ -17,14 +17,14 @@
     <session id="1773840551">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="15" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.3" value="2" />
-          <entry key="project.open.time.4" value="4" />
-          <entry key="project.open.time.5" value="5" />
+          <entry key="project.open.time.4" value="5" />
+          <entry key="project.open.time.5" value="6" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="15" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -156,27 +156,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="RISK-Game" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="RISK-Game" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="RISK-Game" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="bin" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="RISK-Game" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="maps" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -216,6 +195,27 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="RISK-Game" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="RISK-Game" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="RISK-Game" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="bin" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="RISK-Game" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="maps" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -226,18 +226,36 @@
             <path>
               <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
               <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="docs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
-              <item name="docs" type="462c0819:PsiDirectoryNode" />
-              <item name="documentation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
               <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="risk" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="risk" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RISK-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="risk" type="462c0819:PsiDirectoryNode" />
+              <item name="validate" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
@@ -375,7 +393,7 @@
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49936306" visible="true" weight="0.28898427" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49936306" visible="true" weight="0.29756796" />
       <window_info id="Structure" order="1" sideWeight="0.50063694" side_tool="true" weight="0.28540772" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
