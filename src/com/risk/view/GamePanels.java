@@ -822,30 +822,30 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    players = new Players();
 	    players.addPlayers("Manan");
 	    players.addPlayers("Shalin");
-	    frame.setContentPane(playerMenu());
+	    setFrameValidate(playerMenu());
+	    /*frame.setContentPane(playerMenu());
 	    frame.invalidate();
-	    frame.validate();
+	    frame.validate();*/
 	} else if(actionName.equals(editMapBtnName)){					
-	    frame.setContentPane(editMapPanel());
+	    setFrameValidate(editMapPanel());
+	    /*	    frame.setContentPane(editMapPanel());
 	    frame.invalidate();
 	    frame.validate();
-
+*/
 	} else if (actionName.equals(editExistingMapBtnName)) {
 	    riskLogger("Editing Existing Map");
-	    frame.setContentPane(editExistingMapPanel());
+	    setFrameValidate(editExistingMapPanel());
+	    /*frame.setContentPane(editExistingMapPanel());
 	    frame.invalidate();
-	    frame.validate();
+	    frame.validate();*/
 
 	} else if (actionName.equals(createNewMapBtnName)) {
-	    riskLogger("Creating New Map");
-	    frame.setContentPane(createMapPanel());
+	    setFrameValidate(createMapPanel());
+	   /* frame.setContentPane(createMapPanel());
 	    frame.invalidate();
-	    frame.validate();
-
+	    frame.validate();*/
 	} else if (actionName.equals(exitBtnName)){
-	    riskLogger("Quit Game");
 	    System.exit(0);
-	    riskLogger("0");
 	} else if (actionName.equals("Start Game")){
 	    if(randomMap) {
 		if(StringUtils.isNotEmpty(mapFilePath)) {
@@ -858,9 +858,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			territory = initializeData.getTerritory();
 			observerSubject.setState(players.getPlayers(0),true);
 			observerSubject.setState("Reinforcement Force Started \n",false);
-			frame.setContentPane(gameView());
+			setFrameValidate(gameView());
+			/*frame.setContentPane(gameView());
 			frame.invalidate();
-			frame.validate();
+			frame.validate();*/
 			fortifySkipBtn.setEnabled(false);
 			attackSkipBtn.setEnabled(false);
 		    } else {
@@ -879,12 +880,13 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			continent = initializeData.getContinent();
 			players = initializeData.getPlayers();
 			territory = initializeData.getTerritory();
-			observerSubject.setState(players.getPlayers(0),true);
+			observerSubject.setState("Manan",true);
 			observerSubject.setState("Reinforcement Force Started \n",false);
 			//updateLogArea();
-			frame.setContentPane(gameView());
+			setFrameValidate(gameView());
+			/*frame.setContentPane(gameView());
 			frame.invalidate();
-			frame.validate();
+			frame.validate();*/
 			fortifySkipBtn.setEnabled(false);
 			attackSkipBtn.setEnabled(false);
 		    } else {
@@ -897,32 +899,32 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    }
 
 	} else if(actionName.equals(twoPlayersBtnName)){
-	    riskLogger("Two Player Game");
 	    players.addPlayers("Neutral Player");
-	    frame.setContentPane(userInfoPanel(3));
+	    setFrameValidate(userInfoPanel(2));
+	    /*frame.setContentPane(userInfoPanel(3));
 	    frame.invalidate();
-	    frame.validate();
+	    frame.validate();*/
 	} else if(actionName.equals(threePlayersBtnName)){
-	    riskLogger("Three Player Game");
 	    players.addPlayers("Khyati");
-	    frame.setContentPane(userInfoPanel(3));
+	    setFrameValidate(userInfoPanel(3));
+	    /*frame.setContentPane(userInfoPanel(3));
 	    frame.invalidate();
-	    frame.validate();
+	    frame.validate();*/
 	} else if(actionName.equals(fourPlayersBtnName)){
-	    riskLogger("Four Player Game");
 	    players.addPlayers("Khyati");
 	    players.addPlayers("Vaishakhi");
-	    frame.setContentPane(userInfoPanel(4));
+	    setFrameValidate(userInfoPanel(4));
+	    /*frame.setContentPane(userInfoPanel(4));
 	    frame.invalidate();
-	    frame.validate();
+	    frame.validate();*/
 	} else if(actionName.equals(fivePlayersBtnName)){
-	    riskLogger("Five Player Game");
 	    players.addPlayers("Khyati");
 	    players.addPlayers("Vaishakhi");
 	    players.addPlayers("Himen");
-	    frame.setContentPane(userInfoPanel(5));
+	    setFrameValidate(userInfoPanel(5));
+	    /*frame.setContentPane(userInfoPanel(5));
 	    frame.invalidate();
-	    frame.validate();
+	    frame.validate();*/
 	} else if(actionName.equals("placeReinforcement")) {
 	    goForReinforcement(true);
 	} else if(actionName.equals("attackBtn")) {
@@ -930,16 +932,23 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	} else if(actionName.equals("startFortification")) {
 	    goForFortification();
 	} else if(actionName.equals("endTurn")) {
-	    riskLogger("Player Turn ended.");
-	    riskLogger("");
 	    changePlayerTurn();
 	} else if(actionName.equals(backBtnName)){
-	    frame.setContentPane(mainMenu(frame));
+	    setFrameValidate(mainMenu(frame));
+	    /*frame.setContentPane(mainMenu(frame));
 	    frame.invalidate();
-	    frame.validate();
+	    frame.validate();*/
 	}
     }
-
+    /**
+     * This Method is used to validate frame with new content
+     * @param jPanel new content which  need to be added in frame
+     */
+    public void setFrameValidate(JPanel jPanel) {
+	frame.setContentPane(jPanel);
+	frame.invalidate();
+	frame.validate();
+    }
     /**
      * Attack phase.
      * Invoke the fortification phase.
