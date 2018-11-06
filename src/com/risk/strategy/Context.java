@@ -16,8 +16,12 @@ public class Context {
     public void executeReinforcementArmy(String currentPlayer, Continent currentContinent) {
 	strategy.generateReinforcementArmy(currentPlayer,currentContinent);
     }
-    public void executeAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDice,
-			int defenderDice) {
+    public void executeArmyAfterAttack(String playerName, Territory currentTerritory, String fromTerritory, String toTerritory, int armies) {
+	strategy.moveArmyAfterAttack(playerName,currentTerritory,fromTerritory,toTerritory,armies);
+    }
+    public void executeAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDice, int defenderDice) {
+	System.out.println(fromTerritory +" " + toTerritory + " " + attackerDice + " "+ defenderDice);
+
 	strategy.doAttack(currentTerritory,fromTerritory,toTerritory,attackerDice,defenderDice);
     }
     public void executeFortification(Territory territory, String fromTerritory, String toTerritory, int getArmySelect) {
