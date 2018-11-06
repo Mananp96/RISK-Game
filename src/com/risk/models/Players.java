@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 import com.risk.strategy.Strategy;
 
@@ -25,16 +26,38 @@ public class Players implements Strategy {
     ArrayList<String> playerList; 
     ArrayList<String> playerPlaying;
     String currentPhase;
-    Map<String,Territory> playerCard;
     private boolean isAttackWon;
+    private boolean isWonCard;
+    public boolean isWonCard() {
+        return isWonCard;
+    }
+
+    public void setWonCard(boolean isWonCard) {
+        this.isWonCard = isWonCard;
+    }
+
+
     String attackerMsg = "";
     String defenderMsg = "";
+    int tradeIn = 0;
+    Map<String, String> cards;
+    Map<String, String> territoryCards;
 
     public Players() {
 	playerContinent = new HashMap<>();
 	playerArmy = new HashMap<>();
 	playerList = new ArrayList<>();
 	playerPlaying = new ArrayList<>();
+	cards = new HashMap<>();
+	territoryCards = new HashMap<>();
+    }
+
+    public Map<String, String> getTerritoryCards() {
+        return territoryCards;
+    }
+
+    public void setTerritoryCards(Map<String, String> territoryCards) {
+        this.territoryCards = territoryCards;
     }
 
     /**
@@ -58,6 +81,14 @@ public class Players implements Strategy {
      */
     public ArrayList<String> getPlayerPlaying() {
 	return playerPlaying;
+    }
+
+    public int getTradeIn() {
+        return tradeIn;
+    }
+
+    public void setTradeIn() {
+        this.tradeIn += 1;
     }
 
     /**
@@ -130,21 +161,6 @@ public class Players implements Strategy {
 	playerContinent.put(name, continent);
 	return playerContinent;
     }
-    /**
-     * This method get number of card player has.
-     * @return playerCard number of card which player has
-     */
-    public Map<String, Territory> getPlayerCard() {
-	return playerCard;
-    }
-    /**
-     * This method is used to set card for player
-     * @param playerCard card which you need to add in player
-     */
-    public void setPlayerCard(Map<String, Territory> playerCard) {
-	this.playerCard = playerCard;
-    }
-
     /**
      * This method returns the Territories acquired by particular player.
      * @param name Name of Player
@@ -233,6 +249,14 @@ public class Players implements Strategy {
 	this.isAttackWon = isAttackWon;
     }
 
+    public Map<String, String> getCards() {
+        return cards;
+    }
+
+    public void setCards(Map<String, String> cards) {
+        this.cards = cards;
+    }
+
     /**
      * Attack phase
      */
@@ -300,6 +324,15 @@ public class Players implements Strategy {
 	    System.out.println("After------> "+playerContinent.get(fromPlayer).getContinentOwnedterritory().get(fromContinentPlayer));
 	    System.out.println("After------> " + playerContinent.get(toPlayer).getContinentOwnedterritory().get(toContinentPlayer));
 	    currentTerritory.updateTerritoryUser(currentTerritory.getTerritoryUser().get(fromTerritory),toTerritory);
+	    Object randomTerritory = currentTerritory.getTerritoryCard().keySet().toArray()[new Random().nextInt(currentTerritory.getTerritoryCard().keySet().toArray().length)];
+	    System.out.println("Territory Card : " + randomTerritory);
+	    System.out.println("Card Value " + currentTerritory.getTerritoryCard().get(randomTerritory));
+	    if(!isWonCard) {
+		cards.put(randomTerritory.toString(),fromPlayer);
+		territoryCards.put(randomTerritory.toString().trim(),currentTerritory.getTerritoryCard().get(randomTerritory));
+		setWonCard(true);
+	    }
+	    currentTerritory.getTerritoryCard().remove(randomTerritory);
 	    System.out.println("---> " + currentTerritory.getTerritoryUser().get(toTerritory));
 	}
 
@@ -353,7 +386,6 @@ public class Players implements Strategy {
 		count+=entry.getValue().size();
 	    }
 	}
-
 	Double value = new Double(Math.floor(count/3));
 	updateArmy(currentPlayer, value.intValue() > 3 ? (value.intValue() + checkContinentAcquired(currentPlayer,currentContinent))   : (3 + checkContinentAcquired(currentPlayer, currentContinent)), "ADD");	    
     }
@@ -369,6 +401,7 @@ public class Players implements Strategy {
 	for(Entry<String,ArrayList<String>> entry : tempData.entrySet()) {
 	    if(entry.getValue().size() == currentContinent.getContTerrValue().get(entry.getKey())) {
 		count += currentContinent.getContinentValue().get(entry.getKey());
+	    System.out.println("------------>Continent Acquired : " + entry.getKey());
 	    }
 	}
 	return count > 0 ? count : 0;

@@ -27,7 +27,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Map.Entry;
 /**
  * 
@@ -64,8 +63,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     private GridLayout mainLayout;
     private JButton reinforceBtn;
     private JButton attackBtn;
-	private JButton attackSkipBtn;
-	private JButton fortifySkipBtn;
+    private JButton attackSkipBtn;
+    private JButton fortifySkipBtn;
     private JButton fortifyBtn;
     private JButton endTurnBtn;
     private JButton menuBtn;
@@ -85,7 +84,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
     private JTextArea territoryDetails = new JTextArea(10,4);
     private JTextArea logArea = new JTextArea(4,20);
-;
     private JList<String> cardsList;
     private JList<String> territoryAList;
     private JList<String> territoryBList;
@@ -105,13 +103,14 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
     private JComboBox<String> territoryADropDown;
     private JComboBox<String> territoryBDropDown;
-	private JComboBox<Integer> attackerDiceDropDown;
-	private JComboBox<Integer> defenderDiceDropDown;
+    private JComboBox<Integer> attackerDiceDropDown;
+    private JComboBox<Integer> defenderDiceDropDown;
     private SpinnerNumberModel selectArmyModel;
     private JLabel fortErrorMsg;
     private Context context;
     private JPanel countryPanel;
     private JPanel gamePanel;
+    private JComboBox<String> territoryCDropDown;
     public static JTextArea log = new JTextArea(25,20);
 
     public GamePanels() {
@@ -360,7 +359,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			fortifySkipBtn.setEnabled(true);
 			//riskLogger("Fortification Phase Started");
 			//updateLogArea();
-			observerSubject.setState("Fortification Phase Started \n", false);
+			observerSubject.setState("Attack Phase Skipped \n", false);
 			gamePanel.remove(2);
 			gamePanel.invalidate();
 			gamePanel.validate();
@@ -387,7 +386,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			endTurnBtn.setEnabled(true);
 			//riskLogger("Fortification Phase Started");
 			//updateLogArea();
-			observerSubject.setState("Fortification Phase Started \n", false);
+			observerSubject.setState("Fortification Phase Skipped \n", false);
 			gamePanel.remove(2);
 			gamePanel.invalidate();
 			gamePanel.validate();
@@ -489,135 +488,136 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    countryPanel.add(fortificationPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));  
 	} else if(phase.equalsIgnoreCase("attack")) {
 	    countryPanel.add(attackPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));  
+	} else if(phase.equalsIgnoreCase("tradein")) {
+	    countryPanel.add(cardPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));  
 	}
-	//
-	//
-	//countryPanel.add(cardPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
 	countryPanel.add(logScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 1, 2));
 	return countryPanel;
     }
-
-	private JPanel cardPanel() {
-		JPanel cardPanel = new JPanel();
-		cardPanel.setLayout(new GridLayout(10, 1));
-
-		JLabel attackerLabel = new JLabel("Card 1");
-		territoryADropDown = new JComboBox<>();
-
-		JLabel defenderLabel = new JLabel("Card 2");
-		territoryBDropDown = new JComboBox<>();
-
-		JLabel attackerDiceLable = new JLabel("Card 3");
-		attackerDiceDropDown = new JComboBox<>();
-
-		tradeCardBtn = new JButton("Trade Cards");
-
-		cardPanel.add(attackerLabel);
-		cardPanel.add(territoryADropDown);
-
-		cardPanel.add(new JLabel(""));
-		cardPanel.add(defenderLabel);
-		cardPanel.add(territoryBDropDown);
-
-		cardPanel.add(new JLabel(""));
-		cardPanel.add(attackerDiceLable);
-		cardPanel.add(attackerDiceDropDown);
-
-		cardPanel.add(new JLabel(""));
-		cardPanel.add(tradeCardBtn);
-
-		territoryADropDown.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-
-			}
-		});
-		territoryBDropDown.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-
-
-			}
-		});
-		territoryADropDown.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-
-			}
-		});
-
-		return cardPanel;
+    /**
+     * This Method return Panel Consisting 3 drop down for for Trading Cards
+     * @return JPanel
+     */
+    private JPanel cardPanel() {
+	JPanel cardPanel = new JPanel();
+	cardPanel.setLayout(new GridLayout(10, 1));
+	JLabel attackerLabel = new JLabel("Card 1");
+	territoryADropDown = new JComboBox<>();
+	JLabel defenderLabel = new JLabel("Card 2");
+	territoryBDropDown = new JComboBox<>();
+	JLabel attackerDiceLable = new JLabel("Card 3");
+	territoryCDropDown = new JComboBox<>();
+	tradeCardBtn = new JButton("Trade Cards");
+	cardPanel.add(attackerLabel);
+	cardPanel.add(territoryADropDown);
+	territoryADropDown.addItem("");
+	for(Entry<String, String> entry : players.getCards().entrySet()) {
+	    if(players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue())) {
+		territoryADropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
+	    }
 	}
+	cardPanel.add(new JLabel(""));
+	cardPanel.add(defenderLabel);
+	cardPanel.add(territoryBDropDown);
+	cardPanel.add(new JLabel(""));
+	cardPanel.add(attackerDiceLable);
+	cardPanel.add(territoryCDropDown);
+	cardPanel.add(new JLabel(""));
+	cardPanel.add(tradeCardBtn);
+	territoryADropDown.addItemListener(new ItemListener() {
 
-	private JPanel attackPanel() {
-		JPanel attackPanel = new JPanel();
-		attackPanel.setLayout(new GridLayout(8, 1));
+	    @Override
+	    public void itemStateChanged(ItemEvent e) {
+		territoryBDropDown.removeAllItems();
+		if(territoryADropDown.getSelectedIndex() > 0) {
+		    String[] tempVar = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex()).split("--");
 
-		JLabel attackerLabel = new JLabel("Attacker Territory");
-		territoryADropDown = new JComboBox<>();
+		    for(Entry<String, String> entry : players.getCards().entrySet()) {
+			if(!tempVar[1].trim().equalsIgnoreCase(entry.getKey()) && players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue()))
+			    territoryBDropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
+		    }		
+		}
+	    }
+	});
+	territoryBDropDown.addItemListener(new ItemListener() {
 
-		JLabel defenderLabel = new JLabel("Defender Territory");
-		territoryBDropDown = new JComboBox<>();
-
-		JLabel attackerDiceLable = new JLabel("Attacker Dice");
-		attackerDiceDropDown = new JComboBox<>();
-
-		JLabel defenderDiceLable = new JLabel("Defender dice");
-		defenderDiceDropDown = new JComboBox<>();
-
-		attackPanel.add(attackerLabel);
-		attackPanel.add(territoryADropDown);
-		territoryADropDown.addItem("");
-		for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
-		    if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
-			territoryADropDown.addItem(entry.getKey());
+	    @Override
+	    public void itemStateChanged(ItemEvent e) {
+		territoryCDropDown.removeAllItems();
+		if(territoryBDropDown.getSelectedIndex() > 0) {
+		    String[] tempVar1 = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex()).split("--");
+		    String[] tempVar2 = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex()).split("--");
+		    for(Entry<String, String> entry : players.getCards().entrySet()) {
+			if(!tempVar1[1].trim().equalsIgnoreCase(entry.getKey()) &&!tempVar2[1].trim().equalsIgnoreCase(entry.getKey()) && players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue()))
+			    territoryBDropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
 		    }
 		}
-		territoryADropDown.addItemListener(new ItemListener() {
 
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-			    addTerritoryBDropDown("attack");
-			    attackerDiceDropDown.removeAllItems();
-			    String terrName = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
-			    if(StringUtils.isNotEmpty(terrName)) {
-				    int numberOfDie = territory.getTerritoryArmy().get(terrName) > 3 ? 3 : territory.getTerritoryArmy().get(terrName)-1;
-				    for(int i=1;i<=numberOfDie;i++) {
-					attackerDiceDropDown.addItem(i);
-				    }
-			    }
-			}
-		});
-		attackPanel.add(defenderLabel);
-		attackPanel.add(territoryBDropDown);
-
-		attackPanel.add(attackerDiceLable);
-		attackPanel.add(attackerDiceDropDown);
-
-		attackPanel.add(defenderDiceLable);
-		attackPanel.add(defenderDiceDropDown);
-
-
-		territoryBDropDown.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-			    defenderDiceDropDown.removeAllItems();
-			    String terrName = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
-			    if(StringUtils.isNotEmpty(terrName)) {
-				int numberOfDie = territory.getTerritoryArmy().get(terrName) >= 3 ? 3 : territory.getTerritoryArmy().get(terrName);
-				    for(int i=1;i<=numberOfDie;i++) {
-					defenderDiceDropDown.addItem(i);
-				    }
-			    }
-
-			}
-		});
-		return attackPanel;
+	    }
+	});
+	return cardPanel;
+    }
+    /** 
+     * This Method return  Panel consisting Attack Functionalities for Player.
+     * @return JPanel
+     */
+    private JPanel attackPanel() {
+	JPanel attackPanel = new JPanel();
+	attackPanel.setLayout(new GridLayout(8, 1));
+	JLabel attackerLabel = new JLabel("Attacker Territory");
+	territoryADropDown = new JComboBox<>();
+	JLabel defenderLabel = new JLabel("Defender Territory");
+	territoryBDropDown = new JComboBox<>();
+	JLabel attackerDiceLable = new JLabel("Attacker Dice");
+	attackerDiceDropDown = new JComboBox<>();
+	JLabel defenderDiceLable = new JLabel("Defender dice");
+	defenderDiceDropDown = new JComboBox<>();
+	attackPanel.add(attackerLabel);
+	attackPanel.add(territoryADropDown);
+	territoryADropDown.addItem("");
+	for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
+	    if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
+		territoryADropDown.addItem(entry.getKey());
+	    }
 	}
+	territoryADropDown.addItemListener(new ItemListener() {
+
+	    @Override
+	    public void itemStateChanged(ItemEvent e) {
+		addTerritoryBDropDown("attack");
+		attackerDiceDropDown.removeAllItems();
+		String terrName = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
+		if(StringUtils.isNotEmpty(terrName)) {
+		    int numberOfDie = territory.getTerritoryArmy().get(terrName) > 3 ? 3 : territory.getTerritoryArmy().get(terrName)-1;
+		    for(int i=1;i<=numberOfDie;i++) {
+			attackerDiceDropDown.addItem(i);
+		    }
+		}
+	    }
+	});
+	attackPanel.add(defenderLabel);
+	attackPanel.add(territoryBDropDown);
+	attackPanel.add(attackerDiceLable);
+	attackPanel.add(attackerDiceDropDown);
+	attackPanel.add(defenderDiceLable);
+	attackPanel.add(defenderDiceDropDown);
+	territoryBDropDown.addItemListener(new ItemListener() {
+
+	    @Override
+	    public void itemStateChanged(ItemEvent e) {
+		defenderDiceDropDown.removeAllItems();
+		String terrName = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
+		if(StringUtils.isNotEmpty(terrName)) {
+		    int numberOfDie = territory.getTerritoryArmy().get(terrName) >= 3 ? 3 : territory.getTerritoryArmy().get(terrName);
+		    for(int i=1;i<=numberOfDie;i++) {
+			defenderDiceDropDown.addItem(i);
+		    }
+		}
+
+	    }
+	});
+	return attackPanel;
+    }
 
     /**
      * Display list of territory and it's adjacent territory of current Player 
@@ -885,6 +885,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			frame.setContentPane(gameView());
 			frame.invalidate();
 			frame.validate();
+			fortifySkipBtn.setEnabled(false);
+			attackSkipBtn.setEnabled(false);
 		    } else {
 			JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 		    }
@@ -947,21 +949,26 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	//updateLogArea();
 	String fromTerritory = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
 	String toTerritory = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
-	int attackerDie = attackerDiceDropDown.getItemAt(attackerDiceDropDown.getSelectedIndex());
-	int defenderDie= defenderDiceDropDown.getItemAt(defenderDiceDropDown.getSelectedIndex());
+	int attackerDie = attackerDiceDropDown.getSelectedIndex() != -1 ? attackerDiceDropDown.getItemAt(attackerDiceDropDown.getSelectedIndex()) : 0;
+	int defenderDie= defenderDiceDropDown.getSelectedIndex() != -1 ? defenderDiceDropDown.getItemAt(defenderDiceDropDown.getSelectedIndex()) : 0;
 	String message1 = "Before Attack \n "+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
 	//observerSubject.setMessage(true,message1);
-	context = new Context(players);
-	context.executeAttack(territory, fromTerritory , toTerritory, attackerDie, defenderDie);
-	String message2 = "Attacker Die \n" + players.getAttackerMsg()+"\n Defender Die \n" +players.getDefenderMsg();
-	String message3 =message1+message2+ "After Attack \n "+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
-	observerSubject.setMessage(true,message3);
-	if(players.isAttackWon()) {
-	    moveArmyAfterAttack();
+	if(StringUtils.isNotEmpty(fromTerritory) && StringUtils.isNotEmpty(toTerritory) && attackerDie > 0 && defenderDie >0) {
+	    context = new Context(players);
+	    context.executeAttack(territory, fromTerritory , toTerritory, attackerDie, defenderDie);
+	    String message2 = "Attacker Die \n" + players.getAttackerMsg()+"\n Defender Die \n" +players.getDefenderMsg();
+	    String message3 =message1+message2+ "After Attack \n "+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
+	    observerSubject.setAttackMsg(message3);
+	    if(players.isAttackWon()) {
+		System.out.println("Number of Cards : " + territory.getTerritoryCard().size());
+		moveArmyAfterAttack();
+	    }
+	    attackPanelReset();
+	    log.append(message3);
+	} else {
+	    JOptionPane.showMessageDialog(frame, "Please Select Value Properly");
+	    observerSubject.setAttackMsg("Please Select Value Properly");
 	}
-	
-	attackPanelReset();
-	log.append(message3);
 
 	/*fortifyBtn.setEnabled(true);
 	endTurnBtn.setEnabled(true);
@@ -974,14 +981,14 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     private void moveArmyAfterAttack() {
 	String fromTerritory = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
 	String toTerritory = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
-	String output = JOptionPane.showInputDialog(frame,"Move Armies from "+fromTerritory+" to "+toTerritory, "Move Armies", JOptionPane.OK_CANCEL_OPTION);
+	String output = JOptionPane.showInputDialog(frame,"Move Armies from "+fromTerritory+" to "+toTerritory, "Move Armies upto "+(territory.getTerritoryArmy().get(fromTerritory)-1), JOptionPane.OK_CANCEL_OPTION);
 	    if (StringUtils.isNotEmpty(output) && StringUtils.isNumeric(output) && Integer.parseInt(output) > 0 && Integer.parseInt(output) < territory.getTerritoryArmy().get(fromTerritory)) {
 		    context = new Context(players);
 		    context.executeArmyAfterAttack(players.getPlayers(playerTurn),territory,fromTerritory,toTerritory,Integer.parseInt(output));
-		    observerSubject.setMessage(true,"Army on  " + fromTerritory  + " is "+ territory.getTerritoryArmy().get(fromTerritory));
-		    observerSubject.setMessage(true,"Army on  " + toTerritory  + " is "+ territory.getTerritoryArmy().get(toTerritory));
+		    observerSubject.setAttackMsg("Army on  " + fromTerritory  + " is "+ territory.getTerritoryArmy().get(fromTerritory));
+		    observerSubject.setAttackMsg("Army on  " + toTerritory  + " is "+ territory.getTerritoryArmy().get(toTerritory));
 	    } else {
-		observerSubject.setMessage(true, "Please Enter Armies Again");
+		observerSubject.setAttackMsg("Please Enter Armies Again");
 		moveArmyAfterAttack();
 	    }
     }
@@ -996,13 +1003,13 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	territoryADropDown.addItem("");
 	for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 	    if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
+		System.out.println("->" +entry.getKey());
 		territoryADropDown.addItem(entry.getKey());
 	    }
 	}
 	territoryBDropDown.removeAllItems();
 	attackerDiceDropDown.removeAllItems();
 	defenderDiceDropDown.removeAllItems();
-	displayTerritoryDetails();
     }
     /**
      * method used to do reinforcement on territory.
@@ -1062,7 +1069,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     public void enableReinforcementBtn() {
 	String name = players.getPlayerPlaying().get(playerTurn);
 	if(StringUtils.isNotEmpty(name)) {
-	    if(players.getPlayerArmy(name) == 0) {
+	    if(players.getPlayerArmy(name) == 0 && !hasPlayerOwnedMoreCards()) {
 		reinforceBtn.setEnabled(false);
 		players.setCurrentPhase("Attack");
 		observerSubject.setState(name, true);
@@ -1086,6 +1093,18 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	}
     }
     /**
+     * This Method check whether player has more than 5 cards
+     */
+    public boolean hasPlayerOwnedMoreCards() {
+	int cardCount = 0;
+	for(Entry< String, String> entry : players.getCards().entrySet()) {
+	    if(entry.getValue().equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
+		cardCount++;
+	    }
+	}
+	return cardCount > 5 ? true :  false;
+    }
+    /**
      * method use to enable list of current territory owned by current player to move army from one  territory to another.   
      */
     public void startFortificationPhase() {
@@ -1102,10 +1121,20 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * Method is used to change the Turn of player when End Turn Button is Clicked.
      */
     public void changePlayerTurn() {
+	endTurnBtn.setEnabled(false);
 	playerTurn++;
 	playerTurn = playerTurn < players.getPlayerList().size() ? playerTurn : 0;
+	if(!playerHasTerritory()) {
+	    players.getPlayerList().remove(playerTurn);
+	    players.getPlayerPlaying().remove(playerTurn);
+	}
+	playerTurn = players.getPlayerList().get(playerTurn).equalsIgnoreCase("Neutral Player") ? 0 : playerTurn;
 	/*Reinforcement reinforcement = new Reinforcement(players.getPlayers(playerTurn),players, territory, continent);
 	players.updateArmy(players.getPlayers(playerTurn), reinforcement.generateArmy(),"ADD");*/
+	if(players.isWonCard()) {
+	    JOptionPane.showMessageDialog(frame, "You Have Won 1 Card", "Card", JOptionPane.INFORMATION_MESSAGE);
+	}
+	players.setWonCard(false);
 	context = new Context(players);
 	context.executeReinforcementArmy(players.getPlayers(playerTurn),continent);
 	removeElements();
@@ -1118,12 +1147,39 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	gamePanel.remove(2);
 	gamePanel.invalidate();
 	gamePanel.validate();
-	gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	if(players.getCards().containsValue(players.getPlayerPlaying().get(playerTurn))) {
+	    gamePanel.add(countryScreen("tradeIn"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	} else {
+	    gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	}
+	
 	gamePanel.invalidate();
 	gamePanel.validate();
+	playerOwnedCards();
 	//updateLogArea();
     }
-    
+    /**
+     * This Method Check Whether Player has Territories or not.
+     * @return true if player has territories Otherwise false
+     */
+    public boolean playerHasTerritory() {
+	return territory.getTerritoryUser().containsValue(players.getPlayerList().get(playerTurn)) ? true : false;
+    }
+    /**
+     * This Method check whether player has more than 5 cards
+     */
+    public void playerOwnedCards() {
+	int cardCount = 0;
+	for(Entry< String, String> entry : players.getCards().entrySet()) {
+	    if(entry.getValue().equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
+		cardCount++;
+	    }
+	}
+	if(cardCount > 5) {
+		JOptionPane.showMessageDialog(frame, players.getPlayerList().get(playerTurn) +" you need to Trade in Some Cards", "Need Card Trade In", JOptionPane.ERROR_MESSAGE);
+	}
+    }
+
     /**
      * This method remove elements from  territoryAModel, territoryBModel, territoryInfoModel, continentInfoModel, territoryADropDown and territoryBDropDown
      */
@@ -1164,7 +1220,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		riskLogger("Armies at :"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory));
 		riskLogger("");*/
 		String tempMsg = "Armies moved from "+fromTerritory+" to "+toTerritory + "\n"+"Armies at :"+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory)+"\nArmies at :"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
-		observerSubject.setMessage(true,tempMsg);
+		observerSubject.setFortificationMessage(tempMsg);
 		fortErrorMsg.setText("You can Move upto " + (territory.getTerritoryArmy().get(fromTerritory)-1) + " Army");
 	    } else {
 		JOptionPane.showMessageDialog(frame, "Armies unable to move from " + fromTerritory + " to " + toTerritory +". Please enter no. of  Armies again", "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -1224,8 +1280,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    territoryDetails.getDocument().insertString(0, "Player Details", green);
 	    frame.revalidate();
 	} catch (BadLocationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    System.out.println("Bad Location Exception " +e);
 	}
 	territoryDetails.append("\n");
 	
@@ -1308,6 +1363,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    }
 	    else {
 		fortErrorMsg.setText("You can't move your Army");
+		observerSubject.setFortificationMessage("You can't move your Army");
 	    }
 	}
     }
@@ -1379,5 +1435,20 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    observerSubject.setMessageFlag(false);
 	}
 	    
+    }
+    @Override
+    public void fortificationUpdate() {
+	    log.append(observerSubject.getFortificationMessage()+"\n");
+	    displayTerritoryDetails();
+    }
+    @Override
+    public void attackUpdate() {
+	    log.append(observerSubject.getAttackMsg()+"\n");
+	    displayTerritoryDetails();
+	
+    }
+    @Override
+    public void tradeInCardUpdate() {
+
     }
 }
