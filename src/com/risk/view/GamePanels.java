@@ -27,6 +27,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Map.Entry;
 /**
  * 
@@ -109,6 +110,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     private SpinnerNumberModel selectArmyModel;
     private JLabel fortErrorMsg;
     private Context context;
+    private JPanel countryPanel;
+    private JPanel gamePanel;
     public static JTextArea log = new JTextArea(25,20);
 
     public GamePanels() {
@@ -218,12 +221,12 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	frame.setVisible(true);
 	frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
 	frame.setResizable(true);
-	JPanel gamePanel = new JPanel();
+	gamePanel = new JPanel();
 	frame.setLayout(mainLayout);
 
 	gamePanel.add(displayLog(),setGridBagConstraints(new Insets(25, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_START, 0.5, 0.5, 0, 0));
 	gamePanel.add(eventScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.CENTER, 0.5, 0.5, 1, 0));
-	gamePanel.add(countryScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
 
 	return gamePanel;
     }
@@ -345,14 +348,54 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		attackButtonPanel.add(attackSkipBtn);
 		attackButtonPanel.setPreferredSize(new Dimension(300,600));
 		attackContainerPanel.add(attackButtonPanel);
-
+		attackSkipBtn.setEnabled(true);
+		attackSkipBtn.addActionListener(new ActionListener() {
+		    
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			attackSkipBtn.setEnabled(false);
+			attackBtn.setEnabled(false);
+			fortifyBtn.setEnabled(true);
+			fortifySkipBtn.setEnabled(true);
+			//riskLogger("Fortification Phase Started");
+			//updateLogArea();
+			observerSubject.setState("Fortification Phase Started \n", false);
+			gamePanel.remove(2);
+			gamePanel.invalidate();
+			gamePanel.validate();
+			gamePanel.add(countryScreen("fortification"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+			gamePanel.invalidate();
+			gamePanel.validate();
+			startFortificationPhase();
+			
+		    }
+		});
 		JPanel fortifyButtonPanel = new JPanel();
 		JPanel fortifyContainerPanel = new JPanel();
 		fortifyButtonPanel.add(fortifyBtn);
 		fortifyButtonPanel.add(fortifySkipBtn);
 		fortifyButtonPanel.setPreferredSize(new Dimension(300,600));
 		fortifyContainerPanel.add(fortifyButtonPanel);
-
+		fortifySkipBtn.addActionListener(new ActionListener() {
+		    
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			fortifySkipBtn.setEnabled(false);
+			fortifyBtn.setEnabled(false);
+			endTurnBtn.setEnabled(true);
+			//riskLogger("Fortification Phase Started");
+			//updateLogArea();
+			observerSubject.setState("Fortification Phase Started \n", false);
+			gamePanel.remove(2);
+			gamePanel.invalidate();
+			gamePanel.validate();
+			gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+			gamePanel.invalidate();
+			gamePanel.validate();			
+		    }
+		});
 	//eventPanel.add(cardsList, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
 	eventPanel.add(selectedLabel, setGridBagConstraints(new Insets(25, 5, 21, 5), GridBagConstraints.BOTH, 0.5, 0.5, 0, 4));
 	eventPanel.add(continentScrollPane, setGridBagConstraints(new Insets(5, 5, 25, 5), GridBagConstraints.BOTH, 0.5, 10, 0, 5));
@@ -373,11 +416,12 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     /**
      * Display various portion of game play such as list of continent and territory. And also details about army in particular territory and also which player occupied it.
      * Section for movement of Army for Fortification Phase.
+     * @param phase 
      * @return countryPanel which consist detail view continent and territory
      */
-    protected JPanel countryScreen(){
+    protected JPanel countryScreen(String phase){
 
-	JPanel countryPanel = new JPanel();		
+	countryPanel = new JPanel();		
 	countryPanel.setPreferredSize(new Dimension(600, 600));
 	GridBagLayout countryLayout = new GridBagLayout();
 	countryPanel.setLayout(countryLayout);
@@ -441,9 +485,14 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	countryPanel.add(territoryLabel, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,1, 1, 0));
 	countryPanel.add(continentInfoScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 1));
 	countryPanel.add(territoryInfoScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 1, 1));
-	//countryPanel.add(fortificationPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
-	//countryPanel.add(attackPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
-	countryPanel.add(cardPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
+	if(phase.equalsIgnoreCase("fortification")) {
+	    countryPanel.add(fortificationPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));  
+	} else if(phase.equalsIgnoreCase("attack")) {
+	    countryPanel.add(attackPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));  
+	}
+	//
+	//
+	//countryPanel.add(cardPanel(), setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 0, 2));
 	countryPanel.add(logScrollPane, setGridBagConstraints(new Insets(5,5, 5, 5), GridBagConstraints.BOTH, 0.5,3, 1, 2));
 	return countryPanel;
     }
@@ -521,7 +570,27 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
 		attackPanel.add(attackerLabel);
 		attackPanel.add(territoryADropDown);
+		territoryADropDown.addItem("");
+		for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
+		    if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
+			territoryADropDown.addItem(entry.getKey());
+		    }
+		}
+		territoryADropDown.addItemListener(new ItemListener() {
 
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+			    addTerritoryBDropDown("attack");
+			    attackerDiceDropDown.removeAllItems();
+			    String terrName = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
+			    if(StringUtils.isNotEmpty(terrName)) {
+				    int numberOfDie = territory.getTerritoryArmy().get(terrName) > 3 ? 3 : territory.getTerritoryArmy().get(terrName)-1;
+				    for(int i=1;i<=numberOfDie;i++) {
+					attackerDiceDropDown.addItem(i);
+				    }
+			    }
+			}
+		});
 		attackPanel.add(defenderLabel);
 		attackPanel.add(territoryBDropDown);
 
@@ -531,33 +600,19 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		attackPanel.add(defenderDiceLable);
 		attackPanel.add(defenderDiceDropDown);
 
-		territoryADropDown.addItemListener(new ItemListener() {
 
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-
-			}
-		});
 		territoryBDropDown.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-
-
-			}
-		});
-		territoryADropDown.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-
-			}
-		});
-		territoryBDropDown.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-
+			    defenderDiceDropDown.removeAllItems();
+			    String terrName = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
+			    if(StringUtils.isNotEmpty(terrName)) {
+				int numberOfDie = territory.getTerritoryArmy().get(terrName) >= 3 ? 3 : territory.getTerritoryArmy().get(terrName);
+				    for(int i=1;i<=numberOfDie;i++) {
+					defenderDiceDropDown.addItem(i);
+				    }
+			    }
 
 			}
 		});
@@ -591,7 +646,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-			addTerritoryBDropDown();
+			addTerritoryBDropDown("fortification");
 			}
 		});
 		territoryBDropDown.addItemListener(new ItemListener() {
@@ -806,6 +861,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			frame.setContentPane(gameView());
 			frame.invalidate();
 			frame.validate();
+			fortifySkipBtn.setEnabled(false);
+			attackSkipBtn.setEnabled(false);
 		    } else {
 			JOptionPane.showMessageDialog(frame, "Please Check data Again.", "Content Invalid", JOptionPane.ERROR_MESSAGE);   
 		    }
@@ -888,16 +945,65 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     private void goForAttack() {
 	players.setCurrentPhase("Attack");
 	//updateLogArea();
-	JOptionPane.showMessageDialog(frame,"Attack Phase is in Progress");
-	fortifyBtn.setEnabled(true);
+	String fromTerritory = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
+	String toTerritory = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
+	int attackerDie = attackerDiceDropDown.getItemAt(attackerDiceDropDown.getSelectedIndex());
+	int defenderDie= defenderDiceDropDown.getItemAt(defenderDiceDropDown.getSelectedIndex());
+	String message1 = "Before Attack \n "+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
+	//observerSubject.setMessage(true,message1);
+	context = new Context(players);
+	context.executeAttack(territory, fromTerritory , toTerritory, attackerDie, defenderDie);
+	String message2 = "Attacker Die \n" + players.getAttackerMsg()+"\n Defender Die \n" +players.getDefenderMsg();
+	String message3 =message1+message2+ "After Attack \n "+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
+	observerSubject.setMessage(true,message3);
+	if(players.isAttackWon()) {
+	    moveArmyAfterAttack();
+	}
+	
+	attackPanelReset();
+	log.append(message3);
+
+	/*fortifyBtn.setEnabled(true);
 	endTurnBtn.setEnabled(true);
 	//riskLogger("Fortification Phase Started");
 	//updateLogArea();
 	observerSubject.setState("Fortification Phase Started \n", false);
-	startFortificationPhase();
+	startFortificationPhase();*/
 
     }
-
+    private void moveArmyAfterAttack() {
+	String fromTerritory = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
+	String toTerritory = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
+	String output = JOptionPane.showInputDialog(frame,"Move Armies from "+fromTerritory+" to "+toTerritory, "Move Armies", JOptionPane.OK_CANCEL_OPTION);
+	    if (StringUtils.isNotEmpty(output) && StringUtils.isNumeric(output) && Integer.parseInt(output) > 0 && Integer.parseInt(output) < territory.getTerritoryArmy().get(fromTerritory)) {
+		    context = new Context(players);
+		    context.executeArmyAfterAttack(players.getPlayers(playerTurn),territory,fromTerritory,toTerritory,Integer.parseInt(output));
+		    observerSubject.setMessage(true,"Army on  " + fromTerritory  + " is "+ territory.getTerritoryArmy().get(fromTerritory));
+		    observerSubject.setMessage(true,"Army on  " + toTerritory  + " is "+ territory.getTerritoryArmy().get(toTerritory));
+	    } else {
+		observerSubject.setMessage(true, "Please Enter Armies Again");
+		moveArmyAfterAttack();
+	    }
+    }
+    private void attackPanelReset() {
+	territoryAModel.removeAllElements();
+	territoryBModel.removeAllElements();
+	territoryInfoModel.removeAllElements();
+	continentInfoModel.removeAllElements();
+	updateTerritoryAList();
+	updateContinentInfoList();
+	territoryADropDown.removeAllItems();
+	territoryADropDown.addItem("");
+	for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
+	    if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
+		territoryADropDown.addItem(entry.getKey());
+	    }
+	}
+	territoryBDropDown.removeAllItems();
+	attackerDiceDropDown.removeAllItems();
+	defenderDiceDropDown.removeAllItems();
+	displayTerritoryDetails();
+    }
     /**
      * method used to do reinforcement on territory.
      * @param flag used to identify whether player can do reinforcement or not.
@@ -963,12 +1069,18 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		observerSubject.setState("Attack Phase Started \n", false);
 		//riskLogger(players.getCurrentPhase()+ " Phase Started");
 		attackBtn.setEnabled(true);
-		endTurnBtn.setEnabled(true);
-		fortifyBtn.setEnabled(false);
+		attackSkipBtn.setEnabled(true);
+		fortifySkipBtn.setEnabled(false);
+		gamePanel.remove(2);
+		gamePanel.invalidate();
+		gamePanel.validate();
+		gamePanel.add(countryScreen("attack"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+		gamePanel.invalidate();
+		gamePanel.validate();
 	    } else {
-		attackBtn.setEnabled(false);
+/*		attackBtn.setEnabled(false);
 		fortifyBtn.setEnabled(false);
-		endTurnBtn.setEnabled(false);
+		endTurnBtn.setEnabled(false);*/
 		reinforceBtn.setEnabled(true);
 	    }
 	}
@@ -1003,6 +1115,12 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	observerSubject.setState(players.getPlayers(playerTurn), true);
 	log.setText("");
 	observerSubject.setState("Reinforcement Phase Started \n", false);
+	gamePanel.remove(2);
+	gamePanel.invalidate();
+	gamePanel.validate();
+	gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	gamePanel.invalidate();
+	gamePanel.validate();
 	//updateLogArea();
     }
     
@@ -1161,14 +1279,17 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     }
     /**
      * method use to display list of adjacent territory owned by current player to move army from selected  territory to adjacent one.   
+     * @param phase 
      */
-    public void addTerritoryBDropDown() {
+    public void addTerritoryBDropDown(String phase) {
 	territoryBDropDown.removeAllItems();
 	String dropDownAValue =  territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
 	if(StringUtils.isNotEmpty(dropDownAValue)) {
 	    for(int i = 0 ; i < territory.getAdjacentTerritory().get(dropDownAValue).size() ; i++) {
 		String terrName = territory.getAdjacentTerritory().get(dropDownAValue).get(i);
-		if(players.getPlayerPlaying().get(playerTurn).equals(territory.getTerritoryUser().get(terrName))) {
+		if(players.getPlayerPlaying().get(playerTurn).equals(territory.getTerritoryUser().get(terrName)) && phase.equalsIgnoreCase("fortification")) {
+		    territoryBDropDown.addItem(terrName);
+		} else if(!players.getPlayerPlaying().get(playerTurn).equals(territory.getTerritoryUser().get(terrName)) && phase.equalsIgnoreCase("attack")) {
 		    territoryBDropDown.addItem(terrName);
 		}
 	    }
@@ -1252,8 +1373,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    displayTerritoryDetails();
 	    observerSubject.setMessageFlag(false);
 	}
+	System.out.println("--->"+observerSubject.getMessage());
 	if(observerSubject.getMessageFlag()) {
 	    log.append(observerSubject.getMessage());
+	    observerSubject.setMessageFlag(false);
 	}
 	    
     }
