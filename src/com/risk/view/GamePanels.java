@@ -545,11 +545,11 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    public void itemStateChanged(ItemEvent e) {
 		territoryCDropDown.removeAllItems();
 		if(territoryBDropDown.getSelectedIndex() > 0) {
-		    String[] tempVar1 = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex()).split("--");
+    		    String[] tempVar1 = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex()).split("--");
 		    String[] tempVar2 = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex()).split("--");
 		    for(Entry<String, String> entry : players.getCards().entrySet()) {
 			if(!tempVar1[1].trim().equalsIgnoreCase(entry.getKey()) &&!tempVar2[1].trim().equalsIgnoreCase(entry.getKey()) && players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue()))
-			    territoryBDropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
+			    territoryCDropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
 		    }
 		}
 
