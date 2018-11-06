@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
+
 import com.risk.strategy.Strategy;
 
 /**
@@ -19,7 +20,14 @@ public class Players implements Strategy {
      * @param playerArmy player having no. of armies
      * @param playerList no. of player currently playing game
      * @param playerPlaying no. of player playing game
-     * @param playerCard no. of card player has
+     * @param cards no. of card player has
+     * @param territoryCards territory and card type mapping
+     * @param isAttackWon return true if players has won attack and acquired territories
+     * @param isWonCard return true if players acquired territories in his/her turn and gets card
+     * @param tradeInArmies number of tradein armies
+     * @param attackerMsg message for attacker
+     * @param defenderMsg message for defender
+     * @param tradeIn number of tradein is done in game
      */
     Map<String, Continent> playerContinent; 
     Map<String, Integer> playerArmy;   
@@ -28,15 +36,7 @@ public class Players implements Strategy {
     String currentPhase;
     private boolean isAttackWon;
     private boolean isWonCard;
-    public boolean isWonCard() {
-        return isWonCard;
-    }
-
-    public void setWonCard(boolean isWonCard) {
-        this.isWonCard = isWonCard;
-    }
-
-
+    int  tradeInArmies = 4;
     String attackerMsg = "";
     String defenderMsg = "";
     int tradeIn = 0;
@@ -51,15 +51,48 @@ public class Players implements Strategy {
 	cards = new HashMap<>();
 	territoryCards = new HashMap<>();
     }
-
+    /**
+     * This Method return number of trade in armies generated
+     * @return tradeInArmies number of trade in armies
+     */
+    public int getTradeInArmies() {
+	return tradeInArmies;
+    }
+    /**
+     * This Method set  number of trade in armies
+     * @param tradeInArmies number of trade in armies
+     */
+    public void setTradeInArmies(int tradeInArmies) {
+	this.tradeInArmies = tradeInArmies;
+    }
+    /**
+     *  This Method return true if players acquired territories in his/her turn and gets card
+     * @return true if players acquired territories in his/her turn and gets card
+     */
+    public boolean isWonCard() {
+	return isWonCard;
+    }
+    /**
+     * This method set true if players acquired territories in his/her turn and gets card otherwise false
+     * @param isWonCard true if players acquired territories in his/her turn and gets card
+     */
+    public void setWonCard(boolean isWonCard) {
+	this.isWonCard = isWonCard;
+    }
+    /**
+     * This method get territory and card type mapping
+     * @return territoryCards territory and card type mapping
+     */
     public Map<String, String> getTerritoryCards() {
-        return territoryCards;
+	return territoryCards;
     }
-
+    /**
+     * This method set territory and card type mapping
+     * @param territoryCards territory and card type mapping
+     */
     public void setTerritoryCards(Map<String, String> territoryCards) {
-        this.territoryCards = territoryCards;
+	this.territoryCards = territoryCards;
     }
-
     /**
      * 
      * @return playerContinent player had territories in particular continent
@@ -84,11 +117,11 @@ public class Players implements Strategy {
     }
 
     public int getTradeIn() {
-        return tradeIn;
+	return tradeIn;
     }
 
     public void setTradeIn() {
-        this.tradeIn += 1;
+	this.tradeIn += 1;
     }
 
     /**
@@ -132,9 +165,8 @@ public class Players implements Strategy {
      * @param count number of players playing.
      * @return a list playerPlaying.
      */
-    public ArrayList<String> selectPlayers(ArrayList<String> names , int count) {
-
-	for(int i = 0 ; i < count ; i++ ) {
+    public ArrayList<String> selectPlayers(ArrayList<String> names, int count) {
+	for (int i = 0; i < count; i++) {
 	    playerPlaying.add(names.get(i));
 	}
 	return playerPlaying;
@@ -200,7 +232,7 @@ public class Players implements Strategy {
      * @return a Map playerArmy
      */
     public Map<String, Integer> updateArmy(String name,int armyCount,String operation){
-	if(operation.equalsIgnoreCase("add")) {
+	if (operation.equalsIgnoreCase("add")) {
 	    playerArmy.replace(name, playerArmy.get(name), playerArmy.get(name) + armyCount);
 	} else {
 	    playerArmy.replace(name, playerArmy.get(name), playerArmy.get(name) - armyCount);
@@ -248,21 +280,26 @@ public class Players implements Strategy {
     public void setAttackWon(boolean isAttackWon) {
 	this.isAttackWon = isAttackWon;
     }
-
+    /**
+     * This Method return which players has which territory card 
+     * @return cards territory card
+     */
     public Map<String, String> getCards() {
-        return cards;
+	return cards;
     }
-
+    /** 
+     * This Method set territory card for particular player 
+     * @param cards teritory card
+     */
     public void setCards(Map<String, String> cards) {
-        this.cards = cards;
+	this.cards = cards;
     }
 
     /**
-     * Attack phase
+     * Attack phase using Strategy Pattern 
      */
     @Override
     public void doAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDice, int defenderDice) {
-	// TODO Auto-generated method stub
 	isAttackWon = false;
 	setDefenderMsg("");
 	setAttackerMsg("");
@@ -270,16 +307,14 @@ public class Players implements Strategy {
 	ArrayList<Integer> defenderDiceList = new ArrayList<>();
 	int[] attackerDiceArray = new int[attackerDice];
 	int[] defenderDiceArray = new int[defenderDice];
-	for(int i=0;i<attackerDice;i++) {
-	    attackerDiceArray[i] = (int)(Math.random()*6+1);
-	    attackerMsg+= "DIE "+(i+1) + " : " +attackerDiceArray[i]+"\n";
+	for (int i = 0; i < attackerDice; i++) {
+	    attackerDiceArray[i] = (int) (Math.random() * 6 + 1);
+	    attackerMsg += "DIE " + (i + 1) + " : " + attackerDiceArray[i] + "\n";
 	    attackerDiceList.add(attackerDiceArray[i]);
-
 	}
-
-	for(int j=0;j<defenderDice;j++) {
-	    defenderDiceArray[j] = (int)(Math.random()*6+1);
-	    defenderMsg+= "DIE "+(j+1) + " : " +defenderDiceArray[j]+"\n";
+	for (int j = 0; j < defenderDice; j++) {
+	    defenderDiceArray[j] = (int) (Math.random() * 6 + 1);
+	    defenderMsg += "DIE " + (j + 1) + " : " + defenderDiceArray[j] + "\n";
 	    defenderDiceList.add(defenderDiceArray[j]);
 	}
 
@@ -327,8 +362,8 @@ public class Players implements Strategy {
 	    Object randomTerritory = currentTerritory.getTerritoryCard().keySet().toArray()[new Random().nextInt(currentTerritory.getTerritoryCard().keySet().toArray().length)];
 	    System.out.println("Territory Card : " + randomTerritory);
 	    System.out.println("Card Value " + currentTerritory.getTerritoryCard().get(randomTerritory));
-	    if(!isWonCard) {
-		cards.put(randomTerritory.toString(),fromPlayer);
+	    if (!isWonCard) {
+		cards.put(randomTerritory.toString(), fromPlayer);
 		territoryCards.put(randomTerritory.toString().trim(),currentTerritory.getTerritoryCard().get(randomTerritory));
 		setWonCard(true);
 	    }
@@ -337,25 +372,37 @@ public class Players implements Strategy {
 	}
 
     }
-
+    /**
+     * This Method used to get message when attack is done
+     * @return attackerMsg message which need to be print in logs
+     */
     public String getAttackerMsg() {
 	return attackerMsg;
     }
-
+    /**
+     * This Method used to set message when attack is done
+     * @param attackerMsg message which need  to be print in logs
+     */
     public void setAttackerMsg(String attackerMsg) {
 	this.attackerMsg = attackerMsg;
     }
-
+    /**
+     * This Method used to get message when attack is done
+     * @return defenderMsg message which need  to be print in logs
+     */
     public String getDefenderMsg() {
 	return defenderMsg;
     }
-
+    /**
+     * This Method used to set message when attack is done
+     * @param defenderMsg message which need  to be print in logs
+     */
     public void setDefenderMsg(String defenderMsg) {
 	this.defenderMsg = defenderMsg;
     }
 
     /**
-     * do Fortification
+     * Fortification phase using Strategy Pattern 
      */
     @Override
     public void doForitification(Territory currentTerritory, String fromTerritory, String toTerritory, int getArmySelect) {
@@ -365,7 +412,7 @@ public class Players implements Strategy {
     }
 
     /**
-     * do Reinforcement
+     * Reinforcement phase using Strategy Pattern 
      */
     @Override
     public void doReinforcement(String currentPlayer, String currentTerritoryName, int army, Territory currentTerritory) {
@@ -374,19 +421,19 @@ public class Players implements Strategy {
     }
 
     /**
-     * generate Reinforcement Army
+     * generate Reinforcement Army using Strategy Pattern 
      */
     @Override
     public void generateReinforcementArmy(String currentPlayer, Continent currentContinent) {
 	int count = 0;
 	setCurrentPhase("Reinforcement");
-	Map<String, ArrayList<String>> tempData = getPlayerContinent().get(currentPlayer).getContinentOwnedterritory(); 
-	for(Entry<String, ArrayList<String>> entry : tempData.entrySet()) {
-	    if(!entry.getValue().isEmpty()) {
-		count+=entry.getValue().size();
+	Map<String, ArrayList<String>> tempData = getPlayerContinent().get(currentPlayer).getContinentOwnedterritory();
+	for (Entry<String, ArrayList<String>> entry : tempData.entrySet()) {
+	    if (!entry.getValue().isEmpty()) {
+		count += entry.getValue().size();
 	    }
 	}
-	Double value = new Double(Math.floor(count/3));
+	Double value = new Double(Math.floor(count / 3));
 	updateArmy(currentPlayer, value.intValue() > 3 ? (value.intValue() + checkContinentAcquired(currentPlayer,currentContinent))   : (3 + checkContinentAcquired(currentPlayer, currentContinent)), "ADD");	    
     }
     /**
@@ -398,22 +445,22 @@ public class Players implements Strategy {
     public int checkContinentAcquired(String currentPlayer, Continent currentContinent){
 	int count = 0;
 	Map<String, ArrayList<String>> tempData = getPlayerContinent(currentPlayer).getContinentOwnedterritory();
-	for(Entry<String,ArrayList<String>> entry : tempData.entrySet()) {
-	    if(entry.getValue().size() == currentContinent.getContTerrValue().get(entry.getKey())) {
+	for (Entry<String, ArrayList<String>> entry : tempData.entrySet()) {
+	    if (entry.getValue().size() == currentContinent.getContTerrValue().get(entry.getKey())) {
 		count += currentContinent.getContinentValue().get(entry.getKey());
-	    System.out.println("------------>Continent Acquired : " + entry.getKey());
+		System.out.println("------------>Continent Acquired : " + entry.getKey());
 	    }
 	}
 	return count > 0 ? count : 0;
     }
 
-
+    /**
+     * This Method is used to Move army when attacker successfully capture territory
+     */
     @Override
     public void moveArmyAfterAttack(String currentPlayer, Territory currentTerritory, String fromTerritory, String toTerritory, int armies) {
-	// TODO Auto-generated method stub
 	currentTerritory.updateTerritoryArmy(fromTerritory, armies, "DELETE");
 	currentTerritory.updateTerritoryArmy(toTerritory, armies, "ADD");
-
     }
 
 }

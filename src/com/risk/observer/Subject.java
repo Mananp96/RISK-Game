@@ -11,13 +11,14 @@ public class Subject {
     private String message;
     private boolean messageFlag;
     private String fortificationMsg;
+
     public String getTradeInMsg() {
-        return tradeInMsg;
+	return tradeInMsg;
     }
 
     public void setTradeInMsg(String tradeInMsg) {
-        this.tradeInMsg = tradeInMsg;
-        notifyForTradeIn();
+	this.tradeInMsg = tradeInMsg;
+	notifyForTradeIn();
     }
 
     private String attackMsg;
@@ -32,12 +33,12 @@ public class Subject {
     }
 
     public String getAttackMsg() {
-        return attackMsg;
+	return attackMsg;
     }
 
     public void setAttackMsg(String attackMsg) {
-        this.attackMsg = attackMsg;
-        notifyForAttack();
+	this.attackMsg = attackMsg;
+	notifyForAttack();
     }
 
     public String getState() {
@@ -46,7 +47,7 @@ public class Subject {
 
     public void setState(String state, boolean flag) {
 	this.state = state;
-	this.flag= flag;
+	this.flag = flag;
 	notifyAllObservers();
     }
 
@@ -63,44 +64,49 @@ public class Subject {
 	return message;
     }
 
-    public void setMessage(boolean flag,String newMessage) {
-	message = /*message +*/  newMessage+ "\n" ;
+    public void setMessage(boolean flag, String newMessage) {
+	message = /* message + */ newMessage + "\n";
 	messageFlag = flag;
     }
 
     public boolean getFlag() {
 	return flag;
     }
-    public void attach(Observer observer){
-	observers.add(observer);		
+
+    public void attach(Observer observer) {
+	observers.add(observer);
     }
-    public void notifyAllObservers(){
+
+    public void notifyAllObservers() {
 	for (Observer observer : observers) {
 	    observer.update();
 	}
     }
-    
-    public String getFortificationMessage(){
+
+    public String getFortificationMessage() {
 	return fortificationMsg;
     }
+
     public void setFortificationMessage(String fortificationMsg) {
 	this.fortificationMsg = fortificationMsg;
 	notifyForFortification();
     }
-    
-    public void notifyForFortification(){
+
+    public void notifyForFortification() {
 	for (Observer observer : observers) {
 	    observer.fortificationUpdate();
 	}
     }
-    public void notifyForAttack(){
+
+    public void notifyForAttack() {
 	for (Observer observer : observers) {
 	    observer.attackUpdate();
 	}
     }
-    public void notifyForTradeIn(){
+
+    public void notifyForTradeIn() {
 	for (Observer observer : observers) {
-	    observer.tradeInCardUpdate();;
+	    observer.tradeInCardUpdate();
 	}
     }
 }
