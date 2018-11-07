@@ -1576,14 +1576,14 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * @return true any combination matches otherwise false
      */
     public boolean checkTradeInCard(ArrayList<String> cardList) {
-	ArrayList<String> list1 = generateCardCombination(INFANTRY_CARD, INFANTRY_CARD, INFANTRY_CARD);
-	ArrayList<String> list2 = generateCardCombination(CAVALRY_CARD, CAVALRY_CARD, CAVALRY_CARD);
-	ArrayList<String> list3 = generateCardCombination(ARTILLERY_CARD,ARTILLERY_CARD, ARTILLERY_CARD);
-	ArrayList<String> list4 = generateCardCombination(INFANTRY_CARD, CAVALRY_CARD, ARTILLERY_CARD);
-	ArrayList<String> list5 = generateCardCombination(INFANTRY_CARD, INFANTRY_CARD, WILD_CARD);
-	ArrayList<String> list6 = generateCardCombination(CAVALRY_CARD, CAVALRY_CARD, WILD_CARD);
-	ArrayList<String> list7 = generateCardCombination(ARTILLERY_CARD, ARTILLERY_CARD,WILD_CARD);
-	return cardList.containsAll(list1) || cardList.containsAll(list2) || cardList.containsAll(list3) || cardList.containsAll(list4) || cardList.containsAll(list5) || cardList.containsAll(list6) || cardList.containsAll(list7) ? true : false ;	      
+	boolean list1 = checkCardCombination(cardList, INFANTRY_CARD, INFANTRY_CARD, INFANTRY_CARD);
+	boolean list2 = checkCardCombination(cardList, CAVALRY_CARD, CAVALRY_CARD, CAVALRY_CARD);
+	boolean list3 = checkCardCombination(cardList, ARTILLERY_CARD, ARTILLERY_CARD, ARTILLERY_CARD);
+	boolean list4 = checkCardCombination(cardList, INFANTRY_CARD, CAVALRY_CARD, ARTILLERY_CARD);
+	boolean list5 = checkCardCombination(cardList, INFANTRY_CARD, INFANTRY_CARD, WILD_CARD);
+	boolean list6 = checkCardCombination(cardList, CAVALRY_CARD, CAVALRY_CARD, WILD_CARD);
+	boolean list7 = checkCardCombination(cardList, ARTILLERY_CARD, ARTILLERY_CARD, WILD_CARD);
+	return list1 || list2 || list3 || list4 || list5 || list6 || list7 ? true : false;	      
     }
     /**
      * This Method used to generate Combination of cards
@@ -1592,11 +1592,16 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * @param card3 card type
      * @return true when any of the combination matches Otherwise false
      */
-    public ArrayList<String> generateCardCombination(String card1, String card2, String card3){
+    public boolean checkCardCombination(ArrayList<String> cardList, String card1, String card2, String card3){
 	ArrayList<String> list = new ArrayList<>();
 	list.add(card1);
 	list.add(card2);
 	list.add(card3);
-	return list;
+	for (int i = 0; i < cardList.size(); i++) {
+	    if (list.contains(cardList.get(i))) {
+		list.remove(cardList.get(i));
+	    }
+	}
+	return list.isEmpty() ? true : false;
     }
 }
