@@ -125,7 +125,6 @@ public class NewEditMapPanel implements ActionListener{
 
 	    @Override
 	    public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
 		if(mapOptA.isSelected() && chooseMap.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 		    existingMapFilePath = chooseMap.getSelectedFile().getPath();
 		    generateEditMapData(existingMapFilePath);
@@ -338,9 +337,7 @@ public class NewEditMapPanel implements ActionListener{
     }
     @Override
     public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
 	String actionName = arg0.getActionCommand();
-	System.out.println("Action Name " + actionName);
 	if(actionName.equalsIgnoreCase(backBtnName)){
 	    GamePanels gamePanels = new GamePanels();
 	    frame.setContentPane(gamePanels.mainMenu(frame));
@@ -441,7 +438,6 @@ public class NewEditMapPanel implements ActionListener{
      *  This method is used to generate territory drop down  in Add Adjacent Section
      */
     private void updateAddAdjTerritoryList() {
-	// TODO Auto-generated method stub
 	addAdjTerritoryListA.removeAllItems();
 	addAdjTerritoryListB.removeAllItems();
 	for(Entry<String, String> entry : territory.getTerritoryCont().entrySet()) {
@@ -474,7 +470,6 @@ public class NewEditMapPanel implements ActionListener{
      * @param adjacent Current adjacent territory which need to delete
      */
     private void deleteAdjacentTerritory(String adjacent) {
-	System.out.println("Enter adjacent Territory  for delete is "+ adjacent);	    
 	if(deleteAdjTerrtList.getSelectedIndex() != -1) {
 	    territory.getAdjacentTerritory().get(deleteTerritoryList.getItemAt(deleteTerritoryList.getSelectedIndex())).remove(adjacent);
 	    displaySuccessDeleteDialog();
@@ -492,7 +487,6 @@ public class NewEditMapPanel implements ActionListener{
      * @param territoryStr Territory which need to delete
      */
     private void deleteTerritory(String territoryStr) {
-	System.out.println("Enter  Territory  for delete is "+ territoryStr);
 	if(deleteTerritoryList.getSelectedIndex() != -1) {
 	    territory.getTerritoryCont().remove(territoryStr);
 	    territory.getTerritoryList().remove(territoryStr);
@@ -525,7 +519,6 @@ public class NewEditMapPanel implements ActionListener{
      */
     private void deleteContinent(String continentStr) {
 	try {
-	    System.out.println("Enter  continent  for delete is "+ continentStr);
 	    if(deleteContinentList.getSelectedIndex() != -1) {
 		continent.getContinentValue().remove(continentStr);
 		continent.getContinentTerritory().remove(continentStr);
@@ -559,7 +552,6 @@ public class NewEditMapPanel implements ActionListener{
      * @param newTerritory
      */
     private void updateTerritory(String oldTerritory, String newTerritory) {
-	System.out.println("Territory Enter is " + oldTerritory + " and New Territory is : "+ newTerritory);
 	if(StringUtils.isNotEmpty(oldTerritory) && StringUtils.isNotEmpty(newTerritory)) {
 	    territory.getTerritoryCont().put(newTerritory,territory.getTerritoryCont().remove(oldTerritory));
 	    territory.getAdjacentTerritory().put(newTerritory, territory.getAdjacentTerritory().remove(oldTerritory));
@@ -590,7 +582,7 @@ public class NewEditMapPanel implements ActionListener{
 	    updateDeleteContinentList();	    }
     }
     /**
-     * This method is used to udpate Continent Name and it's value in Edit Continent Section
+     * This method is used to update Continent Name and it's value in Edit Continent Section
      * @param oldContinent Old Continent
      * @param newContinent New Continent 
      * @param value Value of Continent
