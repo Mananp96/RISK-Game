@@ -543,6 +543,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    @Override
 	    public void itemStateChanged(ItemEvent e) {
 		territoryBDropDown.removeAllItems();
+		territoryBDropDown.addItem("");
 		if(territoryADropDown.getSelectedIndex() > 0) {
 		    String[] tempVar = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex()).split("--");
 		    for(Entry<String, String> entry : players.getCards().entrySet()) {
@@ -557,12 +558,16 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    @Override
 	    public void itemStateChanged(ItemEvent e) {
 		territoryCDropDown.removeAllItems();
+		territoryCDropDown.addItem("");
 		if(territoryBDropDown.getSelectedIndex() > 0) {
 		    String[] tempVar1 = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex()).split("--");
 		    String[] tempVar2 = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex()).split("--");
 		    for(Entry<String, String> entry : players.getCards().entrySet()) {
-			if((!tempVar1[1].trim().equalsIgnoreCase(entry.getKey()) || !tempVar2[1].trim().equalsIgnoreCase(entry.getKey())) && players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue()))
-			    territoryCDropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
+			if(!tempVar1[1].trim().equalsIgnoreCase(entry.getKey()) && players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue())) {
+			   if( !tempVar2[1].trim().equalsIgnoreCase(entry.getKey())) 
+			       territoryCDropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
+			}
+			    
 		    }
 		}
 	    }
@@ -1544,7 +1549,11 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		JOptionPane.showMessageDialog(frame, "Select proper Combination of Cards", "Card Combination Error",JOptionPane.ERROR_MESSAGE);
 		log.append("Select proper Combination of Cards\n");
 	    }
-	}
+	    
+	} else {
+		JOptionPane.showMessageDialog(frame, "Select proper Combination of Cards", "Card Combination Error",JOptionPane.ERROR_MESSAGE);
+		log.append("Select proper Combination of Cards\n");
+	    }
     }
     /**
      * This Method generate armies when players trade in cards
