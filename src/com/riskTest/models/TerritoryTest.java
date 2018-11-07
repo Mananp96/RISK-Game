@@ -21,9 +21,13 @@ public class TerritoryTest {
 	String territoryTwo = "Algeria";
 	String territoryThree = "Western Sahara";
 	String territoryFour = "Mauritania";
+	String africaContinent = "Africa";
+	String asiaContinent = "Asia";
 	Territory territory;
 	
 	Map<String, ArrayList<String>> adjacentTerritory; 
+	Map<String, String> territoryContinent; 
+	Map<String, String> territoryUser; 
 	ArrayList<String> territoryList;
 	Map<String, Integer> territoryArmy;
 	
@@ -36,11 +40,14 @@ public class TerritoryTest {
 		adjacentTerritory = new HashMap<>();
 		territoryList = new ArrayList<>();
 		territoryArmy = new HashMap<>();
+		territoryContinent = new HashMap<>();
+		territoryUser = new HashMap<>();
 		
 		territoryList.add(territoryTwo);
 		territoryList.add(territoryThree);
 		adjacentTerritory.put(territoryOne, territoryList);
-		
+		territoryContinent.put(territoryTwo,africaContinent);
+		territoryContinent.put(territoryThree,africaContinent);
 		territoryList = new ArrayList<>();
 		territoryList.add(territoryThree);
 		territoryList.add(territoryFour);
@@ -49,6 +56,8 @@ public class TerritoryTest {
 		
 		territoryArmy.put(territoryOne, 3);
 		territoryArmy.put(territoryTwo, 1);
+		territoryUser.put(territoryOne,"man");
+		territoryUser.put(territoryTwo,"prince");
 	}
 	
 	/**
@@ -77,5 +86,28 @@ public class TerritoryTest {
 		territory.updateTerritoryArmy(territoryOne, 1, "update");
 		assertEquals(territoryArmy,territory.getTerritoryArmy());
 	}
+	
+	@Test
+	public void testAddTerritoryCont() {
+		territory.addTerritoryCont(territoryThree, africaContinent);
+		territory.addTerritoryCont(territoryTwo, africaContinent);
+		assertEquals(territoryContinent, territory.getTerritoryCont());
+	}
+	
+	@Test
+	public void testUpdateTerritoryUser() {
+		territory.updateTerritoryUser("manan", territoryOne);
+		territory.updateTerritoryUser("prince", territoryTwo);
+		assertEquals(territoryUser,territory.updateTerritoryUser("man", territoryOne));
+	}
+	
+	@Test
+	public void testUpdateTerritoryContinent() {
+		territory.addTerritoryCont(territoryTwo, asiaContinent);
+		territory.addTerritoryCont(territoryThree, asiaContinent);
+		territory.updateTerritoryContinent(asiaContinent, africaContinent);
+		assertEquals(territoryContinent, territory.getTerritoryCont());
+	}
+	
 	
 }
