@@ -26,7 +26,12 @@ public class ReinforcementTest {
 	@Test
 	public void testGenerateArmy() {
 		territory = new Territory();
+		continent = new Continent();
+		players = new Players();
 		for(int i = 0; i < 12; i++) {
+			continent.setContinentValue("continent"+i, i);
+			continent.addContTerritoryValue("continent"+i);
+			players.addPlayerContinent("Player"+i, continent);
 			territory.updateTerritoryUser("Player1", "Territory"+i);
 		}
 		reinforcement = new Reinforcement("Player1", players, territory, continent);

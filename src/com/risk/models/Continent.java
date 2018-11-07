@@ -23,6 +23,16 @@ public class Continent {
 	Map<String, Integer> contTerrValue;
 	
 	/**
+	 * Continent class constructor
+	 */
+	public Continent() {
+		continentValue = new HashMap<>();
+		continentTerritory = new HashMap<>();
+		continentOwnedTerritory = new HashMap<>();
+		contTerrValue = new HashMap<>();
+	}
+	
+	/**
 	 *  This method increment territory number in particular continent
 	 * @param continent continent in which one territory is identified
 	 */
@@ -33,6 +43,7 @@ public class Continent {
 		contTerrValue.put(continent, 1);
 	    }
 	}
+	
 	/**
 	 * 
 	 * @return contTerrValue
@@ -40,6 +51,7 @@ public class Continent {
 	public Map<String, Integer> getContTerrValue() {
 	    return contTerrValue;
 	}
+	
 	/**
 	 * 
 	 * @param contTerrValue no. of Territories in Particular Continent
@@ -48,12 +60,7 @@ public class Continent {
 	    this.contTerrValue = contTerrValue;
 	}
 
-	public Continent() {
-		continentValue = new HashMap<>();
-		continentTerritory = new HashMap<>();
-		continentOwnedTerritory = new HashMap<>();
-		contTerrValue = new HashMap<>();
-	}
+	
 	/**
 	 * 
 	 * @return Map continentValue 

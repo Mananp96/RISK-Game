@@ -13,6 +13,26 @@ import com.risk.models.Territory;
  * 
  */
 public class Reinforcement {
+	
+	Players players; 
+	Territory territory; 
+	Continent continent;
+	String playerName;
+	String phase = "Reinforcement";
+	
+	/**
+	 * Constructor used to initialized data member of class.
+	 * @param playerName Name of player
+	 * @param players object of Players Model
+	 * @param territory object of Territory Model
+	 * @param continent object of Continent Model
+	 */
+	public Reinforcement(String playerName , Players players, Territory territory, Continent continent) {
+		this.playerName = playerName;
+		this.players = players;
+		this.territory = territory;
+		this.continent = continent;
+	}
 
 	/**
 	 * method get players object
@@ -61,26 +81,6 @@ public class Reinforcement {
 	public void setContinent(Continent continent) {
 		this.continent = continent;
 	}
-	
-	Players players; 
-	Territory territory; 
-	Continent continent;
-	String playerName;
-	String phase = "Reinforcement";
-
-	/**
-	 * Constructor used to initialized data member of class.
-	 * @param playerName Name of player
-	 * @param players object of Players Model
-	 * @param territory object of Territory Model
-	 * @param continent object of Continent Model
-	 */
-	public Reinforcement(String playerName , Players players, Territory territory, Continent continent) {
-		this.playerName = playerName;
-		this.players = players;
-		this.territory = territory;
-		this.continent = continent;
-	}
 
 	/**
 	 * This method calculate the player armies for Reinforcement phase.
@@ -96,7 +96,7 @@ public class Reinforcement {
 		}
 
 		Double value = new Double(Math.floor(count/3));
-		return value.intValue() > 3 ? (value.intValue() + checkContinentAcquired())   : (3 + checkContinentAcquired()) ;
+		return value.intValue() > 3 ? (value.intValue() + checkContinentAcquired()) : (3 + checkContinentAcquired()) ;
 	}
 	/**
 	 * This method add armies to current player if a particular continent is Acquired fully by player

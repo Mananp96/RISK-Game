@@ -17,7 +17,7 @@ import com.risk.models.Continent;
  */
 public class ContinentTest {
 	Continent continent;
-	String continentNameOne = "Northern Africa";
+	String continentNameOne = "Northern Africa";				
 	String continentNameTwo = "Western Africa";
 	String NATerritoryOne = "Morocco";
 	String NATerritoryTwo = "Algeria";
@@ -29,6 +29,7 @@ public class ContinentTest {
 
 	Map<String, Integer> continentValue;
 	Map<String, ArrayList<String>> continentTerritory;
+	Map<String, ArrayList<String>> continentOwnedTerritory;
 	ArrayList<String> territoryList;
 
 	/**
@@ -39,7 +40,17 @@ public class ContinentTest {
 		continent = new Continent();
 		continentValue = new HashMap<>();
 		continentTerritory = new HashMap<>();
+		continentOwnedTerritory = new HashMap<>();
 		territoryList = new ArrayList<>();
+		territoryList.add(NATerritoryOne);
+		territoryList.add(NATerritoryTwo);
+		continentTerritory.put(continentNameOne,territoryList);
+		continentOwnedTerritory.put(continentNameOne, territoryList);
+		territoryList= new ArrayList<>();
+		territoryList.add(WATerritoryOne);
+		territoryList.add(WATerritoryTwo);
+		continentTerritory.put(continentNameTwo, territoryList);
+		continentOwnedTerritory.put(continentNameTwo, territoryList);
 	}
 
 	/**
@@ -59,14 +70,6 @@ public class ContinentTest {
 	 */
 	@Test
 	public void testAddContinentTerritory() {
-
-		territoryList.add(NATerritoryOne);
-		territoryList.add(NATerritoryTwo);
-		continentTerritory.put(continentNameOne,territoryList);
-		territoryList= new ArrayList<>();
-		territoryList.add(WATerritoryOne);
-		territoryList.add(WATerritoryTwo);
-		continentTerritory.put(continentNameTwo, territoryList);
 		continent.addContinentTerritory(continentNameOne, NATerritoryOne);
 		continent.addContinentTerritory(continentNameOne, NATerritoryTwo);
 		continent.addContinentTerritory(continentNameTwo, WATerritoryOne);
@@ -74,5 +77,17 @@ public class ContinentTest {
 
 		assertNotNull(continent.getContinentTerritory());
 		assertEquals(continentTerritory,continent.getContinentTerritory());
+	}
+	
+	/**
+	 * This method is to test AddContinentOwnedTerritory method of Continent functionality.
+	 */
+	@Test
+	public void testAddContinentOwnedTerritory() {
+		continent.addContinentOwnedTerritory(continentNameOne, NATerritoryOne, true);
+		continent.addContinentOwnedTerritory(continentNameOne, NATerritoryTwo, true);
+		continent.addContinentOwnedTerritory(continentNameTwo, WATerritoryOne, true);
+		continent.addContinentOwnedTerritory(continentNameTwo, WATerritoryTwo, true);
+		assertEquals(continentOwnedTerritory, continent.getContinentOwnedterritory());
 	}
 }
