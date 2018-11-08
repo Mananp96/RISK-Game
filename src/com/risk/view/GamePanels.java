@@ -944,8 +944,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * This Method check whether player has won game or not
      * @return
      */
-    private boolean checkPlayerWonGame() {
+    public boolean checkPlayerWonGame() {
 	String name = players.getPlayerList().get(playerTurn);
+	System.out.println("-----"+name);
 	int totalTerritory = 0;
 	for(Entry<String, ArrayList<String>> entry : players.getPlayerContinent().get(name).getContinentOwnedterritory().entrySet()) {
 	    totalTerritory += entry.getValue().size();

@@ -67,7 +67,7 @@ public class StartUpPhase extends GamePanels {
 				players.updatePlayerContinent(playerName, tempContinent);
 				playerCount++;
 				if (playerCount >= playerSize)
-					playerCount = 0;
+					playerCount = 0;	 
 			} else {
 				territory.updateTerritoryArmy(randomTerritory.toString(), 0, "ADD");
 				territory.updateTerritoryUser("No Player", randomTerritory.toString());

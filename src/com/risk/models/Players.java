@@ -42,6 +42,7 @@ public class Players implements Strategy {
     int tradeIn = 0;
     Map<String, String> cards;
     Map<String, String> territoryCards;
+    public Double value;
 
 	/**
 	 * Constructor
@@ -423,7 +424,7 @@ public class Players implements Strategy {
 		count += entry.getValue().size();
 	    }
 	}
-	Double value = new Double(Math.floor(count / 3));
+	value = new Double(Math.floor(count / 3));
 	updateArmy(currentPlayer, value.intValue() > 3 ? (value.intValue() + checkContinentAcquired(currentPlayer,currentContinent))   : (3 + checkContinentAcquired(currentPlayer, currentContinent)), "ADD");	    
     }
     /**
