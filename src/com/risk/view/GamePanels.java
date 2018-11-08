@@ -1059,7 +1059,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 				cardCount++;
 			}
 		}
-		return cardCount > 5 ? true :  false;
+		return cardCount >= 5 ? true :  false;
 	}
 	/**
 	 * method use to enable list of current territory owned by current player to move army from one  territory to another.   
@@ -1127,7 +1127,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 				cardCount++;
 			}
 		}
-		if(cardCount > 5) {
+		if(cardCount >= 5) {
 			JOptionPane.showMessageDialog(frame, players.getPlayerList().get(playerTurn) +" you need to Trade in Some Cards", "Need Card Trade In", JOptionPane.ERROR_MESSAGE);
 		}
 	}
