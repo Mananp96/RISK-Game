@@ -10,6 +10,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -555,7 +556,15 @@ public class NewEditMapPanel implements ActionListener{
 	if(StringUtils.isNotEmpty(oldTerritory) && StringUtils.isNotEmpty(newTerritory)) {
 	    territory.getTerritoryCont().put(newTerritory,territory.getTerritoryCont().remove(oldTerritory));
 	    territory.getAdjacentTerritory().put(newTerritory, territory.getAdjacentTerritory().remove(oldTerritory));
-
+	    ArrayList<String> temp =new ArrayList<>();
+	    for(int i = 0;i < territory.getTerritoryList().size();i++ ) {
+		if(territory.getTerritoryList().get(i).equalsIgnoreCase(oldTerritory)) {
+		    temp.add(newTerritory);
+		} else {
+		    temp.add(territory.getTerritoryList().get(i));    
+		}
+	    }
+	    territory.setTerritoryList(temp);
 	    for(Entry<String, ArrayList<String>> entry : continent.getContinentTerritory().entrySet()) {
 		if(entry.getValue().contains(oldTerritory)) {
 		    entry.getValue().remove(oldTerritory);

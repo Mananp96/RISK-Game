@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
@@ -87,6 +88,7 @@ public class EditMapFile {
     public boolean saveEditMap(Continent continent,Territory territory) throws InvalidMapException {
 	this.continent = continent;
 	this.territory = territory;
+	territory.setTerritoryNumber(new HashMap<>());
 	for(int i=0;i<territory.getTerritoryList().size();i++ ) {
 	    territory.addNumberOfTerritory(territory.getTerritoryList().get(i),i);
 	}
