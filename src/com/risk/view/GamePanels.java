@@ -137,6 +137,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     private Context context;
     private JPanel gamePanel;
     private JComboBox<String> territoryCDropDown;
+    private JComboBox<String> allOutDropDown;
     public static JTextArea log = new JTextArea(25,20);
 
     public GamePanels() {
@@ -557,8 +558,12 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	attackerDiceDropDown = new JComboBox<>();
 	JLabel defenderDiceLable = new JLabel("Defender dice");
 	defenderDiceDropDown = new JComboBox<>();
+	JLabel allOutLabel = new JLabel("Set All Out Mode");
+	allOutDropDown = new JComboBox<>();
 	attackPanel.add(attackerLabel);
 	attackPanel.add(territoryADropDown);
+	allOutDropDown.addItem("No");
+	allOutDropDown.addItem("Yes");
 	territoryADropDown.addItem("");
 	for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 	    if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
@@ -586,6 +591,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	attackPanel.add(attackerDiceDropDown);
 	attackPanel.add(defenderDiceLable);
 	attackPanel.add(defenderDiceDropDown);
+	attackPanel.add(allOutLabel);
+	attackPanel.add(allOutDropDown);
 	territoryBDropDown.addItemListener(new ItemListener() {
 
 	    @Override
@@ -900,14 +907,26 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	String fromTerritory = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex());
 	String toTerritory = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
 	int attackerDie = attackerDiceDropDown.getSelectedIndex() != -1 ? attackerDiceDropDown.getItemAt(attackerDiceDropDown.getSelectedIndex()) : 0;
-	int defenderDie= defenderDiceDropDown.getSelectedIndex() != -1 ? defenderDiceDropDown.getItemAt(defenderDiceDropDown.getSelectedIndex()) : 0;
+	int defenderDie = defenderDiceDropDown.getSelectedIndex() != -1 ? defenderDiceDropDown.getItemAt(defenderDiceDropDown.getSelectedIndex()) : 0;
+	String allOutValue = allOutDropDown.getItemAt(allOutDropDown.getSelectedIndex());
 	String message1 = "Before Attack \n "+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
-	if(StringUtils.isNotEmpty(fromTerritory) && StringUtils.isNotEmpty(toTerritory) && attackerDie > 0 && defenderDie >0) {
+	if(StringUtils.isNotEmpty(allOutValue) && StringUtils.isNotEmpty(fromTerritory) && StringUtils.isNotEmpty(toTerritory) && attackerDie > 0 && defenderDie >0) {
 	    context = new Context(players);
-	    context.executeAttack(territory, fromTerritory , toTerritory, attackerDie, defenderDie);
-	    String message2 = "Attacker Die \n" + players.getAttackerMsg()+"\n Defender Die \n" +players.getDefenderMsg();
-	    String message3 =message1+message2+ "After Attack \n "+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
-	    observerSubject.setAttackMsg(message3);
+	    if(allOutValue.equalsIgnoreCase("No")) {
+		context.executeAttack(territory, fromTerritory , toTerritory, attackerDie, defenderDie);
+		String message2 = "Attacker Die \n" + players.getAttackerMsg()+"\n Defender Die \n" +players.getDefenderMsg();
+		String message3 = message1 + message2 + "After Attack \n " + fromTerritory +" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
+		observerSubject.setAttackMsg(message3);
+	    } else {
+		observerSubject.setAttackMsg("All Out Mode is Selected");
+		observerSubject.setAttackMsg("Before Attack \n " + fromTerritory +" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n");
+		do {
+		    attackerDie = territory.getTerritoryArmy().get(fromTerritory) > 4 ? 3 : (territory.getTerritoryArmy().get(fromTerritory) - 1);
+		    defenderDie = territory.getTerritoryArmy().get(toTerritory) > 3 ? 3 : territory.getTerritoryArmy().get(toTerritory);
+		    context.executeAttack(territory, fromTerritory, toTerritory, attackerDie, defenderDie);		    
+		} while(territory.getTerritoryArmy().get(fromTerritory) > 1 && territory.getTerritoryArmy().get(toTerritory) > 0 );
+		observerSubject.setAttackMsg("After Attack \n " + fromTerritory +" : "+territory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n");
+	    }
 	    if(players.isAttackWon()) {
 		moveArmyAfterAttack();
 		if(checkPlayerWonGame()) {
@@ -916,7 +935,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		}
 	    }
 	    attackPanelReset();
-	    log.append(message3);
 	} else {
 	    JOptionPane.showMessageDialog(frame, "Please Select Value Properly");
 	    observerSubject.setAttackMsg("Please Select Value Properly");
@@ -965,7 +983,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	territoryADropDown.addItem("");
 	for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 	    if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
-		System.out.println("->" +entry.getKey());
 		territoryADropDown.addItem(entry.getKey());
 	    }
 	}
@@ -1057,6 +1074,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
     }
 
+
     /**
      * Method is used to change the Turn of player when End Turn Button is Clicked.
      */
@@ -1064,11 +1082,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	endTurnBtn.setEnabled(false);
 	playerTurn++;
 	playerTurn = playerTurn < players.getPlayerList().size() ? playerTurn : 0;
-	if(!playerHasTerritory()) {
-	    players.getPlayerList().remove(playerTurn);
-	    players.getPlayerPlaying().remove(playerTurn);
+	playerHasTerritory();
+	if(players.getPlayerList().contains("Neutral Player")) {
+	    playerTurn = players.getPlayerList().get(playerTurn).equalsIgnoreCase("Neutral Player") ? 0 : playerTurn;
 	}
-	playerTurn = players.getPlayerList().get(playerTurn).equalsIgnoreCase("Neutral Player") ? 0 : playerTurn;
 	if(players.isWonCard()) {
 	    JOptionPane.showMessageDialog(frame, "You Have Won 1 Card", "Card", JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -1098,8 +1115,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * This Method Check Whether Player has Territories or not.
      * @return true if player has territories Otherwise false
      */
-    public boolean playerHasTerritory() {
-	return territory.getTerritoryUser().containsValue(players.getPlayerList().get(playerTurn)) ? true : false;
+    public void playerHasTerritory() {
+	if(!territory.getTerritoryUser().containsValue(players.getPlayerList().get(playerTurn))) {
+	    changePlayerTurn();
+	} 
     }
     /**
      * This Method check whether player has more than 5 cards
@@ -1191,18 +1210,22 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    System.out.println("Bad Location Exception " +e);
 	}
 	territoryDetails.append("\n");
-
 	for(int i = 0; i < players.getPlayerList().size(); i++) {
 	    String name = players.getPlayerList().get(i);
 	    int totalArmyOwned = 0;
 	    territoryDetails.append("Player Name : " +  name+ "\n");
 	    int totalTerritory = 0;
+	    int count = 0;
 	    for(Entry<String, ArrayList<String>> entry : players.getPlayerContinent().get(name).getContinentOwnedterritory().entrySet()) {
+		if(entry.getValue().size() == continent.getContTerrValue().get(entry.getKey())) {
+		    count ++;
+		}
 		totalTerritory += entry.getValue().size();
 		for(int j =0;j <entry.getValue().size() ; j++ )
 		    totalArmyOwned += territory.getTerritoryArmy().get(entry.getValue().get(j));
 	    }
 	    territoryDetails.append("Territory Owned : " +  totalTerritory+ "\n");
+	    territoryDetails.append("Continent Acquired : " + count+"\n");
 	    territoryDetails.append("Total Number of Armies : " + totalArmyOwned+"\n");
 	    territoryDetails.append("Map Occupied : " +  Math.floor((totalTerritory*100/territory.getTerritoryList().size()))+ " %\n");
 	    territoryDetails.append("-----------------------------------------\n");
@@ -1378,6 +1401,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    cardList.add(card1[0].trim());
 	    cardList.add(card2[0].trim());
 	    cardList.add(card3[0].trim());
+	    ArrayList<String> cardTerrList= new ArrayList<>();
+	    cardTerrList.add(card1[1].trim());
+	    cardTerrList.add(card2[1].trim());
+	    cardTerrList.add(card3[1].trim());
 	    if(checkTradeInCard(cardList)) {
 		int army = tradeInArmy();
 		players.setTradeInArmies(army);
@@ -1388,10 +1415,13 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		log.append("Number of Trade In : "+players.getTradeIn()+"\n");
 		log.append("You Got " + army+" Amies\n");
 		players.updateArmy(players.getPlayerList().get(playerTurn), army, "ADD");
-		if(territory.getTerritoryUser().get(card1[1].trim()).equalsIgnoreCase(players.getPlayerList().get(playerTurn)) || territory.getTerritoryUser().get(card2[1].trim()).equalsIgnoreCase(players.getPlayerList().get(playerTurn)) || territory.getTerritoryUser().get(card3[1].trim()).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
-		    players.updateArmy(players.getPlayerList().get(playerTurn), 2, "ADD");
-		    log.append("You Got Additional 2 Amies\n");
-		}		    
+		for (int i = 0; i < cardTerrList.size(); i++) {
+		    if(!cardList.get(i).equalsIgnoreCase("Wild Card") && territory.getTerritoryUser().get(cardTerrList.get(i)).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
+			players.updateArmy(players.getPlayerList().get(playerTurn), 2, "ADD");
+			log.append("You Got Additional 2 Amies\n");
+			break;
+		    }
+		}
 		players.getTerritoryCards().remove(card1[1].trim());
 		players.getTerritoryCards().remove(card2[1].trim());
 		players.getTerritoryCards().remove(card3[1].trim());
