@@ -1,14 +1,29 @@
 package com.risk.observer;
 
+/**
+ * This is observer class
+ */
 public abstract class Observer {
-    protected Subject observerSubject;
+	protected Subject observerSubject;
 
-    public abstract void update();
+	/**
+	 * this method update new changes
+	 */
+	public abstract void update();
 
-    public abstract void fortificationUpdate();
+	/**
+	 * this method update fortification changes 
+	 */
+	public abstract void fortificationUpdate();
 
-    public abstract void attackUpdate();
+	/**
+	 * this method update attack changes 
+	 */
+	public abstract void attackUpdate();
 
-    public abstract void tradeInCardUpdate();
+	/**
+	 * this method update card changes 
+	 */
+	public abstract void tradeInCardUpdate();
 
 }

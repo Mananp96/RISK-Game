@@ -6,31 +6,30 @@ package com.risk.models;
  *
  */
 public class ArmiesSelection {
+	private int armies;
 
-    private int armies;
+	/**
+	 * This constructor set the number of armies according to playerPlaying.
+	 * @param playerPlaying Number of Players playing the game.
+	 */
+	public ArmiesSelection(int playerPlaying) {
+		super();
+		armies = 50 - (playerPlaying * 5);
+	}
 
-    /**
-     * This constructor set the number of armies according to playerPlaying.
-     * @param playerPlaying Number of Players playing the game.
-     */
-    public ArmiesSelection(int playerPlaying) {
-	super();
-	armies = 50 - (playerPlaying * 5);
-    }
+	/**
+	 * Returns the Number of initial armies per Player.
+	 * @return number of initial armies
+	 */
+	public int getPlayerArmies() {
+		return armies;
+	}
 
-    /**
-     * Returns the Number of initial armies per Player.
-     * @return number of initial armies
-     */
-    public int getPlayerArmies() {
-	return armies;
-    }
-
-    /**
-     * Set the Number of initial Armies assigned per Player.
-     * @param armies number of initial armies
-     */
-    public void setPlayerArmies(int armies) {
-	this.armies = armies;
-    }
+	/**
+	 * Set the Number of initial Armies assigned per Player.
+	 * @param armies number of initial armies
+	 */
+	public void setPlayerArmies(int armies) {
+		this.armies = armies;
+	}
 }
