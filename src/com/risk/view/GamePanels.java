@@ -1167,6 +1167,15 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		}
 	}
 	/**
+	 * This Method check whether player has won game or not for Test
+	 * @return true if player won game.
+	 */
+	public boolean checkTestWonGame() {
+		int totalTerritory = 2;
+		int totalterritorySize = 2;
+		return (totalTerritory*100)/totalterritorySize == 100 ? true : false;
+	}
+	/**
 	 * method used to check whether current player can go for fortification phase more or not.
 	 */
 	public void checkFortificationStatus() {

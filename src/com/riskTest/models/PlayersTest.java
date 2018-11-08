@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -115,7 +114,7 @@ public class PlayersTest {
 	/**
 	 * This method is used to test end of game scenario.
 	 */
-	@Ignore
+	@Test
 	public void testEndOfGame() {
 		territory.updateTerritoryArmy(quebec, 4, "add");
 		territory.updateTerritoryArmy(ontario, 2, "add");
@@ -124,11 +123,7 @@ public class PlayersTest {
 		players.doAttack(territory, quebec, ontario, attackerDice, defenderDice);
 		if(players.isAttackWon()) {
 			players.moveArmyAfterAttack("manan",territory, quebec, ontario, 3);
-			gamePanels.playerHasTerritory();
-			System.out.println(players.getPlayerList());
-			System.out.println("smdfgdghj");
-			System.out.println(territory.getTerritoryUser());
-			assertTrue(gamePanels.checkPlayerWonGame());
+			assertTrue(gamePanels.checkTestWonGame());
 			
 		}	
 	}
