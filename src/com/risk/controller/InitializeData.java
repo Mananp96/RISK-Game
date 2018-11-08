@@ -23,10 +23,10 @@ public class InitializeData extends GamePanels {
 
 	/**
 	 * This constructor is used to set the data members of class.
-	 * @param filePath	path of map File.
-	 * @param playerCount	Number of Players in game.
-	 * @param armies	Number of armies per Player.
-	 * @param players	model object of Players.
+	 * @param filePath path of map File.
+	 * @param playerCount Number of Players in game.
+	 * @param armies Number of armies per Player.
+	 * @param players model object of Players.
 	 */
 	public InitializeData(String filePath, int playerCount, int armies, Players players) {
 		this.filePath = filePath;
