@@ -3,10 +3,10 @@ package com.riskTest.models;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -87,6 +87,9 @@ public class TerritoryTest {
 		assertEquals(territoryArmy,territory.getTerritoryArmy());
 	}
 	
+	/**
+	 * This method is to test AddTerritoryCont method.
+	 */
 	@Test
 	public void testAddTerritoryCont() {
 		territory.addTerritoryCont(territoryThree, africaContinent);
@@ -94,6 +97,9 @@ public class TerritoryTest {
 		assertEquals(territoryContinent, territory.getTerritoryCont());
 	}
 	
+	/**
+	 * This method is to test UpdateTerritoryUser method.
+	 */
 	@Test
 	public void testUpdateTerritoryUser() {
 		territory.updateTerritoryUser("manan", territoryOne);
@@ -101,12 +107,26 @@ public class TerritoryTest {
 		assertEquals(territoryUser,territory.updateTerritoryUser("man", territoryOne));
 	}
 	
+	/**
+	 * This method is to test UpdateTerritoryContinent.
+	 */
 	@Test
 	public void testUpdateTerritoryContinent() {
 		territory.addTerritoryCont(territoryTwo, asiaContinent);
 		territory.addTerritoryCont(territoryThree, asiaContinent);
 		territory.updateTerritoryContinent(asiaContinent, africaContinent);
 		assertEquals(territoryContinent, territory.getTerritoryCont());
+	}
+	
+	/**
+	 * This method is used to test Add Territory method.
+	 */
+	@Test
+	public void testAddTerritory() {
+		territory.addTerritory(territoryThree);
+		territory.addTerritory(territoryFour);
+		territory.addTerritory(territoryOne);
+		assertEquals(territoryList,territory.getTerritoryList());
 	}
 	
 	

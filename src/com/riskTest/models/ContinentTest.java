@@ -64,6 +64,17 @@ public class ContinentTest {
 		continent.setContinentValue(continentNameTwo, controlValueTwo);
 		assertEquals(continentValue,continent.getContinentValue());
 	}
+	
+	/**
+	 * This method is used to test UpdateTerritoryContinent method.
+	 */
+	@Test
+	public void testUpdateContinentValue() {
+		continentValue.put(continentNameTwo, 3);
+		continent.setContinentValue(continentNameOne,controlValueOne);
+		continent.updateContinentValue(continentNameOne, continentNameTwo, 3);
+		assertEquals(continentValue,continent.getContinentValue());
+	}
 
 	/**
 	 * This method is to test Add Territory of Continent functionality.
