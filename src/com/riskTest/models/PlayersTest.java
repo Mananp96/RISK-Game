@@ -7,16 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.risk.controller.Reinforcement;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
-import com.risk.observer.Subject;
 import com.risk.view.GamePanels;
 
 /**
