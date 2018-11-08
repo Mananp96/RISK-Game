@@ -36,22 +36,22 @@ public interface Strategy {
 
 	/**
 	 * method implement strategy pattern for attack
-	 * @param currentTerritory
-	 * @param fromTerritory
-	 * @param toTerritory
-	 * @param attackerDice
-	 * @param defenderDice
+	 * @param currentTerritory territory object
+	 * @param fromTerritory from territory
+	 * @param toTerritory to territory
+	 * @param attackerDice amount of Dice of Attacker
+	 * @param defenderDice amount of Dice of defender
 	 */
 	public void doAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDice,
 			int defenderDice);
 
 	/**
 	 * method implement strategy pattern for army move after attack phase
-	 * @param fromTerritory
-	 * @param currentTerritory
-	 * @param toTerritory
-	 * @param toTerritory2
-	 * @param armies
+	 * @param fromTerritory from territory
+	 * @param currentTerritory territory object
+	 * @param toTerritory to territory
+	 * @param toTerritory2   to territory2
+	 * @param armies number of armies to move from
 	 */
 	public void moveArmyAfterAttack(String fromTerritory, Territory currentTerritory, String toTerritory,
 			String toTerritory2, int armies);

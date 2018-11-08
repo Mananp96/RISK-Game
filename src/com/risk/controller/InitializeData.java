@@ -142,9 +142,8 @@ public class InitializeData extends GamePanels {
 	 * {@link BoardData#generateBoardData()} of class BoardData
 	 * for the purpose of Generate Data and Validate map Data from map file. 
 	 * if map is valid then it starts the process of Initial Reinforcement: invoke
-	 * the method {@linkplain Reinforcement#generateArmy()} of class Reinforcement.
 	 *
-	 * @return true if map Data is Valid else, return false.
+	 * @return isMapValid true if map Data is Valid else, return false.
 	 */
 	public boolean generateData() {
 

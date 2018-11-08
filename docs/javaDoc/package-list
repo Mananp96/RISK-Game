@@ -1,6 +1,8 @@
 com.risk.controller
 com.risk.exception
 com.risk.models
+com.risk.observer
+com.risk.strategy
 com.risk.validate
 com.risk.view
 com.riskTest
