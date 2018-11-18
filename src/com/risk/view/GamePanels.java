@@ -82,6 +82,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	private JButton fortifyBtn;
 	private JButton endTurnBtn;
 	private JButton menuBtn;
+	private JButton saveBtn;
 	private JButton turnInBtn;
 	private JButton tradeCardBtn;
 	private JButton createNewMapBtn;
@@ -243,6 +244,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		menuBtn.setActionCommand(backBtnName);
 		menuBtn.addActionListener(this);
 
+		saveBtn = new JButton("Save Game");
+		saveBtn.setActionCommand(saveBtnName);
+		saveBtn.addActionListener(this);
+
 		logArea.setFocusable(false);
 		logArea.setLineWrap(true);
 		logArea.setWrapStyleWord(true);
@@ -252,9 +257,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		logScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		JScrollPane jScrollPane = new JScrollPane(log);
 		jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		logPanel.add(menuBtn, setGridBagConstraints(new Insets(5, 0, 20, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 0));
-		logPanel.add(logScrollPane, setGridBagConstraints(new Insets(0,5, 5, 5), GridBagConstraints.BOTH, 0.5,5, 0, 1));
-		logPanel.add(jScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 2));
+		logPanel.add(menuBtn, setGridBagConstraints(new Insets(5, 0, 5, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 0));
+		logPanel.add(saveBtn, setGridBagConstraints(new Insets(5, 0, 20, 5), GridBagConstraints.HORIZONTAL, 0.5, 0.5, 0, 1));
+		logPanel.add(logScrollPane, setGridBagConstraints(new Insets(0,5, 5, 5), GridBagConstraints.BOTH, 0.5,5, 0, 2));
+		logPanel.add(jScrollPane, setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, 0.5, 5, 0, 3));
 		return logPanel;
 	}
 	/**
