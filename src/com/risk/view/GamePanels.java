@@ -1,38 +1,20 @@
 package com.risk.view;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Map.Entry;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.SpinnerNumberModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.risk.controller.InitializeData;
+import com.risk.models.ArmiesSelection;
+import com.risk.models.Continent;
+import com.risk.models.Players;
+import com.risk.models.Territory;
+import com.risk.observer.Observer;
+import com.risk.observer.Subject;
+import com.risk.strategy.Context;
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -42,17 +24,18 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.risk.controller.InitializeData;
-import com.risk.models.ArmiesSelection;
-import com.risk.models.Continent;
-import com.risk.models.Players;
-import com.risk.models.Territory;
-import com.risk.observer.Observer;
-import com.risk.observer.Subject;
-import com.risk.strategy.Context;
 /**
  * 
  * User Interface for Game Play
@@ -81,6 +64,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	String threePlayersBtnName = "threePlayersBtn";
 	String fourPlayersBtnName = "fourPlayersBtn";
 	String fivePlayersBtnName = "fivePlayersBtn";
+	String loadSavedGameName = "loadSavedGameBtn";
 	String createNewMapBtnName = "Create New Map";
 	String editExistingMapBtnName = "Edit Existing Map";
 	String saveBtnName = "Save";
@@ -151,7 +135,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
 	public JPanel playerMenu(){
 		JPanel playerPanel = new JPanel();
-		LayoutManager playerLayout = new GridLayout(6, 1, 5, 5);
+		LayoutManager playerLayout = new GridLayout(7, 1, 5, 5);
 		playerPanel.setLayout(playerLayout);
 
 		JLabel playerCountLabel = new JLabel("Number of Players : ");
@@ -159,6 +143,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		JButton threePlayersBtn = new JButton("Three");
 		JButton fourPlayersBtn = new JButton("Four");
 		JButton fivePlayersBtn = new JButton("Five");
+		JButton loadSavedGameBtn = new JButton("Load Saved Game");
 		backBtn = new JButton ("Back");	
 
 		playerPanel.add(playerCountLabel);
@@ -166,18 +151,21 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		playerPanel.add(threePlayersBtn);
 		playerPanel.add(fourPlayersBtn);
 		playerPanel.add(fivePlayersBtn);
+		playerPanel.add(loadSavedGameBtn);
 		playerPanel.add(backBtn);
 
 		twoPlayersBtn.addActionListener(this);
 		threePlayersBtn.addActionListener(this);
 		fourPlayersBtn.addActionListener(this);
 		fivePlayersBtn.addActionListener(this);
+		loadSavedGameBtn.addActionListener(this);
 		backBtn.addActionListener(this);
 
 		twoPlayersBtn.setActionCommand(twoPlayersBtnName);
 		threePlayersBtn.setActionCommand(threePlayersBtnName);
 		fourPlayersBtn.setActionCommand(fourPlayersBtnName);
 		fivePlayersBtn.setActionCommand(fivePlayersBtnName);
+		loadSavedGameBtn.setActionCommand(loadSavedGameName);
 		backBtn.setActionCommand(backBtnName);
 		return playerPanel;
 	}
@@ -818,27 +806,27 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			if (randomMap) {
 				if (StringUtils.isNotEmpty(mapFilePath)) {
 					ArmiesSelection armies = new ArmiesSelection(playerPlaying);
-					InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
+					InitializeData initializeData = new InitializeData(mapFilePath, playerPlaying, armies.getPlayerArmies(), players);
 					boolean isMapValid = initializeData.generateData();
-					if(isMapValid) {
+					if (isMapValid) {
 						continent = initializeData.getContinent();
 						players = initializeData.getPlayers();
 						territory = initializeData.getTerritory();
-						observerSubject.setState(MANAN_PLAYER,true);
-						observerSubject.setState("Reinforcement Force Started \n",false);
+						observerSubject.setState(MANAN_PLAYER, true);
+						observerSubject.setState("Reinforcement Force Started \n", false);
 						setFrameValidate(gameView());
 						fortifySkipBtn.setEnabled(false);
 						attackSkipBtn.setEnabled(false);
 					} else {
-						JOptionPane.showMessageDialog(frame, "Please Check data Again.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);   
+						JOptionPane.showMessageDialog(frame, "Please Check data Again.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
-					JOptionPane.showMessageDialog(frame, "No Map Selected.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);    
+					JOptionPane.showMessageDialog(frame, "No Map Selected.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
 				if (StringUtils.isNotEmpty(existingMapFilePath)) {
 					ArmiesSelection armies = new ArmiesSelection(playerPlaying);
-					InitializeData initializeData = new InitializeData( existingMapFilePath, playerPlaying , armies.getPlayerArmies(), players);
+					InitializeData initializeData = new InitializeData(existingMapFilePath, playerPlaying, armies.getPlayerArmies(), players);
 					boolean isEditMapValid = initializeData.generateData();
 					if (isEditMapValid) {
 						continent = initializeData.getContinent();
@@ -850,10 +838,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 						fortifySkipBtn.setEnabled(false);
 						attackSkipBtn.setEnabled(false);
 					} else {
-						JOptionPane.showMessageDialog(frame, "Please Check data Again.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);   
+						JOptionPane.showMessageDialog(frame, "Please Check data Again.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
-					JOptionPane.showMessageDialog(frame, "No Map Edited Previously.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);   
+					JOptionPane.showMessageDialog(frame, "No Map Edited Previously.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		} else if (actionName.equals(twoPlayersBtnName)) {
@@ -883,6 +871,98 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			setFrameValidate(mainMenu(frame));
 		} else if (actionName.equals("tradeCardBtn")) {
 			observerSubject.setTradeInMsg("Started Trading A Card");
+		} else if (actionName.equalsIgnoreCase(saveBtnName)) {
+
+			JSONObject game = new JSONObject();
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String playerString = gson.toJson(players);
+			String continentString = gson.toJson(continent);
+			String territoryString = gson.toJson(territory);
+
+			game.put("player", playerString);
+			game.put("continent", continentString);
+			game.put("territory", territoryString);
+			game.put("playerTurn", playerTurn);
+
+			String gameString = gson.toJson(game);
+
+			try {
+				FileWriter fileWriter = new FileWriter("riskGame_1.json");
+				fileWriter.write(gameString);
+				fileWriter.flush();
+				System.out.println("File created successfully");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} else if (actionName.equals(loadSavedGameName)) {
+			try {
+				JSONParser parser = new JSONParser();
+				Gson gson = new Gson();
+
+				Object obj = parser.parse(new FileReader("riskGame_1.json"));
+				JSONObject jsonObject = (JSONObject) obj;
+
+				players = gson.fromJson(String.valueOf(jsonObject.get("player")), Players.class);
+				continent = gson.fromJson(String.valueOf(jsonObject.get("continent")), Continent.class);
+				territory = gson.fromJson(String.valueOf(jsonObject.get("territory")), Territory.class);
+				playerTurn = (int) (long) jsonObject.get("playerTurn");
+
+				if (playerTurn == 0) {
+					observerSubject.setState(MANAN_PLAYER, true);
+				} else if (playerTurn == 1) {
+					observerSubject.setState(SHALIN_PLAYER, true);
+				} else if (playerTurn == 2) {
+					observerSubject.setState(KHYATI_PLAYER, true);
+				} else if (playerTurn == 3) {
+					observerSubject.setState(VAISHAKHI_PLAYER, true);
+				} else if (playerTurn == 4) {
+					observerSubject.setState(HIMEN_PLAYER, true);
+				}
+
+				setFrameValidate(gameView());
+
+				if (players.getCurrentPhase().equalsIgnoreCase("reinforcement")) {
+					reinforceBtn.setEnabled(true);
+					fortifyBtn.setEnabled(false);
+					fortifySkipBtn.setEnabled(false);
+					attackBtn.setEnabled(false);
+					attackSkipBtn.setEnabled(false);
+					observerSubject.setState("Reinforcement Force Started \n", false);
+
+				} else if (players.getCurrentPhase().equalsIgnoreCase("attack")) {
+					reinforceBtn.setEnabled(false);
+					fortifyBtn.setEnabled(false);
+					fortifySkipBtn.setEnabled(false);
+					attackBtn.setEnabled(true);
+					attackSkipBtn.setEnabled(true);
+					observerSubject.setState("Attack Phase Started \n", false);
+					gamePanel.remove(2);
+					gamePanel.invalidate();
+					gamePanel.validate();
+					gamePanel.add(countryScreen("attack"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+					gamePanel.invalidate();
+					gamePanel.validate();
+				} else if (players.getCurrentPhase().equalsIgnoreCase("fortification")) {
+					reinforceBtn.setEnabled(false);
+					fortifyBtn.setEnabled(true);
+					fortifySkipBtn.setEnabled(true);
+					attackBtn.setEnabled(false);
+					attackSkipBtn.setEnabled(false);
+					observerSubject.setState("Fortification Phase Started \n", false);
+					gamePanel.remove(2);
+					gamePanel.invalidate();
+					gamePanel.validate();
+					gamePanel.add(countryScreen("fortification"), setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH, GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+					gamePanel.invalidate();
+					gamePanel.validate();
+					startFortificationPhase();
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 		}
 	}
 	/**
