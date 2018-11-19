@@ -242,38 +242,42 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	 * @return GamePanel object which consist portion of Game Play
 	 */
 	protected JPanel gameView() {
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
-		frame.setResizable(true);
-		gamePanel = new JPanel();
-		frame.setLayout(mainLayout);
-		gamePanel.add(displayLog(),setGridBagConstraints(new Insets(25, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_START, 0.5, 0.5, 0, 0));
-		gamePanel.add(eventScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.CENTER, 0.5, 0.5, 1, 0));
-		gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setVisible(true);
+	    frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
+	    frame.setResizable(true);
+	    gamePanel = new JPanel();
+	    frame.setLayout(mainLayout);
+	    gamePanel.add(displayLog(),setGridBagConstraints(new Insets(25, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_START, 0.5, 0.5, 0, 0));
+	    gamePanel.add(eventScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.CENTER, 0.5, 0.5, 1, 0));
+	    gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	    if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("human")) {
 		setBotReinforcement();
-    	return gamePanel;
+	    }
+	    return gamePanel;
 	}
-	
+
 	public void setBotReinforcement() {
+	    observerSubject.setReinforcementMsg("Reinforcment Phase Started");
 	    if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")) {
-		observerSubject.setReinforcementMsg("Reinforcment Phase Started");
+
 		context = new Context(players);
 		context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
 		observerSubject.setReinforcementMsg(players.getReinforcementMsg());
-		observerSubject.setReinforcementMsg("Reinforcment Phase End");
-		territoryAModel.removeAllElements();
-		territoryBModel.removeAllElements();
-		territoryInfoModel.removeAllElements();
-		continentInfoModel.removeAllElements();
-		updateTerritoryAList();
-		updateContinentInfoList();
-		enableReinforcementBtn();
-		setBotAttackPanel();
 	    } else if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("BENEVOLENT")) {
-		
+		context = new Context(players);
+		context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
+		observerSubject.setReinforcementMsg(players.getReinforcementMsg());
 	    }
+	    observerSubject.setReinforcementMsg("Reinforcment Phase End");
+	    territoryAModel.removeAllElements();
+	    territoryBModel.removeAllElements();
+	    territoryInfoModel.removeAllElements();
+	    continentInfoModel.removeAllElements();
+	    updateTerritoryAList();
+	    updateContinentInfoList();
+	    enableReinforcementBtn();
+	    setBotAttackPanel();
 	}
 	/**
 	 * 
@@ -658,69 +662,75 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	}
 	
 	public void setBotAttackPanel() {
-		if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")){
-			   String tempAttackTerr="";
-			   String tempdefenderTerr="";
-			    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
-				if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
-				    tempAttackTerr= entry.getKey();
-				    for(int i =0;i < territory.getAdjacentTerritory().get(entry.getKey()).size();i++) {
-					if(!players.getPlayerPlaying().get(playerTurn).equals(territory.getTerritoryUser().get(territory.getAdjacentTerritory().get(entry.getKey()).get(i)))) {
-						tempdefenderTerr = territory.getAdjacentTerritory().get(entry.getKey()).get(i);
-						break;
-					}
-				    }	    
-				}
+	    if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")){
+		String tempAttackTerr="";
+		String tempdefenderTerr="";
+		for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
+		    if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
+			tempAttackTerr= entry.getKey();
+			for(int i =0;i < territory.getAdjacentTerritory().get(entry.getKey()).size();i++) {
+			    if(!players.getPlayerPlaying().get(playerTurn).equals(territory.getTerritoryUser().get(territory.getAdjacentTerritory().get(entry.getKey()).get(i)))) {
+				tempdefenderTerr = territory.getAdjacentTerritory().get(entry.getKey()).get(i);
+				break;
 			    }
-			    territoryADropDown.removeAllItems();
-			    territoryADropDown.addItem(tempAttackTerr);
-			    territoryADropDown.setEnabled(false);
-			    if(StringUtils.isNotBlank(tempdefenderTerr)) {
-				territoryBDropDown.removeAllItems();
-				    territoryBDropDown.addItem(tempdefenderTerr);
-				    territoryBDropDown.setEnabled(false);
-				    int attackerDie = territory.getTerritoryArmy().get(tempAttackTerr) > 4 ? 3 : (territory.getTerritoryArmy().get(tempAttackTerr) - 1);
-				    int defenderDie = territory.getTerritoryArmy().get(tempdefenderTerr) > 3 ? 3 : territory.getTerritoryArmy().get(tempdefenderTerr);
-				    attackerDiceDropDown.removeAllItems();
-				    attackerDiceDropDown.addItem(attackerDie);
-				    attackerDiceDropDown.setEnabled(false);
-/*				    if(players.getPlayerType().get(territory.getTerritoryUser().get(tempdefenderTerr)).equalsIgnoreCase("AGGRESSIVE")) {
-*/					defenderDiceDropDown.removeAllItems();
-					defenderDiceDropDown.addItem(defenderDie);
-					defenderDiceDropDown.setEnabled(false);
-					context = new Context(players);
-					context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, "AGGRESSIVE");	
-					observerSubject.setAttackMsg(players.getAttackerMsg());
-					if(players.isAttackWon()) {
-						if(checkPlayerWonGame()) {
-							JOptionPane.showMessageDialog(frame, "You Won Game", "Game Won",JOptionPane.INFORMATION_MESSAGE);
-							setFrameValidate(mainMenu(frame));
-						}
-					}
-					attackPanelReset();
-				 /*   }*/
-			    } else {
-				attackBtn.setEnabled(false);
-				attackSkipBtn.setEnabled(false);
-				fortifyBtn.setEnabled(true);
-				fortifySkipBtn.setEnabled(true);
-				goForFortification();
-				System.out.println("------>"+gamePanel.getComponents().length);
-				if(gamePanel.getComponents().length >2) {
-
-				    gamePanel.remove(2);
-				    gamePanel.invalidate();
-				    gamePanel.validate();
-				    gamePanel.add(countryScreen("fortification"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
-					gamePanel.invalidate();
-					gamePanel.validate();
-				}
-				endTurnBtn.setEnabled(true);
-			    }
-			    
+			}	    
+		    }
+		}
+		territoryADropDown.removeAllItems();
+		territoryADropDown.addItem(tempAttackTerr);
+		territoryADropDown.setEnabled(false);
+		if(StringUtils.isNotBlank(tempdefenderTerr)) {
+		    territoryBDropDown.removeAllItems();
+		    territoryBDropDown.addItem(tempdefenderTerr);
+		    territoryBDropDown.setEnabled(false);
+		    int attackerDie = territory.getTerritoryArmy().get(tempAttackTerr) > 4 ? 3 : (territory.getTerritoryArmy().get(tempAttackTerr) - 1);
+		    int defenderDie = territory.getTerritoryArmy().get(tempdefenderTerr) > 3 ? 3 : territory.getTerritoryArmy().get(tempdefenderTerr);
+		    attackerDiceDropDown.removeAllItems();
+		    attackerDiceDropDown.addItem(attackerDie);
+		    attackerDiceDropDown.setEnabled(false);
+		    /*				    if(players.getPlayerType().get(territory.getTerritoryUser().get(tempdefenderTerr)).equalsIgnoreCase("AGGRESSIVE")) {
+		     */					
+		    defenderDiceDropDown.removeAllItems();
+		    defenderDiceDropDown.addItem(defenderDie);
+		    defenderDiceDropDown.setEnabled(false);
+		    context = new Context(players);
+		    context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, "AGGRESSIVE");	
+		    observerSubject.setAttackMsg(players.getAttackerMsg());
+		    if(players.isAttackWon()) {
+			if(checkPlayerWonGame()) {
+			    JOptionPane.showMessageDialog(frame, "You Won Game", "Game Won",JOptionPane.INFORMATION_MESSAGE);
+			    setFrameValidate(mainMenu(frame));
 			}
+		    }
+		    attackPanelReset();
+		    /*   }*/
+		} else {
+		    setBotAttackPanelReset();
+		}
+
+	    } else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("BENEVOLENT")) {
+		setBotAttackPanelReset();
+	    }
 	}
-		
+	
+	public void setBotAttackPanelReset() {
+	attackBtn.setEnabled(false);
+	attackSkipBtn.setEnabled(false);
+	fortifyBtn.setEnabled(true);
+	fortifySkipBtn.setEnabled(true);
+	goForFortification();
+	System.out.println("------>" + gamePanel.getComponents().length);
+	if (gamePanel.getComponents().length > 2) {
+	    gamePanel.remove(2);
+	    gamePanel.invalidate();
+	    gamePanel.validate();
+	    gamePanel.add(countryScreen("fortification"), setGridBagConstraints(new Insets(5, 5, 5, 5),
+		    GridBagConstraints.BOTH, GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	    gamePanel.invalidate();
+	    gamePanel.validate();
+	}
+	endTurnBtn.setEnabled(true);
+	}
 	/**
 	 * Display list of territory and it's adjacent territory of current Player 
 	 * @return fortificationPanel for movement of army
@@ -920,7 +930,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			players.addPlayers(MANAN_PLAYER);
 			players.addPlayers(SHALIN_PLAYER);
 			players.addPlayerType(MANAN_PLAYER, "AGGRESSIVE");
-			players.addPlayerType(SHALIN_PLAYER, "AGGRESSIVE");
+			players.addPlayerType(SHALIN_PLAYER, "BENEVOLENT");
 
 			setFrameValidate(playerMenu());
 		} else if (actionName.equals(editMapBtnName)) {
@@ -1287,23 +1297,24 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		addTerritoryADropDown();
 		
 	}
+
 	public void setBotFortification() {
 	    fortifyBtn.setEnabled(false);
 	    fortifySkipBtn.setEnabled(false);
-	    if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")) {
+	    if (!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("HUMAN")) {
 		context = new Context(players);
 		context.executeBotFortification(players.getPlayerList().get(playerTurn), territory);
 		observerSubject.setFortificationMessage(players.getFortificationMsg());
 		players.setFortificationMsg("");
-	   
+
 	    }
-		observerSubject.setState("Fortification Phase End \n", false);
-		territoryAModel.removeAllElements();
-		territoryBModel.removeAllElements();
-		territoryInfoModel.removeAllElements();
-		continentInfoModel.removeAllElements();
-		updateTerritoryAList();
-		updateContinentInfoList();
+	    observerSubject.setState("Fortification Phase End \n", false);
+	    territoryAModel.removeAllElements();
+	    territoryBModel.removeAllElements();
+	    territoryInfoModel.removeAllElements();
+	    continentInfoModel.removeAllElements();
+	    updateTerritoryAList();
+	    updateContinentInfoList();
 	}
 
 	/**
@@ -1339,14 +1350,17 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		}
 		
 		if(players.getCards().containsValue(players.getPlayerPlaying().get(playerTurn))) {
-			gamePanel.add(countryScreen("tradeIn"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+		    gamePanel.add(countryScreen("tradeIn"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
 		} else {
-			gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+		    gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
 		}
 		gamePanel.invalidate();
 		gamePanel.validate();
 		playerOwnedCards();
-		setBotReinforcement();
+		if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("HUMAN")) {
+		    setBotReinforcement();    
+		}
+		
 	}
 	/**
 	 * This Method Check Whether Player has Territories or not.

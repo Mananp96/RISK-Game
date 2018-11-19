@@ -1,5 +1,6 @@
 package com.risk.models;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -491,19 +492,33 @@ public class Players implements Strategy {
 	}
 
 	@Override
-	public void doBotReinforcement(String currentPlayer, Territory currentTerritory) {
-	    if(playerType.get(currentPlayer).equalsIgnoreCase("AGGRESSIVE")) {
-		String tempTerritory = "";
-		int tempArmy = 0;
-		for(Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
-		    if(currentTerritory.getTerritoryArmy().get(entry.getKey()) > tempArmy && currentTerritory.getTerritoryUser().get(entry.getKey()).equalsIgnoreCase(currentPlayer)) {
-			tempTerritory = entry.getKey();
-		    }
+    public void doBotReinforcement(String currentPlayer, Territory currentTerritory) {
+	String tempTerritory = "";
+	int tempArmy = 0;
+	String[] tempSplit;
+	ArrayList<String> tempTerrList = new ArrayList<>();
+	if (playerType.get(currentPlayer).equalsIgnoreCase("AGGRESSIVE")) {
+	    for (Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
+		if (currentTerritory.getTerritoryArmy().get(entry.getKey()) > tempArmy
+			&& currentTerritory.getTerritoryUser().get(entry.getKey()).equalsIgnoreCase(currentPlayer)) {
+		    tempTerritory = entry.getKey();
 		}
-		doReinforcement(currentPlayer, tempTerritory, playerArmy.get(currentPlayer), currentTerritory);
 	    }
-	    
+	    doReinforcement(currentPlayer, tempTerritory, playerArmy.get(currentPlayer), currentTerritory);
+	} else if (playerType.get(currentPlayer).equalsIgnoreCase("BENEVOLENT")) {
+	    for (Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
+		if (currentTerritory.getTerritoryUser().get(entry.getKey()).equalsIgnoreCase(currentPlayer)) {
+		    tempTerrList.add(currentTerritory.getTerritoryArmy().get(entry.getKey()) + "-" + entry.getKey());
+		}
+	    }
+	    Collections.sort(tempTerrList);
+	    if (!tempTerrList.isEmpty()) {
+		tempSplit = tempTerrList.get(0).split("-");
+		doReinforcement(currentPlayer, tempSplit[1], playerArmy.get(currentPlayer), currentTerritory);
+	    }
 	}
+
+    }
 
 	@Override
 	public void doBotAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDie,
@@ -523,35 +538,37 @@ public class Players implements Strategy {
 
 	@Override
 	public void doBotForitification(String currentPlayer, Territory currentTerritory) {
-	    // TODO Auto-generated method stub
 	    ArrayList<String> tempTerritory = new ArrayList<>();
 	    String message ="";
-	    if(getPlayerType().get(currentPlayer).equalsIgnoreCase("AGGRESSIVE")) {
+	    if(getPlayerType().get(currentPlayer).equalsIgnoreCase("AGGRESSIVE") || getPlayerType().get(currentPlayer).equalsIgnoreCase("BENEVOLENT")) {
 		for(Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
 		    if(entry.getValue().equalsIgnoreCase(currentPlayer)) {
 			tempTerritory.add(currentTerritory.getTerritoryArmy().get(entry.getKey())+"-"+entry.getKey());
 		    }
 		}
 		Collections.sort(tempTerritory);
-		Collections.reverse(tempTerritory);
-		//System.out.println(tempTerritory);
+		if(getPlayerType().get(currentPlayer).equalsIgnoreCase("AGGRESSIVE")) {
+		    Collections.reverse(tempTerritory);    
+		}
 		if(tempTerritory.size() > 1) {
 		    String[] splitTerr = tempTerritory.get(0).split("-");
+		    System.out.println("-----------> "+splitTerr[1]);
 		    for(int i=0;i<currentTerritory.getAdjacentTerritory().get(splitTerr[1]).size();i++) {
 			String temp = currentTerritory.getAdjacentTerritory().get(splitTerr[1]).get(i);
-			if(!currentTerritory.getTerritoryUser().get(temp).equalsIgnoreCase(currentPlayer) && currentTerritory.getTerritoryArmy().get(temp) > 1) {
-			    message = " Before Fortification \n"+splitTerr[1]+ " : " + currentTerritory.getTerritoryArmy().get(splitTerr[1])+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
+			System.out.println("----*** " +temp);
+			if(currentTerritory.getTerritoryUser().get(temp).equalsIgnoreCase(currentPlayer) && currentTerritory.getTerritoryArmy().get(temp) > 1) {
+			   System.out.println(">"+temp);
+			    message += " Before Fortification \n"+splitTerr[1]+ " : " + currentTerritory.getTerritoryArmy().get(splitTerr[1])+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
 			    doForitification(currentTerritory,temp, splitTerr[1], currentTerritory.getTerritoryArmy().get(temp)-1); 
 			    message += " After Fortification \n"+splitTerr[1]+ " : " + currentTerritory.getTerritoryArmy().get(splitTerr[1])+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
-			    setFortificationMsg(message);
-		//	    System.out.println(splitTerr[1] + " ---------> " +temp);
 			}
 		    }
+		    setFortificationMsg(message);
 		} else {
 		    setFortificationMsg("No Armies to Move");
 		}
 		
-	    } else if(getPlayerType().get(currentPlayer).equalsIgnoreCase("BENEVOLENT")) {
+	    } else if(getPlayerType().get(currentPlayer).equalsIgnoreCase("RANDOM")) {
 		
 	    }
 	}
