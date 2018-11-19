@@ -678,6 +678,26 @@ public class Players implements Strategy {
 	    } else {
 		setFortificationMsg("No Armies to Move");
 	    }
+	} else if (getPlayerType().get(currentPlayer).equalsIgnoreCase("CHEATER")) {
+	    boolean tempFlag = false;
+	    for(Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
+		if(entry.getValue().equalsIgnoreCase(currentPlayer)) {
+		    tempTerritory.add(entry.getKey());
+		}
+	    }
+	    for(int i =0;i< tempTerritory.size();i++) {
+		for(int j=0;j<currentTerritory.getAdjacentTerritory().get(tempTerritory.get(i)).size();j++) {
+		    if(!currentTerritory.getTerritoryUser().get(currentTerritory.getAdjacentTerritory().get(tempTerritory.get(i)).get(j)).equalsIgnoreCase(currentPlayer)) {
+			tempFlag = true;			
+		    }
+		}
+		if(tempFlag) {
+		    currentTerritory.updateTerritoryArmy(tempTerritory.get(i), currentTerritory.getTerritoryArmy().get(tempTerritory.get(i)), "ADD");
+		    tempFlag = false;
+		    message+= currentPlayer +" has double armies in " +tempTerritory.get(i)+ ". Now Current Armies are "+currentTerritory.getTerritoryArmy().get(tempTerritory.get(i))+"\n"; 
+		}
+	    }
+	    setFortificationMsg(message);
 	}
     }
 
