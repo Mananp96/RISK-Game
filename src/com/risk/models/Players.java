@@ -548,7 +548,6 @@ public class Players implements Strategy {
 		currentTerritory.updateTerritoryArmy(fromTerritory, 1, "DELETE");
 		currentTerritory.updateTerritoryArmy(toTerritory, 1, "ADD");    
 	    }
-
 	    setAttackerMsg(message1 + "\n" +message2);
 	}
     }
@@ -567,7 +566,7 @@ public class Players implements Strategy {
 	    if(getPlayerType().get(currentPlayer).equalsIgnoreCase("AGGRESSIVE")) {
 		Collections.reverse(tempTerritory);    
 	    }
-	    if(tempTerritory.size() > 1) {
+	    if(tempTerritory.size() >= 1) {
 		String[] splitTerr = tempTerritory.get(0).split("-");
 		System.out.println("-----------> "+splitTerr[1]);
 		for(int i=0;i<currentTerritory.getAdjacentTerritory().get(splitTerr[1]).size();i++) {
@@ -586,7 +585,32 @@ public class Players implements Strategy {
 	    }
 
 	} else if(getPlayerType().get(currentPlayer).equalsIgnoreCase("RANDOM")) {
-
+	    for(Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
+		if(entry.getValue().equalsIgnoreCase(currentPlayer)) {
+		    tempTerritory.add(entry.getKey());
+		}
+	    }
+	    int rand = 0;
+	    rand = new Random().nextInt(tempTerritory.size())+1;
+	    if(tempTerritory.size() == 1 || rand == tempTerritory.size()) {
+		rand = 0;
+	    }
+	    if(tempTerritory.size() >= 1) {
+		System.out.println("-----------> "+tempTerritory.get(rand));
+		for(int i=0;i<currentTerritory.getAdjacentTerritory().get(tempTerritory.get(rand)).size();i++) {
+		    String temp = currentTerritory.getAdjacentTerritory().get(tempTerritory.get(rand)).get(i);
+		    System.out.println("----*** " +temp);
+		    if(currentTerritory.getTerritoryUser().get(temp).equalsIgnoreCase(currentPlayer) && currentTerritory.getTerritoryArmy().get(temp) > 1) {
+			System.out.println(">"+temp);
+			message += " Before Fortification \n"+tempTerritory.get(rand)+ " : " + currentTerritory.getTerritoryArmy().get(tempTerritory.get(rand))+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
+			doForitification(currentTerritory,temp, tempTerritory.get(rand), currentTerritory.getTerritoryArmy().get(temp)-1); 
+			message += " After Fortification \n"+tempTerritory.get(rand)+ " : " + currentTerritory.getTerritoryArmy().get(tempTerritory.get(rand))+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
+		    }
+		}
+		setFortificationMsg(message);
+	    } else {
+		setFortificationMsg("No Armies to Move");
+	    }
 	}
     }
 

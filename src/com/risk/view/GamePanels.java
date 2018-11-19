@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
@@ -666,7 +667,12 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	}
 	
 	public void setBotAttackPanel() {
-	    if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")){
+	    boolean tempFlag = true;
+	    if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM")){
+		int rand = new Random().nextInt(6)+1;
+		tempFlag = rand  <= 3 ? true : false;
+	    }
+	    if((players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")||players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM")) && tempFlag){
 		String tempAttackTerr="";
 		String tempdefenderTerr="";
 		for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
@@ -713,6 +719,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		}
 
 	    } else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("BENEVOLENT")) {
+		setBotAttackPanelReset();
+	    } else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM") && !tempFlag) {
 		setBotAttackPanelReset();
 	    }
 	}
@@ -1307,14 +1315,28 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	public void setBotFortification() {
 	    fortifyBtn.setEnabled(false);
 	    fortifySkipBtn.setEnabled(false);
-	    if (!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("HUMAN")) {
+	    boolean tempFlag = true;
+	    if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM")){
+		int rand = new Random().nextInt(5)+1;
+		tempFlag = rand  >= 2 ? true : false;
+	    }
+	    if(!tempFlag) {
+		System.out.println("---->Fortification NO");
+	    }
+	    if (!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("HUMAN") && tempFlag) {
 		context = new Context(players);
 		context.executeBotFortification(players.getPlayerList().get(playerTurn), territory);
 		observerSubject.setFortificationMessage(players.getFortificationMsg());
 		players.setFortificationMsg("");
 
+	    } 
+	    if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM") && tempFlag) {
+		System.out.println("---->Fortification AGain");
+		setBotFortification();
+	    } else {
+		observerSubject.setState("Fortification Phase End \n", false);
 	    }
-	    observerSubject.setState("Fortification Phase End \n", false);
+	    
 	    territoryAModel.removeAllElements();
 	    territoryBModel.removeAllElements();
 	    territoryInfoModel.removeAllElements();
