@@ -533,6 +533,20 @@ public class Players implements Strategy {
 		message.append(getReinforcementMsg()+"\n");
 	    } while(getPlayerArmy(currentPlayer) >= 1);
 	    setReinforcementMsg(message.toString());
+	} else if(getPlayerType().get(currentPlayer).equalsIgnoreCase("CHEATER")) {
+	    for (Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
+		if (currentTerritory.getTerritoryUser().get(entry.getKey()).equalsIgnoreCase(currentPlayer)) {
+		    tempTerrList.add(entry.getKey());
+		}
+	    }
+	    if(!tempTerrList.isEmpty()) {
+		updateArmy(currentPlayer, getPlayerArmy(currentPlayer), "DELETE");
+	    }
+	    for(int i = 0;i< tempTerrList.size();i++) {
+		currentTerritory.updateTerritoryArmy(tempTerrList.get(i), currentTerritory.getTerritoryArmy().get(tempTerrList.get(i)), "ADD");
+		message.append("Armies Placed on "+tempTerrList.get(i) +" : "+currentTerritory.getTerritoryArmy().get(tempTerrList.get(i))+"\n");
+	    }
+	    setReinforcementMsg(message.toString());
 	}
 
     }
@@ -549,7 +563,60 @@ public class Players implements Strategy {
 		currentTerritory.updateTerritoryArmy(toTerritory, 1, "ADD");    
 	    }
 	    setAttackerMsg(message1 + "\n" +message2);
+	} else 	if(type.equalsIgnoreCase("CHEATER")) {
+	    StringBuilder message3 = new StringBuilder();
+	    ArrayList<String> tempArray = new ArrayList<>();
+	    for(Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
+		if(entry.getValue().equalsIgnoreCase(fromTerritory)) {
+		    tempArray.add(entry.getKey());
+		}
+	    }
+	    if(!tempArray.isEmpty()) {
+		boolean tempFlag = false;
+		for(int i = 0 ;i< tempArray.size();i++) {
+		    String fromPlayer = fromTerritory;
+		    for(int j=0;j<currentTerritory.getAdjacentTerritory().get(tempArray.get(i)).size();j++) {
+			String tempTerr = currentTerritory.getAdjacentTerritory().get(tempArray.get(i)).get(j);
+			String toPlayer = currentTerritory.getTerritoryUser().get(tempTerr);
+			String fromContinentPlayer = "";
+			String toContinentPlayer = "";
+			if(!fromPlayer.equalsIgnoreCase(toPlayer)) {
+			    for(Entry<String, ArrayList<String>> entry : playerContinent.get(fromPlayer).getContinentOwnedterritory().entrySet()) {
+				fromContinentPlayer = entry.getValue().contains(tempArray.get(i)) ? entry.getKey() : fromContinentPlayer;
+			    }
+			    for(Entry<String, ArrayList<String>> entry : playerContinent.get(toPlayer).getContinentOwnedterritory().entrySet()) {
+				toContinentPlayer = entry.getValue().contains(tempTerr) ? entry.getKey() : toContinentPlayer;
+			    }
+			    playerContinent.get(toPlayer).getContinentOwnedterritory().get(toContinentPlayer).remove(tempTerr);
+			    playerContinent.get(fromPlayer).getContinentOwnedterritory().get(fromContinentPlayer).add(tempTerr);
+			    currentTerritory.updateTerritoryUser(currentTerritory.getTerritoryUser().get(tempArray.get(i)),tempTerr);
+			    message3.append("Cheater Player has Capture : " + tempTerr + " Territory\n");
+			    tempFlag = true;
+			}
+		    }
+		}
+		setAttackerMsg(message3.toString());
+		if(tempFlag) {
+		    int rand = 0;
+
+		    rand = new Random().nextInt(currentTerritory.getTerritoryCard().keySet().toArray().length)+1;
+		    if(currentTerritory.getTerritoryCard().size() == 1) {
+			rand = 0;
+		    }
+		    if(currentTerritory.getTerritoryCard().size() == rand) {
+			rand -=1;
+		    }
+		    Object randomTerritory = currentTerritory.getTerritoryCard().keySet().toArray()[rand];
+		    if (!isWonCard) {
+			cards.put(randomTerritory.toString(), fromTerritory);
+			territoryCards.put(randomTerritory.toString().trim(),currentTerritory.getTerritoryCard().get(randomTerritory));
+			setWonCard(true);
+		    }
+		    currentTerritory.getTerritoryCard().remove(randomTerritory);
+		}
+	    }
 	}
+
     }
 
     @Override

@@ -273,6 +273,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		context = new Context(players);
 		context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
 		observerSubject.setReinforcementMsg(players.getReinforcementMsg());
+	    } else if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("CHEATER")) {
+		context = new Context(players);
+		context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
+		observerSubject.setReinforcementMsg(players.getReinforcementMsg());
 	    }
 	    observerSubject.setReinforcementMsg("Reinforcment Phase End");
 	    territoryAModel.removeAllElements();
@@ -708,20 +712,46 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		    observerSubject.setAttackMsg(players.getAttackerMsg());
 		    if(players.isAttackWon()) {
 			if(checkPlayerWonGame()) {
-			    JOptionPane.showMessageDialog(frame, "You Won Game", "Game Won",JOptionPane.INFORMATION_MESSAGE);
+			    JOptionPane.showMessageDialog(frame, players.getPlayerList().get(playerTurn)+" Won Game", "Game Won",JOptionPane.INFORMATION_MESSAGE);
 			    setFrameValidate(mainMenu(frame));
 			}
 		    }
 		    attackPanelReset();
 		    /*   }*/
 		} else {
-		    setBotAttackPanelReset();
+		    if(checkPlayerWonGame()) {
+			    JOptionPane.showMessageDialog(frame,players.getPlayerList().get(playerTurn)+" Won Game", "Game Won",JOptionPane.INFORMATION_MESSAGE);
+			    setFrameValidate(mainMenu(frame));
+			} else {
+			    setBotAttackPanelReset();    
+			}
 		}
 
 	    } else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("BENEVOLENT")) {
-		setBotAttackPanelReset();
+		if(checkPlayerWonGame()) {
+		    JOptionPane.showMessageDialog(frame,players.getPlayerList().get(playerTurn)+" Won Game", "Game Won",JOptionPane.INFORMATION_MESSAGE);
+		    setFrameValidate(mainMenu(frame));
+		} else {
+		    setBotAttackPanelReset();    
+		}
 	    } else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM") && !tempFlag) {
-		setBotAttackPanelReset();
+		if(checkPlayerWonGame()) {
+		    JOptionPane.showMessageDialog(frame,players.getPlayerList().get(playerTurn)+" Won Game", "Game Won",JOptionPane.INFORMATION_MESSAGE);
+		    setFrameValidate(mainMenu(frame));
+		} else {
+		    setBotAttackPanelReset();    
+		}
+	    } else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("CHEATER")) {
+		context = new Context(players);
+		context.executeBotAttack(territory,players.getPlayerList().get(playerTurn),"",0,0, "CHEATER");	
+		observerSubject.setAttackMsg(players.getAttackerMsg());
+		if(checkPlayerWonGame()) {
+		    JOptionPane.showMessageDialog(frame,players.getPlayerList().get(playerTurn)+" Won Game", "Game Won",JOptionPane.INFORMATION_MESSAGE);
+		    setFrameValidate(mainMenu(frame));
+		} else {
+		    setBotAttackPanelReset();    
+		}
+		
 	    }
 	}
 	
@@ -1008,6 +1038,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			players.addPlayers(KHYATI_PLAYER);
 			players.addPlayers(VAISHAKHI_PLAYER);
 			players.addPlayers(HIMEN_PLAYER);
+			players.addPlayerType(KHYATI_PLAYER, "CHEATER");
+
+			players.addPlayerType(HIMEN_PLAYER, "HUMAN");
+			players.addPlayerType(VAISHAKHI_PLAYER, "RANDOM");
 			setFrameValidate(userInfoPanel(5));
 		} else if (actionName.equals("placeReinforcement")) {
 			goForReinforcement(true);
