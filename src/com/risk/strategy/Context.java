@@ -28,6 +28,9 @@ public class Context {
 	public void executeReinforcement(String currentPlayer, String currentTerritory, int army, Territory territory) {
 		strategy.doReinforcement(currentPlayer, currentTerritory, army, territory);
 	}
+	public void executeBotReinforcement(String currentPlayer, Territory territory) {
+		strategy.doBotReinforcement(currentPlayer, territory);
+	}
 
 	/**
 	 * Strategy pattern for reinforcement army generation
@@ -63,6 +66,9 @@ public class Context {
 			int defenderDice) {
 		strategy.doAttack(currentTerritory, fromTerritory, toTerritory, attackerDice, defenderDice);
 	}
+	public void executeBotAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDie, int defenderDie, String type) {
+	strategy.doBotAttack(currentTerritory, fromTerritory,toTerritory,attackerDie,defenderDie,type);
+}
 
 	/**
 	 * Strategy pattern for fortification
@@ -73,5 +79,9 @@ public class Context {
 	 */
 	public void executeFortification(Territory territory, String fromTerritory, String toTerritory, int getArmySelect) {
 		strategy.doForitification(territory, fromTerritory, toTerritory, getArmySelect);
+	}
+	
+	public  void executeBotFortification(String currentPlayer, Territory currentTerritory) {
+	    strategy.doBotForitification(currentPlayer,currentTerritory);
 	}
 }
