@@ -1,5 +1,6 @@
 package com.risk.validate;
 
+import java.awt.Adjustable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,6 +28,8 @@ public class MapValidator extends GamePanels {
 	 * @param territoryObject object of territory
 	 */
 	public MapValidator(Continent continentObject, Territory territoryObject) {
+		territory = territoryObject;
+		continent = continentObject;
 		this.continentTerritories =  continentObject.getContinentTerritory();
 		this.continentValue = continentObject.getContinentValue();
 		this.adjcentTerritories = territoryObject.getAdjacentTerritory();
@@ -145,12 +148,19 @@ public class MapValidator extends GamePanels {
 		if(adjcentTerritories != null) {
 			for (Entry<String, ArrayList<String>> entry : adjcentTerritories.entrySet()) {
 				if(entry.getValue().size() > 0) {
+					for(int i =0;i< entry.getValue().size();i++) {
+						if(!territory.getTerritoryList().contains(entry.getValue().get(i))) {
+							this.isMapValid= false;
+							throw new InvalidMapException("Incorrect Adjacent Territory");
+						}		
+					}
 					this.isMapValid = true;
 				}else {
 					this.isMapValid = false;
 					throw new InvalidMapException("adjacent territories should not be null");
 				}
 			}
+			
 			this.isGraphConnected();
 		}	
 		return isMapValid;
@@ -164,19 +174,45 @@ public class MapValidator extends GamePanels {
 	 */
 	public boolean isGraphConnected() throws InvalidMapException {
 		ConnectedGraph graph = new ConnectedGraph(territoryNumber.size());
+		System.out.println(territoryNumber);
 		for(Entry<String,ArrayList<String>> entry : adjcentTerritories.entrySet()) {
 			for(int i = 0; i<entry.getValue().size() ; i++) {
 				graph.addConnectionLine(territoryNumber.get(entry.getKey()),
-						territoryNumber.get(entry.getValue().get(i)));						
+						territoryNumber.get(entry.getValue().get(i)));	
 			}
 		}
 		if(graph.isGraphStronglyConnected()) {
 			this.isMapValid = true;
+			this.isContinentConnected();
 		}else {
 			this.isMapValid = false;
 			throw new InvalidMapException("Graph is not connected");
 		}
 		return isMapValid;
 	}
-
+	
+	/**
+	 * This method checks that continent's subgraph is connected or not.
+	 * @return true if subgraph is connected else false;
+	 * @throws InvalidMapException invalid map exception
+	 */
+	public boolean isContinentConnected() throws InvalidMapException {
+		for(Entry<String,ArrayList<String>> entry : continentTerritories.entrySet()) {
+			for(int j=0;j<entry.getValue().size();j++) {
+				ArrayList<String> adjcent = adjcentTerritories.get(entry.getValue().get(j));
+				int count = 0;
+				for(int k = 0;k<adjcent.size();k++) {
+					if(entry.getValue().contains(adjcent.get(k))) {
+						count++;
+					}
+				}
+				if(count==0) {
+					this.isMapValid = false;
+					throw new InvalidMapException("Unconnected Continent");
+				}	
+			}
+		}
+		return isMapValid;
+	}
+	
 }
