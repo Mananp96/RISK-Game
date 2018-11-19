@@ -55,4 +55,13 @@ public interface Strategy {
 	 */
 	public void moveArmyAfterAttack(String fromTerritory, Territory currentTerritory, String toTerritory,
 			String toTerritory2, int armies);
+
+	public void doBotReinforcement(String currentPlayer, Territory territory);
+
+	public void doBotAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDie,
+		int defenderDie, String type);
+
+	public void doBotForitification(String currentPlayer, Territory currentTerritory);
+
+	
 }

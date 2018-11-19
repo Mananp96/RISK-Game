@@ -39,10 +39,37 @@ public class Players implements Strategy {
 	int  tradeInArmies = 4;
 	String attackerMsg = "";
 	String defenderMsg = "";
+	String fortificationMsg ="";
+	String reinforcementMsg ="";
+	public String getReinforcementMsg() {
+	    return reinforcementMsg;
+	}
+
+	public void setReinforcementMsg(String reinforcementMsg) {
+	    this.reinforcementMsg = reinforcementMsg;
+	}
+
+	public String getFortificationMsg() {
+	    return fortificationMsg;
+	}
+
+	public void setFortificationMsg(String fortificationMsg) {
+	    this.fortificationMsg = fortificationMsg;
+	}
+
 	int tradeIn = 0;
 	Map<String, String> cards;
 	Map<String, String> territoryCards;
 	public Double value;
+	Map<String,String> playerType;
+
+	public Map<String, String> getPlayerType() {
+	    return playerType;
+	}
+
+	public void setPlayerType(Map<String, String> playerType) {
+	    this.playerType = playerType;
+	}
 
 	/**
 	 * Constructor
@@ -54,6 +81,11 @@ public class Players implements Strategy {
 		playerPlaying = new ArrayList<>();
 		cards = new HashMap<>();
 		territoryCards = new HashMap<>();
+		playerType = new HashMap<>();
+	}
+	
+	public void addPlayerType(String playerName,String type) {
+	    playerType.put(playerName, type);
 	}
 	/**
 	 * This Method return number of trade in armies generated
@@ -350,10 +382,15 @@ public class Players implements Strategy {
 			playerContinent.get(fromPlayer).getContinentOwnedterritory().get(fromContinentPlayer).add(toTerritory);
 			currentTerritory.updateTerritoryUser(currentTerritory.getTerritoryUser().get(fromTerritory),toTerritory);
 			int rand = 0;
-			do {
-				rand = new Random().nextInt(currentTerritory.getTerritoryCard().keySet().toArray().length);
-			} while (rand <= -1); 
-			Object randomTerritory = currentTerritory.getTerritoryCard().keySet().toArray()[rand];
+		
+				rand = new Random().nextInt(currentTerritory.getTerritoryCard().keySet().toArray().length)+1;
+				if(currentTerritory.getTerritoryCard().size() == 1) {
+				    rand = 0;
+				}
+				if(currentTerritory.getTerritoryCard().size() == rand) {
+				    rand -=1;
+				}
+				Object randomTerritory = currentTerritory.getTerritoryCard().keySet().toArray()[rand];
 			if (!isWonCard) {
 				cards.put(randomTerritory.toString(), fromPlayer);
 				territoryCards.put(randomTerritory.toString().trim(),currentTerritory.getTerritoryCard().get(randomTerritory));
@@ -408,9 +445,9 @@ public class Players implements Strategy {
 	@Override
 	public void doReinforcement(String currentPlayer, String currentTerritoryName, int army, Territory currentTerritory) {
 		updateArmy(currentPlayer, army, "DELETE");
-		currentTerritory.updateTerritoryArmy(currentTerritoryName, army, "ADD");	    
+		currentTerritory.updateTerritoryArmy(currentTerritoryName, army, "ADD");
+		setReinforcementMsg("Armies Placed on "+currentTerritoryName +" : "+army);
 	}
-
 	/**
 	 * generate Reinforcement Army using Strategy Pattern 
 	 */
@@ -439,7 +476,6 @@ public class Players implements Strategy {
 		for (Entry<String, ArrayList<String>> entry : tempData.entrySet()) {
 			if (entry.getValue().size() == currentContinent.getContTerrValue().get(entry.getKey())) {
 				count += currentContinent.getContinentValue().get(entry.getKey());
-				System.out.println("------------>Continent Acquired : " + entry.getKey());
 			}
 		}
 		return count > 0 ? count : 0;
@@ -452,6 +488,72 @@ public class Players implements Strategy {
 	public void moveArmyAfterAttack(String currentPlayer, Territory currentTerritory, String fromTerritory, String toTerritory, int armies) {
 		currentTerritory.updateTerritoryArmy(fromTerritory, armies, "DELETE");
 		currentTerritory.updateTerritoryArmy(toTerritory, armies, "ADD");
+	}
+
+	@Override
+	public void doBotReinforcement(String currentPlayer, Territory currentTerritory) {
+	    if(playerType.get(currentPlayer).equalsIgnoreCase("AGGRESSIVE")) {
+		String tempTerritory = "";
+		int tempArmy = 0;
+		for(Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
+		    if(currentTerritory.getTerritoryArmy().get(entry.getKey()) > tempArmy && currentTerritory.getTerritoryUser().get(entry.getKey()).equalsIgnoreCase(currentPlayer)) {
+			tempTerritory = entry.getKey();
+		    }
+		}
+		doReinforcement(currentPlayer, tempTerritory, playerArmy.get(currentPlayer), currentTerritory);
+	    }
+	    
+	}
+
+	@Override
+	public void doBotAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDie,
+		int defenderDie, String type) {
+	    if(type.equalsIgnoreCase("AGGRESSIVE")) {
+		String message1 = "Before Attack \n " + fromTerritory +" : "+currentTerritory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+currentTerritory.getTerritoryArmy().get(toTerritory)+"\n";
+		doAttack(currentTerritory, fromTerritory, toTerritory, attackerDie, defenderDie);
+		String message2 = "After Attack \n " + fromTerritory +" : "+currentTerritory.getTerritoryArmy().get(fromTerritory) +"\n"+toTerritory+" : "+currentTerritory.getTerritoryArmy().get(toTerritory)+"\n";
+		if(isAttackWon) {
+		    currentTerritory.updateTerritoryArmy(fromTerritory, 1, "DELETE");
+		    currentTerritory.updateTerritoryArmy(toTerritory, 1, "ADD");    
+		}
+		
+		setAttackerMsg(message1 + "\n" +message2);
+	    }
+	}
+
+	@Override
+	public void doBotForitification(String currentPlayer, Territory currentTerritory) {
+	    // TODO Auto-generated method stub
+	    ArrayList<String> tempTerritory = new ArrayList<>();
+	    String message ="";
+	    if(getPlayerType().get(currentPlayer).equalsIgnoreCase("AGGRESSIVE")) {
+		for(Entry<String, String> entry : currentTerritory.getTerritoryUser().entrySet()) {
+		    if(entry.getValue().equalsIgnoreCase(currentPlayer)) {
+			tempTerritory.add(currentTerritory.getTerritoryArmy().get(entry.getKey())+"-"+entry.getKey());
+		    }
+		}
+		Collections.sort(tempTerritory);
+		Collections.reverse(tempTerritory);
+		//System.out.println(tempTerritory);
+		if(tempTerritory.size() > 1) {
+		    String[] splitTerr = tempTerritory.get(0).split("-");
+		    for(int i=0;i<currentTerritory.getAdjacentTerritory().get(splitTerr[1]).size();i++) {
+			String temp = currentTerritory.getAdjacentTerritory().get(splitTerr[1]).get(i);
+			if(!currentTerritory.getTerritoryUser().get(temp).equalsIgnoreCase(currentPlayer) && currentTerritory.getTerritoryArmy().get(temp) > 1) {
+			    message = " Before Fortification \n"+splitTerr[1]+ " : " + currentTerritory.getTerritoryArmy().get(splitTerr[1])+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
+			    doForitification(currentTerritory,temp, splitTerr[1], currentTerritory.getTerritoryArmy().get(temp)-1); 
+			    message += " After Fortification \n"+splitTerr[1]+ " : " + currentTerritory.getTerritoryArmy().get(splitTerr[1])+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
+			    setFortificationMsg(message);
+		//	    System.out.println(splitTerr[1] + " ---------> " +temp);
+			}
+		    }
+		} else {
+		    setFortificationMsg("No Armies to Move");
+		}
+		
+	    } else if(getPlayerType().get(currentPlayer).equalsIgnoreCase("BENEVOLENT")) {
+		
+	    }
 	}
 
 }

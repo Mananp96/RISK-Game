@@ -25,5 +25,7 @@ public abstract class Observer {
 	 * this method update card changes 
 	 */
 	public abstract void tradeInCardUpdate();
+	public abstract void botTradeInCardUpdate();
+	public abstract void reinforcementUpdate();
 
 }
