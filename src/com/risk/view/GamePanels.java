@@ -268,6 +268,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		context = new Context(players);
 		context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
 		observerSubject.setReinforcementMsg(players.getReinforcementMsg());
+	    } else if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM")) {
+		context = new Context(players);
+		context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
+		observerSubject.setReinforcementMsg(players.getReinforcementMsg());
 	    }
 	    observerSubject.setReinforcementMsg("Reinforcment Phase End");
 	    territoryAModel.removeAllElements();
@@ -989,6 +993,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		} else if (actionName.equals(fourPlayersBtnName)) {
 			players.addPlayers(KHYATI_PLAYER);
 			players.addPlayers(VAISHAKHI_PLAYER);
+			players.addPlayerType(KHYATI_PLAYER, "HUMAN");
+			players.addPlayerType(VAISHAKHI_PLAYER, "RANDOM");
 			setFrameValidate(userInfoPanel(4));
 		} else if (actionName.equals(fivePlayersBtnName)) {
 			players.addPlayers(KHYATI_PLAYER);
