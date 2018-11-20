@@ -111,14 +111,14 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	private DefaultListModel<String> territoryBModel;
 	private DefaultListModel<String> continentInfoModel;
 	private DefaultListModel<String> territoryInfoModel;
-
+	ArrayList<JComboBox<String>> playersListDropDown; 
 	private JComboBox<String> territoryADropDown;
 	private JComboBox<String> territoryBDropDown;
-	private JComboBox<String> player1DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
-	private JComboBox<String> player2DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
-	private JComboBox<String> player3DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
-	private JComboBox<String> player4DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
-	private JComboBox<String> player5DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player1DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player2DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player3DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player4DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player5DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
 	private JComboBox<Integer> noOfGamesDropDown;
 	private JComboBox<Integer> noOfTurnsDropDown;
 	private JComboBox<Integer> attackerDiceDropDown;
@@ -855,7 +855,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	 */
 	public JPanel userInfoPanel(int count){
 		frame.setBounds(0, 0, 300, 500);
-		ArrayList<JComboBox> playersListDropDown = new ArrayList<>();
+		playersListDropDown = new ArrayList<>();
 		playersListDropDown.add(player1DropDown);
 		playersListDropDown.add(player2DropDown);
 		playersListDropDown.add(player3DropDown);
@@ -1011,6 +1011,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			players = new Players();
 			players.addPlayers(MANAN_PLAYER);
 			players.addPlayers(SHALIN_PLAYER);
+			players.addPlayerType(MANAN_PLAYER, "AGGRESSIVE");
+			players.addPlayerType(SHALIN_PLAYER, "BENEVOLENT");
+
 			setFrameValidate(playerMenu());
 		} else if (actionName.equalsIgnoreCase(tournamentModeName)) {
 			tournamentModeOn = true;
@@ -1031,7 +1034,11 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			System.exit(0);
 		} else if (actionName.equals("Start Game")) {
 			if (randomMap) {
-				if (StringUtils.isNotEmpty(mapFilePath[0].getName())) {
+				if (mapFilePath != null  && StringUtils.isNotEmpty(mapFilePath[0].getName())) {
+				    	for(int i = 0;i<players.getPlayerList().size();i++) {
+				    	    players.getPlayerType().put(players.getPlayerList().get(i),playersListDropDown.get(i).getItemAt(playersListDropDown.get(i).getSelectedIndex()));
+				    	    System.out.println(players.getPlayerList().get(i)+" ========= "+playersListDropDown.get(i).getItemAt(playersListDropDown.get(i).getSelectedIndex()));
+				    	}
 					ArmiesSelection armies = new ArmiesSelection(playerPlaying);
 					InitializeData initializeData = new InitializeData(mapFilePath[0].getPath() , playerPlaying , armies.getPlayerArmies(), players);
 					boolean isMapValid = initializeData.generateData();
@@ -1050,13 +1057,19 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 				}
 			} else {
 				if (StringUtils.isNotEmpty(existingMapFilePath)) {
-					ArmiesSelection armies = new ArmiesSelection(playerPlaying);
+				    for(int i = 0;i<players.getPlayerList().size();i++) {
+				    	    players.getPlayerType().put(players.getPlayerList().get(i),playersListDropDown.get(i).getItemAt(playersListDropDown.get(i).getSelectedIndex()));
+				    	    System.out.println(players.getPlayerList().get(i)+" ========= "+playersListDropDown.get(i).getItemAt(playersListDropDown.get(i).getSelectedIndex()));
+				    	}
+				    ArmiesSelection armies = new ArmiesSelection(playerPlaying);
 					InitializeData initializeData = new InitializeData( existingMapFilePath, playerPlaying , armies.getPlayerArmies(), players);
 					boolean isEditMapValid = initializeData.generateData();
 					if (isEditMapValid) {
-						continent = initializeData.getContinent();
+						System.out.println("------wer--?" +players.getPlayerType().size());
+					    continent = initializeData.getContinent();
 						players = initializeData.getPlayers();
 						territory = initializeData.getTerritory();
+						System.out.println("-fdsdf-------?" +players.getPlayerType().size());
 						observerSubject.setState(MANAN_PLAYER, true);
 						observerSubject.setState("Reinforcement Force Started \n", false);
 						setFrameValidate(gameView());
