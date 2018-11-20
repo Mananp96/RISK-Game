@@ -1,0 +1,12 @@
+[Map]
+author=Unknown
+warn=yes
+image=previous.bmp
+wrap=no
+[Continents]
+A=2
+B=2
+[Territories]
+a,0,0,A,b,c
+b,0,0,B,a
+c,0,0,B,a

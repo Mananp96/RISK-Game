@@ -14,6 +14,16 @@ public class Subject {
 	private String message;
 	private boolean messageFlag;
 	private String fortificationMsg;
+	private String reinforcementMsg;
+
+	public String getReinforcementMsg() {
+	    return reinforcementMsg;
+	}
+
+	public void setReinforcementMsg(String reinforcementMsg) {
+	    this.reinforcementMsg = reinforcementMsg;
+	    notifyForReinforcment();
+	}
 
 	/**
 	 * get method for trade message
@@ -31,7 +41,10 @@ public class Subject {
 		this.tradeInMsg = tradeInMsg;
 		notifyForTradeIn();
 	}
-
+	public void setBotTradeInMsg(String tradeInMsg) {
+		this.tradeInMsg = tradeInMsg;
+		notifyForBotTradeIn();
+	}
 	private String attackMsg;
 	private String tradeInMsg;
 
@@ -190,6 +203,16 @@ public class Subject {
 	public void notifyForTradeIn() {
 		for (Observer observer : observers) {
 			observer.tradeInCardUpdate();
+		}
+	}
+	public void notifyForBotTradeIn() {
+		for (Observer observer : observers) {
+			observer.botTradeInCardUpdate();
+		}
+	}
+	public void notifyForReinforcment() {
+		for (Observer observer : observers) {
+			observer.reinforcementUpdate();
 		}
 	}
 }

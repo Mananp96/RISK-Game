@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import com.risk.exception.InvalidMapException;
@@ -140,8 +139,8 @@ public class BoardData {
 				}
 
 			}
-			territoryObject.addTerritoryCard("Wild Card 1", "Wild Card");
-			territoryObject.addTerritoryCard("Wild Card 2", "Wild Card");
+/*			territoryObject.addTerritoryCard("Wild Card 1", "Wild Card");
+			territoryObject.addTerritoryCard("Wild Card 2", "Wild Card");*/
 			MapValidator mapValidator = new MapValidator(continentObject, territoryObject);
 			isMapValid = mapValidator.validateMap();
 			reader.close();
