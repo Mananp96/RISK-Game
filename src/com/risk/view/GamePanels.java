@@ -114,11 +114,11 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
 	private JComboBox<String> territoryADropDown;
 	private JComboBox<String> territoryBDropDown;
-	private JComboBox<String> player1DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
-	private JComboBox<String> player2DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
-	private JComboBox<String> player3DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
-	private JComboBox<String> player4DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
-	private JComboBox<String> player5DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player1DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player2DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player3DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player4DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player5DropDown = new JComboBox(new Object[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
 	private JComboBox<Integer> noOfGamesDropDown;
 	private JComboBox<Integer> noOfTurnsDropDown;
 	private JComboBox<Integer> attackerDiceDropDown;
