@@ -383,21 +383,25 @@ public class Players implements Strategy {
 	    playerContinent.get(fromPlayer).getContinentOwnedterritory().get(fromContinentPlayer).add(toTerritory);
 	    currentTerritory.updateTerritoryUser(currentTerritory.getTerritoryUser().get(fromTerritory),toTerritory);
 	    int rand = 0;
-
-	    rand = new Random().nextInt(currentTerritory.getTerritoryCard().keySet().toArray().length)+1;
+	    if(!currentTerritory.getTerritoryCard().isEmpty())
+		rand = new Random().nextInt(currentTerritory.getTerritoryCard().keySet().toArray().length)+1;
 	    if(currentTerritory.getTerritoryCard().size() == 1) {
 		rand = 0;
 	    }
 	    if(currentTerritory.getTerritoryCard().size() == rand) {
 		rand -=1;
 	    }
-	    Object randomTerritory = currentTerritory.getTerritoryCard().keySet().toArray()[rand];
-	    if (!isWonCard) {
-		cards.put(randomTerritory.toString(), fromPlayer);
-		territoryCards.put(randomTerritory.toString().trim(),currentTerritory.getTerritoryCard().get(randomTerritory));
-		setWonCard(true);
+	    System.out.println(currentTerritory.getTerritoryCard().size() + " " + rand );
+	    if(rand >= 0 ) {
+		Object randomTerritory = currentTerritory.getTerritoryCard().keySet().toArray()[rand];
+		if (!isWonCard) {
+		    cards.put(randomTerritory.toString(), fromPlayer);
+		    territoryCards.put(randomTerritory.toString().trim(),currentTerritory.getTerritoryCard().get(randomTerritory));
+		    setWonCard(true);
+		}
+		currentTerritory.getTerritoryCard().remove(randomTerritory);
 	    }
-	    currentTerritory.getTerritoryCard().remove(randomTerritory);
+
 	}
 
     }
