@@ -59,6 +59,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	Continent continent;
 	int playerTurn = 0;
 	String newBtnName = "New Game";
+	String tournamentModeName = "tournamentMode";
 	String exitBtnName = "Quit";
 	String twoPlayersBtnName = "twoPlayersBtn";
 	String threePlayersBtnName = "threePlayersBtn";
@@ -70,6 +71,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	String saveBtnName = "Save";
 	String backBtnName = "backBtn";
 	String existingMapFilePath;
+
+	boolean tournamentModeOn = false;
 
 	private String editMapBtnName = "Edit Button";
 	private String mapFilePath;
@@ -111,10 +114,14 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
 	private JComboBox<String> territoryADropDown;
 	private JComboBox<String> territoryBDropDown;
+	private JComboBox<Integer> noOfGamesDropDown;
+	private JComboBox<Integer> noOfTurnsDropDown;
 	private JComboBox<Integer> attackerDiceDropDown;
 	private JComboBox<Integer> defenderDiceDropDown;
 	private SpinnerNumberModel selectArmyModel;
 	private JLabel fortErrorMsg;
+	private JLabel noOfGames;
+	private JLabel noOfTurns;
 	private Context context;
 	private JPanel gamePanel;
 	private JComboBox<String> territoryCDropDown;
@@ -143,31 +150,39 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		JButton twoPlayersBtn = new JButton("Two");
 		JButton threePlayersBtn = new JButton("Three");
 		JButton fourPlayersBtn = new JButton("Four");
-		JButton fivePlayersBtn = new JButton("Five");
-		JButton loadSavedGameBtn = new JButton("Load Saved Game");
-		backBtn = new JButton ("Back");	
 
 		playerPanel.add(playerCountLabel);
 		playerPanel.add(twoPlayersBtn);
 		playerPanel.add(threePlayersBtn);
 		playerPanel.add(fourPlayersBtn);
-		playerPanel.add(fivePlayersBtn);
-		playerPanel.add(loadSavedGameBtn);
-		playerPanel.add(backBtn);
 
 		twoPlayersBtn.addActionListener(this);
 		threePlayersBtn.addActionListener(this);
 		fourPlayersBtn.addActionListener(this);
-		fivePlayersBtn.addActionListener(this);
-		loadSavedGameBtn.addActionListener(this);
-		backBtn.addActionListener(this);
 
 		twoPlayersBtn.setActionCommand(twoPlayersBtnName);
 		threePlayersBtn.setActionCommand(threePlayersBtnName);
 		fourPlayersBtn.setActionCommand(fourPlayersBtnName);
-		fivePlayersBtn.setActionCommand(fivePlayersBtnName);
-		loadSavedGameBtn.setActionCommand(loadSavedGameName);
+
+		if (!tournamentModeOn) {
+			JButton fivePlayersBtn = new JButton("Five");
+			JButton loadSavedGameBtn = new JButton("Load Saved Game");
+
+			playerPanel.add(fivePlayersBtn);
+			playerPanel.add(loadSavedGameBtn);
+
+			fivePlayersBtn.addActionListener(this);
+			loadSavedGameBtn.addActionListener(this);
+
+			fivePlayersBtn.setActionCommand(fivePlayersBtnName);
+			loadSavedGameBtn.setActionCommand(loadSavedGameName);
+		}
+
+		backBtn = new JButton ("Back");
+		playerPanel.add(backBtn);
+		backBtn.addActionListener(this);
 		backBtn.setActionCommand(backBtnName);
+
 		return playerPanel;
 	}
 
@@ -655,21 +670,25 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		this.frame = frame;
 		frame.setBounds(0, 0, 300, 300);
 		JPanel menuPanel = new JPanel();
-		mainLayout = new GridLayout(3, 1, 5, 5);
+		mainLayout = new GridLayout(4, 1, 5, 5);
 		menuPanel.setLayout(mainLayout);
 		JButton newButton = new JButton("Play Game");
+		JButton tournamentMode = new JButton("Tournament Game");
 		editButton = new JButton("Edit map");
 		JButton exitButton = new JButton("Quit");
 
 		menuPanel.add(newButton);
+		menuPanel.add(tournamentMode);
 		menuPanel.add(editButton);
 		menuPanel.add(exitButton);
 
 		newButton.addActionListener(this);
+		tournamentMode.addActionListener(this);
 		editButton.addActionListener(this);
 		exitButton.addActionListener(this);
 
 		newButton.setActionCommand(newBtnName);
+		tournamentMode.setActionCommand(tournamentModeName);
 		editButton.setActionCommand(editMapBtnName);
 		exitButton.setActionCommand(exitBtnName);
 		return menuPanel;
@@ -683,8 +702,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	 * @return userPanel
 	 */
 	public JPanel userInfoPanel(int count){
+		frame.setBounds(0, 0, 300, 500);
 		JPanel userPanel = new JPanel();
-		userPanel.setLayout(new GridLayout(6 + count, 1, 5, 5));
+		userPanel.setLayout(new GridLayout(8 + count, 2, 5, 5));
 		mapOptA = new JRadioButton("Choose Your Own Map");
 		mapOptA.setActionCommand("Own Map");
 		JFileChooser chooseMap = new JFileChooser("D:");
@@ -713,23 +733,46 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			}
 		});
 
-		mapOptB = new JRadioButton("Choose Previously Edited Map");
-		mapOptB.addItemListener(new ItemListener() {
+		if (!tournamentModeOn) {
+			mapOptB = new JRadioButton("Choose Previously Edited Map");
+			mapOptB.addItemListener(new ItemListener() {
 
-			@Override
-			public void itemStateChanged(ItemEvent e) {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
 
-				if(mapOptB.isSelected()) {
-					existingMapFilePath = "previous.map";
-					randomMap = false;
+					if (mapOptB.isSelected()) {
+						existingMapFilePath = "previous.map";
+						randomMap = false;
+					}
 				}
+			});
+		} else{
+			noOfGames = new JLabel("No of Games");
+			noOfGamesDropDown = new JComboBox<>();
+			for(int i=1;i<=5;i++) {
+				noOfGamesDropDown.addItem(i);
 			}
-		});
+
+			noOfTurns = new JLabel("No of Turns");
+			noOfTurnsDropDown = new JComboBox<>();
+			for(int i=10;i<=50;i++) {
+				noOfTurnsDropDown.addItem(i);
+			}
+		}
 		ButtonGroup buttonGrp = new ButtonGroup();
 		buttonGrp.add(mapOptA);
-		buttonGrp.add(mapOptB);
+		if (!tournamentModeOn){
+			buttonGrp.add(mapOptB);
+		}
 		userPanel.add(mapOptA);
-		userPanel.add(mapOptB);
+		if (!tournamentModeOn) {
+			userPanel.add(mapOptB);
+		} else{
+			userPanel.add(noOfGames);
+			userPanel.add(noOfGamesDropDown);
+			userPanel.add(noOfTurns);
+			userPanel.add(noOfTurnsDropDown);
+		}
 		userPanel.add(new JLabel("Player Names are"));
 		for (int i = 0; i < count; i++) {
 			userPanel.add(new JLabel("Player " + (i + 1) + " : " + players.getPlayers(i)));
@@ -796,11 +839,18 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		String actionName = arg0.getActionCommand();
 
 		if (actionName.equalsIgnoreCase(newBtnName)) {
+			tournamentModeOn = false;
 			players = new Players();
 			players.addPlayers(MANAN_PLAYER);
 			players.addPlayers(SHALIN_PLAYER);
 			setFrameValidate(playerMenu());
-		} else if (actionName.equals(editMapBtnName)) {
+		} else if (actionName.equalsIgnoreCase(tournamentModeName)) {
+			tournamentModeOn = true;
+			players = new Players();
+			players.addPlayers(MANAN_PLAYER);
+			players.addPlayers(SHALIN_PLAYER);
+			setFrameValidate(playerMenu());
+		}else if (actionName.equals(editMapBtnName)) {
 			setFrameValidate(editMapPanel());
 		} else if (actionName.equals(editExistingMapBtnName)) {
 			setFrameValidate(editExistingMapPanel());
@@ -896,6 +946,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 				FileWriter fileWriter = new FileWriter("riskGame_1.json");
 				fileWriter.write(gameString);
 				fileWriter.flush();
+				JOptionPane.showMessageDialog(frame, "File created successfully.");
 				System.out.println("File created successfully");
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -966,7 +1017,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 				}
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(frame, "No previously saved file.");
+				//e.printStackTrace();
 			}
 
 		}
