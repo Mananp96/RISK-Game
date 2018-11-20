@@ -1,55 +1,4 @@
 package com.risk.view;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Map.Entry;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.Border;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-
-import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,6 +10,32 @@ import com.risk.models.Territory;
 import com.risk.observer.Observer;
 import com.risk.observer.Subject;
 import com.risk.strategy.Context;
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.Random;
 /**
  * 
  * User Interface for Game Play
@@ -100,7 +75,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	boolean tournamentModeOn = false;
 
 	private String editMapBtnName = "Edit Button";
-	private String mapFilePath;
+	private File[] mapFilePath;
 	int  playerPlaying;
 	private GridLayout mainLayout;
 	private JButton reinforceBtn;
@@ -139,6 +114,11 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
 	private JComboBox<String> territoryADropDown;
 	private JComboBox<String> territoryBDropDown;
+	private JComboBox<String> player1DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player2DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player3DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player4DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
+	private JComboBox<String> player5DropDown = new JComboBox(new Object[] {"Aggressive", "Benevolent", "Random", "Cheater"});
 	private JComboBox<Integer> noOfGamesDropDown;
 	private JComboBox<Integer> noOfTurnsDropDown;
 	private JComboBox<Integer> attackerDiceDropDown;
@@ -268,7 +248,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    gamePanel.add(eventScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.CENTER, 0.5, 0.5, 1, 0));
 	    gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
 	    if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("human")) {
-		setBotReinforcement();
+			setBotReinforcement();
 	    }
 	    return gamePanel;
 	}
@@ -875,6 +855,13 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	 */
 	public JPanel userInfoPanel(int count){
 		frame.setBounds(0, 0, 300, 500);
+		ArrayList<JComboBox> playersListDropDown = new ArrayList<>();
+		playersListDropDown.add(player1DropDown);
+		playersListDropDown.add(player2DropDown);
+		playersListDropDown.add(player3DropDown);
+		playersListDropDown.add(player4DropDown);
+		playersListDropDown.add(player5DropDown);
+
 		JPanel userPanel = new JPanel();
 		userPanel.setLayout(new GridLayout(8 + count, 2, 5, 5));
 		mapOptA = new JRadioButton("Choose Your Own Map");
@@ -882,6 +869,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		JFileChooser chooseMap = new JFileChooser("D:");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("MAP FILES", "map", "map");
 		chooseMap.setFileFilter(filter);
+		chooseMap.setMultiSelectionEnabled(true);
 		chooseMap.addChoosableFileFilter(new FileFilter() {
 			public String getDescription() {
 				return "MAP Documents (*.map)";
@@ -894,23 +882,28 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 				}
 			}
 		});
-		mapOptA.addItemListener(new ItemListener() {
 
+		mapOptA.addActionListener(new ActionListener() {
 			@Override
-			public void itemStateChanged(ItemEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				if(mapOptA.isSelected() && chooseMap.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					mapFilePath = chooseMap.getSelectedFile().getPath();
-					randomMap = true;
+					if (chooseMap.getSelectedFiles().length <= 5) {
+						mapFilePath = chooseMap.getSelectedFiles();
+						randomMap = true;
+					}else{
+						JOptionPane.showMessageDialog(frame, "Please select maps between 1 - 5");
+
+					}
 				}
 			}
 		});
 
 		if (!tournamentModeOn) {
 			mapOptB = new JRadioButton("Choose Previously Edited Map");
-			mapOptB.addItemListener(new ItemListener() {
+			mapOptB.addActionListener(new ActionListener() {
 
 				@Override
-				public void itemStateChanged(ItemEvent e) {
+				public void actionPerformed(ActionEvent e) {
 
 					if (mapOptB.isSelected()) {
 						existingMapFilePath = "previous.map";
@@ -947,7 +940,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		}
 		userPanel.add(new JLabel("Player Names are"));
 		for (int i = 0; i < count; i++) {
-			userPanel.add(new JLabel("Player " + (i + 1) + " : " + players.getPlayers(i)));
+			Box  horizontalPlayerListBox = Box.createHorizontalBox();
+			horizontalPlayerListBox.add(new JLabel("Player " + (i + 1) + " : " + players.getPlayers(i)));
+			horizontalPlayerListBox.add(playersListDropDown.get(i));
+			userPanel.add(horizontalPlayerListBox);
 		}
 		playerPlaying = count;
 		startGameBtn = new JButton("Start Game");
@@ -1035,9 +1031,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			System.exit(0);
 		} else if (actionName.equals("Start Game")) {
 			if (randomMap) {
-				if (StringUtils.isNotEmpty(mapFilePath)) {
+				if (StringUtils.isNotEmpty(mapFilePath[0].getName())) {
 					ArmiesSelection armies = new ArmiesSelection(playerPlaying);
-					InitializeData initializeData = new InitializeData(mapFilePath , playerPlaying , armies.getPlayerArmies(), players);
+					InitializeData initializeData = new InitializeData(mapFilePath[0].getPath() , playerPlaying , armies.getPlayerArmies(), players);
 					boolean isMapValid = initializeData.generateData();
 					if(isMapValid) {
 						continent = initializeData.getContinent();
@@ -1153,7 +1149,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 					observerSubject.setState(VAISHAKHI_PLAYER, true);
 				} else if (playerTurn == 4) {
 					observerSubject.setState(HIMEN_PLAYER, true);
-	}
+				}
 
 				setFrameValidate(gameView());
 

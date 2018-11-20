@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3107be0-8a67-43f0-9922-97a094fdd559" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/riskGame_1.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/risk/view/GamePanels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/risk/view/GamePanels.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,16 +21,16 @@
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.3" value="5" />
           <entry key="project.open.time.4" value="5" />
-          <entry key="project.open.time.5" value="6" />
+          <entry key="project.open.time.5" value="7" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="20" />
+          <entry key="project.opened" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="class" value="2" />
-          <entry key="java" value="3430" />
+          <entry key="java" value="3854" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -40,16 +38,16 @@
           <entry key="api_description" value="1" />
           <entry key="bmp" value="2" />
           <entry key="class" value="3" />
-          <entry key="classpath" value="3" />
+          <entry key="classpath" value="4" />
           <entry key="gitignore" value="1" />
           <entry key="html" value="1" />
           <entry key="iml" value="1" />
           <entry key="java" value="115" />
           <entry key="json" value="2" />
-          <entry key="map" value="4" />
+          <entry key="map" value="5" />
           <entry key="md" value="1" />
           <entry key="prefs" value="2" />
-          <entry key="project" value="2" />
+          <entry key="project" value="3" />
           <entry key="properties" value="1" />
           <entry key="txt" value="2" />
           <entry key="xml" value="15" />
@@ -59,20 +57,20 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CLASS" value="2" />
-          <entry key="JAVA" value="3430" />
+          <entry key="JAVA" value="3854" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="3" />
-          <entry key="Eclipse" value="5" />
+          <entry key="Eclipse" value="7" />
           <entry key="HTML" value="1" />
           <entry key="IDEA_MODULE" value="1" />
           <entry key="Image" value="2" />
           <entry key="JAVA" value="115" />
           <entry key="JSON" value="2" />
           <entry key="Markdown" value="1" />
-          <entry key="PLAIN_TEXT" value="10" />
+          <entry key="PLAIN_TEXT" value="11" />
           <entry key="Properties" value="1" />
           <entry key="XML" value="15" />
         </counts>
@@ -80,30 +78,32 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/risk/view/GamePanels.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="704" column="28" selection-start-line="704" selection-start-column="28" selection-end-line="704" selection-end-column="28" />
+            <state relative-caret-position="325">
+              <caret line="910" lean-forward="true" selection-start-line="910" selection-end-line="910" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#26907#26908#0" expanded="true" />
-                <element signature="e#26956#26957#0" expanded="true" />
-                <element signature="e#27081#27082#0" expanded="true" />
-                <element signature="e#27109#27110#0" expanded="true" />
-                <element signature="e#59246#59247#0" expanded="true" />
-                <element signature="e#59267#59268#0" expanded="true" />
-                <element signature="e#59403#59404#0" expanded="true" />
-                <element signature="e#59432#59433#0" expanded="true" />
-                <element signature="e#59560#59561#0" expanded="true" />
-                <element signature="e#59583#59584#0" expanded="true" />
-                <element signature="e#59733#59734#0" expanded="true" />
-                <element signature="e#59766#59767#0" expanded="true" />
-                <element signature="e#59890#59891#0" expanded="true" />
-                <element signature="e#59913#59914#0" expanded="true" />
-                <element signature="e#60067#60068#0" expanded="true" />
-                <element signature="e#60100#60101#0" expanded="true" />
+                <element signature="e#35116#35117#0" expanded="true" />
+                <element signature="e#35165#35166#0" expanded="true" />
+                <element signature="e#35290#35291#0" expanded="true" />
+                <element signature="e#35318#35319#0" expanded="true" />
+                <element signature="e#37232#37233#0" expanded="true" />
+                <element signature="e#37273#37274#0" expanded="true" />
+                <element signature="e#71186#71187#0" expanded="true" />
+                <element signature="e#71207#71208#0" expanded="true" />
+                <element signature="e#71343#71344#0" expanded="true" />
+                <element signature="e#71372#71373#0" expanded="true" />
+                <element signature="e#71500#71501#0" expanded="true" />
+                <element signature="e#71523#71524#0" expanded="true" />
+                <element signature="e#71673#71674#0" expanded="true" />
+                <element signature="e#71706#71707#0" expanded="true" />
+                <element signature="e#71830#71831#0" expanded="true" />
+                <element signature="e#71853#71854#0" expanded="true" />
+                <element signature="e#72007#72008#0" expanded="true" />
+                <element signature="e#72040#72041#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -120,11 +120,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Dimension</find>
-      <find>Currentplaye</find>
-      <find>phase</find>
-      <find>reinforcement</find>
-      <find>current</find>
       <find>territory l</find>
       <find>play game</find>
       <find>riskLogger</find>
@@ -150,6 +145,11 @@
       <find>buttonGrp</find>
       <find>userPanel</find>
       <find>defenderDiceDropDown</find>
+      <find>Own Map</find>
+      <find>mapOptA</find>
+      <find>mapFilePath</find>
+      <find>randomMap</find>
+      <find>not</find>
     </findStrings>
     <replaceStrings>
       <replace>850</replace>
@@ -193,45 +193,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
-              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
-              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
-              <item name="com" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
-              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
-              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
-              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
-              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-              <item name="junit" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
-              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
-              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-              <item name="netscape.javascript" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
-              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
-              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-              <item name="toolbarButtonGraphics" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -273,6 +234,45 @@
               <item name="RISK-Game" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="com.google.code.gson:gson:2.8.5" type="70bed36:NamedLibraryElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
+              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
+              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
+              <item name="com" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
+              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
+              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
+              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
+              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
+              <item name="junit" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
+              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
+              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
+              <item name="netscape.javascript" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="RISK-Game" type="58d84e3e:PackageViewProjectNode" />
+              <item name="RISK-Game" type="616d4139:PackageViewModuleNode" />
+              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
+              <item name="toolbarButtonGraphics" type="1f31426a:PackageElementNode" />
             </path>
           </expand>
           <select />
@@ -428,7 +428,7 @@
     <frame x="0" y="23" width="1440" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49936306" weight="0.30615166" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49936306" visible="true" weight="0.30615166" />
       <window_info id="Structure" order="1" sideWeight="0.50063694" side_tool="true" weight="0.28540772" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -438,7 +438,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3299363" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3299363" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -490,9 +490,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/maps/incorrectMapOne.map">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/riskTest/validate/ConnectedGraph.java" />
     <entry file="file://$PROJECT_DIR$/src/com/riskTest/models/TerritoryTest.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -635,21 +632,11 @@
     <entry file="file://$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/.project">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/risk/controller/Reinforcement.java" />
     <entry file="file://$PROJECT_DIR$/src/com/risk/validate/ConnectedGraph.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="11" column="51" selection-start-line="11" selection-start-column="51" selection-end-line="11" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.classpath">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="74" selection-start-line="6" selection-start-column="59" selection-end-line="6" selection-end-column="74" />
         </state>
       </provider>
     </entry>
@@ -735,28 +722,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mapFile375.map">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.classpath">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="59" lean-forward="true" selection-start-line="6" selection-start-column="59" selection-end-line="6" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.project">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/risk/view/GamePanels.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="704" column="28" selection-start-line="704" selection-start-column="28" selection-end-line="704" selection-end-column="28" />
+        <state relative-caret-position="325">
+          <caret line="910" lean-forward="true" selection-start-line="910" selection-end-line="910" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#26907#26908#0" expanded="true" />
-            <element signature="e#26956#26957#0" expanded="true" />
-            <element signature="e#27081#27082#0" expanded="true" />
-            <element signature="e#27109#27110#0" expanded="true" />
-            <element signature="e#59246#59247#0" expanded="true" />
-            <element signature="e#59267#59268#0" expanded="true" />
-            <element signature="e#59403#59404#0" expanded="true" />
-            <element signature="e#59432#59433#0" expanded="true" />
-            <element signature="e#59560#59561#0" expanded="true" />
-            <element signature="e#59583#59584#0" expanded="true" />
-            <element signature="e#59733#59734#0" expanded="true" />
-            <element signature="e#59766#59767#0" expanded="true" />
-            <element signature="e#59890#59891#0" expanded="true" />
-            <element signature="e#59913#59914#0" expanded="true" />
-            <element signature="e#60067#60068#0" expanded="true" />
-            <element signature="e#60100#60101#0" expanded="true" />
+            <element signature="e#35116#35117#0" expanded="true" />
+            <element signature="e#35165#35166#0" expanded="true" />
+            <element signature="e#35290#35291#0" expanded="true" />
+            <element signature="e#35318#35319#0" expanded="true" />
+            <element signature="e#37232#37233#0" expanded="true" />
+            <element signature="e#37273#37274#0" expanded="true" />
+            <element signature="e#71186#71187#0" expanded="true" />
+            <element signature="e#71207#71208#0" expanded="true" />
+            <element signature="e#71343#71344#0" expanded="true" />
+            <element signature="e#71372#71373#0" expanded="true" />
+            <element signature="e#71500#71501#0" expanded="true" />
+            <element signature="e#71523#71524#0" expanded="true" />
+            <element signature="e#71673#71674#0" expanded="true" />
+            <element signature="e#71706#71707#0" expanded="true" />
+            <element signature="e#71830#71831#0" expanded="true" />
+            <element signature="e#71853#71854#0" expanded="true" />
+            <element signature="e#72007#72008#0" expanded="true" />
+            <element signature="e#72040#72041#0" expanded="true" />
           </folding>
         </state>
       </provider>
