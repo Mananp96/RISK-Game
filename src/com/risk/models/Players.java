@@ -1,6 +1,5 @@
 package com.risk.models;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -391,7 +390,6 @@ public class Players implements Strategy {
 	    if(currentTerritory.getTerritoryCard().size() == rand) {
 		rand -=1;
 	    }
-	    System.out.println(currentTerritory.getTerritoryCard().size() + " " + rand );
 	    if(rand >= 0 ) {
 		Object randomTerritory = currentTerritory.getTerritoryCard().keySet().toArray()[rand];
 		if (!isWonCard) {
@@ -639,12 +637,9 @@ public class Players implements Strategy {
 	    }
 	    if(tempTerritory.size() >= 1) {
 		String[] splitTerr = tempTerritory.get(0).split("-");
-		System.out.println("-----------> "+splitTerr[1]);
 		for(int i=0;i<currentTerritory.getAdjacentTerritory().get(splitTerr[1]).size();i++) {
 		    String temp = currentTerritory.getAdjacentTerritory().get(splitTerr[1]).get(i);
-		    System.out.println("----*** " +temp);
 		    if(currentTerritory.getTerritoryUser().get(temp).equalsIgnoreCase(currentPlayer) && currentTerritory.getTerritoryArmy().get(temp) > 1) {
-			System.out.println(">"+temp);
 			message += " Before Fortification \n"+splitTerr[1]+ " : " + currentTerritory.getTerritoryArmy().get(splitTerr[1])+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
 			doForitification(currentTerritory,temp, splitTerr[1], currentTerritory.getTerritoryArmy().get(temp)-1); 
 			message += " After Fortification \n"+splitTerr[1]+ " : " + currentTerritory.getTerritoryArmy().get(splitTerr[1])+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
@@ -667,12 +662,9 @@ public class Players implements Strategy {
 		rand = 0;
 	    }
 	    if(tempTerritory.size() >= 1) {
-		System.out.println("-----------> "+tempTerritory.get(rand));
 		for(int i=0;i<currentTerritory.getAdjacentTerritory().get(tempTerritory.get(rand)).size();i++) {
 		    String temp = currentTerritory.getAdjacentTerritory().get(tempTerritory.get(rand)).get(i);
-		    System.out.println("----*** " +temp);
 		    if(currentTerritory.getTerritoryUser().get(temp).equalsIgnoreCase(currentPlayer) && currentTerritory.getTerritoryArmy().get(temp) > 1) {
-			System.out.println(">"+temp);
 			message += " Before Fortification \n"+tempTerritory.get(rand)+ " : " + currentTerritory.getTerritoryArmy().get(tempTerritory.get(rand))+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
 			doForitification(currentTerritory,temp, tempTerritory.get(rand), currentTerritory.getTerritoryArmy().get(temp)-1); 
 			message += " After Fortification \n"+tempTerritory.get(rand)+ " : " + currentTerritory.getTerritoryArmy().get(tempTerritory.get(rand))+"\n" + temp + " : "+currentTerritory.getTerritoryArmy().get(temp)+"\n"  ;
