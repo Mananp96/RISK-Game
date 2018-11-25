@@ -1,5 +1,65 @@
 package com.risk.view;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.risk.controller.InitializeData;
@@ -10,37 +70,6 @@ import com.risk.models.Territory;
 import com.risk.observer.Observer;
 import com.risk.observer.Subject;
 import com.risk.strategy.Context;
-import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map.Entry;
-import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-import java.util.Random;
 /**
  * 
  * User Interface for Game Play
@@ -58,11 +87,21 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     public static final String KHYATI_PLAYER = "Khyati";
     public static final String VAISHAKHI_PLAYER = "Vaishakhi";
     public static final String HIMEN_PLAYER = "Himen";
+    public static final String HUMAN_TYPE = "Human";
+    public static final String AGGRESSIVE_TYPE = "Aggressive";
+    public static final String BENEVOLENT_TYPE = "Benevolent";
+    public static final String RANDOM_TYPE = "Random";
+    public static final String CHEATER_TYPE = "Cheater";
+
     JFrame frame;
     Players players;
     Territory territory;
     Continent continent;
     int playerTurn = 0;
+    int fileTurn =  0; 
+    int gameTurn =  0; 
+    int turnNumber =  0; 
+
     String newBtnName = "New Game";
     String tournamentModeName = "tournamentMode";
     String exitBtnName = "Quit";
@@ -119,11 +158,11 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     ArrayList<JComboBox<String>> playersListDropDown; 
     private JComboBox<String> territoryADropDown;
     private JComboBox<String> territoryBDropDown;
-    private JComboBox<String> player1DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
-    private JComboBox<String> player2DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
-    private JComboBox<String> player3DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
-    private JComboBox<String> player4DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
-    private JComboBox<String> player5DropDown = new JComboBox<>(new String[] {"Human","Aggressive", "Benevolent", "Random", "Cheater"});
+    private JComboBox<String> player1DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+    private JComboBox<String> player2DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+    private JComboBox<String> player3DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+    private JComboBox<String> player4DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+    private JComboBox<String> player5DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
     private JComboBox<Integer> noOfGamesDropDown;
     private JComboBox<Integer> noOfTurnsDropDown;
     private JComboBox<Integer> attackerDiceDropDown;
@@ -141,7 +180,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     Handler fileHandler = null;
     Formatter simpleFormatter = null;
     boolean gameWon = false;
-
+    private ArrayList<String> tempPlayerList;
+    private Map<Integer,String> mapResult = new HashMap<>();
+    private Map<Integer,Map<Integer,String>> tournamentResult = new HashMap<>();
     public GamePanels() {
 
     }
@@ -256,29 +297,19 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	gamePanel.add(displayLog(),setGridBagConstraints(new Insets(25, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_START, 0.5, 0.5, 0, 0));
 	gamePanel.add(eventScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.CENTER, 0.5, 0.5, 1, 0));
 	gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
-	if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("human")) {
+	if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 	    setBotReinforcement();
 	}
 	return gamePanel;
     }
-
+    /**
+     * This method is used for Reinforcement for Bot Players. Bot Players are Aggressive, Benevolent, Random and Cheater
+     */
     public void setBotReinforcement() {
 	players.setCurrentPhase("Reinforcement");
 	observerSubject.setPlayerLog();
 	observerSubject.setReinforcementMsg("Reinforcement Phase Started");
-	if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")) {
-	    context = new Context(players);
-	    context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
-	    observerSubject.setReinforcementMsg(players.getReinforcementMsg());
-	} else if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("BENEVOLENT")) {
-	    context = new Context(players);
-	    context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
-	    observerSubject.setReinforcementMsg(players.getReinforcementMsg());
-	} else if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM")) {
-	    context = new Context(players);
-	    context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
-	    observerSubject.setReinforcementMsg(players.getReinforcementMsg());
-	} else if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("CHEATER")) {
+	if (!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 	    context = new Context(players);
 	    context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
 	    observerSubject.setReinforcementMsg(players.getReinforcementMsg());
@@ -366,7 +397,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	territoryAModel = new DefaultListModel<>();
 	territoryAList = new JList<>(territoryAModel);
 	for (Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
-	    if(entry.getValue().equalsIgnoreCase(players.getPlayerPlaying().get(playerTurn))) {
+	    if(entry.getValue().equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
 		territoryAModel.addElement(entry.getKey() +" -- " +territory.getTerritoryArmy().get(entry.getKey()));
 	    }
 	}		
@@ -545,7 +576,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	cardPanel.add(territoryADropDown);
 	territoryADropDown.addItem("");
 	for(Entry<String, String> entry : players.getCards().entrySet()) {
-	    if(players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue())) {
+	    if(players.getPlayerList().get(playerTurn).equalsIgnoreCase(entry.getValue())) {
 		territoryADropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
 	    }
 	}
@@ -568,7 +599,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		if(territoryADropDown.getSelectedIndex() > 0) {
 		    String[] tempVar = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex()).split("--");
 		    for(Entry<String, String> entry : players.getCards().entrySet()) {
-			if(!tempVar[1].trim().equalsIgnoreCase(entry.getKey()) && players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue()))
+			if(!tempVar[1].trim().equalsIgnoreCase(entry.getKey()) && players.getPlayerList().get(playerTurn).equalsIgnoreCase(entry.getValue()))
 			    territoryBDropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
 		    }		
 		}
@@ -584,7 +615,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		    String[] tempVar1 = territoryADropDown.getItemAt(territoryADropDown.getSelectedIndex()).split("--");
 		    String[] tempVar2 = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex()).split("--");
 		    for(Entry<String, String> entry : players.getCards().entrySet()) {
-			if(!tempVar1[1].trim().equalsIgnoreCase(entry.getKey()) && players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue())) {
+			if(!tempVar1[1].trim().equalsIgnoreCase(entry.getKey()) && players.getPlayerList().get(playerTurn).equalsIgnoreCase(entry.getValue())) {
 			    if( !tempVar2[1].trim().equalsIgnoreCase(entry.getKey())) 
 				territoryCDropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
 			}
@@ -656,7 +687,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		String terrName = territoryBDropDown.getItemAt(territoryBDropDown.getSelectedIndex());
 		if(StringUtils.isNotEmpty(terrName)) {
 		    int numberOfDie = territory.getTerritoryArmy().get(terrName) >= 3 ? 3 : territory.getTerritoryArmy().get(terrName);
-		    if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")) {
+		    if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(AGGRESSIVE_TYPE)) {
 			defenderDiceDropDown.addItem(numberOfDie);
 			defenderDiceDropDown.setEnabled(false);
 			allOutDropDown.setEnabled(false);
@@ -672,23 +703,25 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	});
 	return attackPanel;
     }
-
+    /**
+     * This method is used for Attack for Bot Players. Bot Players are Aggressive, Benevolent, Random and Cheater
+     */
     public void setBotAttackPanel() {
 	boolean tempFlag = true;
 	players.setCurrentPhase("Attack");
 	observerSubject.setPlayerLog();
-	if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM")){
+	if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE)){
 	    int rand = new Random().nextInt(6)+1;
 	    tempFlag = rand  <= 3 ? true : false;
 	}
-	if((players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE")||players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM")) && tempFlag){
+	if((players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(AGGRESSIVE_TYPE)||players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE)) && tempFlag){
 	    String tempAttackTerr="";
 	    String tempdefenderTerr="";
 	    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 		if(entry.getValue().equalsIgnoreCase(players.getPlayers(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
 		    tempAttackTerr= entry.getKey();
 		    for(int i =0;i < territory.getAdjacentTerritory().get(entry.getKey()).size();i++) {
-			if(!players.getPlayerPlaying().get(playerTurn).equals(territory.getTerritoryUser().get(territory.getAdjacentTerritory().get(entry.getKey()).get(i)))) {
+			if(!players.getPlayerList().get(playerTurn).equals(territory.getTerritoryUser().get(territory.getAdjacentTerritory().get(entry.getKey()).get(i)))) {
 			    tempdefenderTerr = territory.getAdjacentTerritory().get(entry.getKey()).get(i);
 			    break;
 			}
@@ -711,51 +744,72 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		defenderDiceDropDown.addItem(defenderDie);
 		defenderDiceDropDown.setEnabled(false);
 		context = new Context(players);
-		context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, "AGGRESSIVE");	
+		context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, AGGRESSIVE_TYPE);	
 		observerSubject.setAttackMsg(players.getAttackerMsg());
 		if(players.isAttackWon()) {
 		    if(checkPlayerWonGame()) {
-			LOGGER.info("******************* "+players.getPlayerList().get(playerTurn)+" Won Game  **********");
-			setFrameValidate(mainMenu(frame));
+			changeGame();
 		    }
 		}
 		attackPanelReset();
 	    } else {
 		if(checkPlayerWonGame()) {
-		    LOGGER.info("******************* "+players.getPlayerList().get(playerTurn)+" Won Game  **********");
-		    setFrameValidate(mainMenu(frame));
+			changeGame();
 		} else {
 		    setBotAttackPanelReset();    
 		}
 	    }
-	} else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("BENEVOLENT")) {
+	} else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(BENEVOLENT_TYPE)) {
 	    if(checkPlayerWonGame()) {
-		LOGGER.info("******************* "+players.getPlayerList().get(playerTurn)+" Won Game  **********");
-		setFrameValidate(mainMenu(frame));
+		changeGame();
 	    } else {
 		setBotAttackPanelReset();    
 	    }
-	} else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM") && !tempFlag) {
+	} else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE) && !tempFlag) {
 	    if(checkPlayerWonGame()) {
-		LOGGER.info("******************* "+players.getPlayerList().get(playerTurn)+" Won Game  **********");
-		setFrameValidate(mainMenu(frame));
+		changeGame();
 	    } else {
 		setBotAttackPanelReset();    
 	    }
-	} else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("CHEATER")) {
+	} else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(CHEATER_TYPE)) {
 	    context = new Context(players);
-	    context.executeBotAttack(territory,players.getPlayerList().get(playerTurn),"",0,0, "CHEATER");	
+	    context.executeBotAttack(territory,players.getPlayerList().get(playerTurn),"",0,0, CHEATER_TYPE);	
 	    observerSubject.setAttackMsg(players.getAttackerMsg());
 	    if(checkPlayerWonGame()) {
-		LOGGER.info("******************* "+players.getPlayerList().get(playerTurn)+" Won Game  **********");
-		setFrameValidate(mainMenu(frame));
+		changeGame();
 	    } else {
 		setBotAttackPanelReset();    
 	    }
 
 	}
     }
-
+    /**
+     * This method is used to play next game number if player won game 
+     */
+    private void changeGame() {
+	LOGGER.info("******************* "+players.getPlayerList().get(playerTurn)+" Won Game  **********");
+	if(tournamentModeOn) {
+	    mapResult.put(gameTurn,players.getPlayerList().get(playerTurn));
+	    gameTurn++;
+	    tournamentEnd();
+	}
+	setFrameValidate(mainMenu(frame));
+    }
+    public Map<Integer, String> getMapResult() {
+	return mapResult;
+    }
+    public void setMapResult(Map<Integer, String> mapResult) {
+	this.mapResult = mapResult;
+    }
+    public Map<Integer, Map<Integer, String>> getTournamentResult() {
+	return tournamentResult;
+    }
+    public void setTournamentResult(Map<Integer, Map<Integer, String>> tournamentResult) {
+	this.tournamentResult = tournamentResult;
+    }
+    /**
+     * This Method is used to reset attack panel for Bot Player.
+     */
     public void setBotAttackPanelReset() {
 	attackBtn.setEnabled(false);
 	attackSkipBtn.setEnabled(false);
@@ -1030,6 +1084,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    setFrameValidate(playerMenu());
 	} else if (actionName.equalsIgnoreCase(tournamentModeName)) {
 	    tournamentModeOn = true;
+	    mapResult = new HashMap<>();
+	    tournamentResult = new HashMap<>();
 	    players = new Players();
 	    players.addPlayers(MANAN_PLAYER);
 	    players.addPlayers(SHALIN_PLAYER);
@@ -1043,30 +1099,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	} else if (actionName.equals(exitBtnName)) {
 	    System.exit(0);
 	} else if (actionName.equals("Start Game")) {
-	    if (randomMap) {
-		if (mapFilePath != null  && StringUtils.isNotEmpty(mapFilePath[0].getName())) {
-		    for(int i = 0;i<players.getPlayerList().size();i++) {
-			players.getPlayerType().put(players.getPlayerList().get(i),playersListDropDown.get(i).getItemAt(playersListDropDown.get(i).getSelectedIndex()));
-			System.out.println(players.getPlayerList().get(i)+" ========= "+playersListDropDown.get(i).getItemAt(playersListDropDown.get(i).getSelectedIndex()));
-		    }
-		    ArmiesSelection armies = new ArmiesSelection(playerPlaying);
-		    InitializeData initializeData = new InitializeData(mapFilePath[0].getPath() , playerPlaying , armies.getPlayerArmies(), players);
-		    boolean isMapValid = initializeData.generateData();
-		    if(isMapValid) {
-			continent = initializeData.getContinent();
-			players = initializeData.getPlayers();
-			territory = initializeData.getTerritory();
-			observerSubject.setPlayerLog();
-			if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("Human")) {
-			    observerSubject.setReinforcementMsg("Reinforcement Phase Started");
-			}
-			setFrameValidate(gameView());
-		    } else {
-			JOptionPane.showMessageDialog(frame, "Please Check data Again.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);   
-		    }
-		} else {
-		    JOptionPane.showMessageDialog(frame, "No Map Selected.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);    
-		}
+	    if (randomMap && !tournamentModeOn) {
+		startPlayingGame();
+	    } else if(tournamentModeOn){
+		startPlayingGame();
 	    } else {
 		if (StringUtils.isNotEmpty(existingMapFilePath)) {
 		    for(int i = 0;i<players.getPlayerList().size();i++) {
@@ -1080,7 +1116,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			players = initializeData.getPlayers();
 			territory = initializeData.getTerritory();
 			observerSubject.setPlayerLog();
-			if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("Human")) {
+			if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 			    observerSubject.setReinforcementMsg("Reinforcement Phase Started");
 			}
 			setFrameValidate(gameView());
@@ -1156,7 +1192,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		playerTurn = (int) (long) jsonObject.get("playerTurn");
 
 		if (playerTurn == 0) {
-
 		    observerSubject.setState(MANAN_PLAYER, true);
 		} else if (playerTurn == 1) {
 		    observerSubject.setState(SHALIN_PLAYER, true);
@@ -1210,6 +1245,75 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		JOptionPane.showMessageDialog(frame, "No previously saved file.");
 	    }
 
+	}
+    }
+    /**
+     * This Method is used to start  playing game with map in Single mode or Tournament Mode. 
+     */
+    public void startPlayingGame() {
+	String currentFileName = "";
+	if(tournamentModeOn) {
+	    currentFileName = mapFilePath[fileTurn].getPath();
+	} else {
+	    currentFileName = mapFilePath[0].getPath();	    
+	}
+	continent = new Continent();
+	territory = new Territory();
+	if(fileTurn == 0 && gameTurn == 0) {
+	    for(int i = 0;i<players.getPlayerList().size();i++) {
+		players.getPlayerType().put(players.getPlayerList().get(i),playersListDropDown.get(i).getItemAt(playersListDropDown.get(i).getSelectedIndex()));
+	    }
+	    tempPlayerList = players.getPlayerList();
+	} else {
+	    players = new Players();
+	    players.setPlayerList(tempPlayerList);
+	    for(int i = 0;i<players.getPlayerList().size();i++) {
+		players.getPlayerType().put(players.getPlayerList().get(i),playersListDropDown.get(i).getItemAt(playersListDropDown.get(i).getSelectedIndex()));
+	    }
+	    playerTurn = 0;
+	}
+	if (mapFilePath != null  && StringUtils.isNotEmpty(mapFilePath[fileTurn].getName())) {	  
+	    ArmiesSelection armies = new ArmiesSelection(players.getPlayerList().size());
+	    InitializeData initializeData = new InitializeData(currentFileName , players.getPlayerList().size() , armies.getPlayerArmies(), players);
+	    boolean isMapValid = initializeData.generateData();
+	    if(isMapValid) {
+		continent = initializeData.getContinent();
+		players = initializeData.getPlayers();
+		territory = initializeData.getTerritory();
+		observerSubject.setPlayerLog();
+		if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
+		    observerSubject.setReinforcementMsg("Reinforcement Phase Started");
+		}
+		setFrameValidate(gameView());
+	    } else {
+		JOptionPane.showMessageDialog(frame, "Please Check data Again.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);   
+	    }
+	} else {
+	    JOptionPane.showMessageDialog(frame, "No Map Selected.", CONTENT_INVALID, JOptionPane.ERROR_MESSAGE);    
+	}
+    }
+    /**
+     * This method checks whether tournament ends or not. If tournament not end, it start playing game again with map.
+     */
+    public void tournamentEnd() {
+	if(noOfGamesDropDown != null) {
+	    int gameNo = noOfGamesDropDown.getItemAt(noOfGamesDropDown.getSelectedIndex());
+	    if(gameTurn >= gameNo) {
+		tournamentResult.put(fileTurn, mapResult);
+		mapResult = new HashMap<>();
+		fileTurn++;
+		gameTurn=0;
+	    } 
+	    if(fileTurn >= mapFilePath.length) {
+		for(Entry<Integer, Map<Integer, String>> entry : tournamentResult.entrySet()) {
+		    for(Entry<Integer, String> newEntry : entry.getValue().entrySet()) {
+			LOGGER.info("Map " + entry.getKey() + " : " + newEntry.getKey() + " : "+ players.getPlayerType().get(newEntry.getValue()));
+		    }
+		}
+		setFrameValidate(mainMenu(frame));
+	    } else {		    
+		startPlayingGame();
+	    }
 	}
     }
     /**
@@ -1328,7 +1432,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * @param flag used to identify whether player can do reinforcement or not.
      */
     public void goForReinforcement(boolean flag) {
-	String name = players.getPlayerPlaying().get(playerTurn);
+	String name = players.getPlayerList().get(playerTurn);
 	if(StringUtils.isNotEmpty(territoryAList.getSelectedValue())){	    
 	    String[] terrName = territoryAList.getSelectedValue().split("--");
 	    String message = flag ? "Add Armies in " + terrName[0] : "Add Armies Again in " + terrName[0];
@@ -1364,7 +1468,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      */
     public void enableReinforcementBtn() {
 	if(players.getPlayerList().size() >= 1) {
-	    String name = players.getPlayerPlaying().get(playerTurn);
+	    String name = players.getPlayerList().get(playerTurn);
 	    if(StringUtils.isNotEmpty(name)) {
 		if(players.getPlayerArmy(name) == 0 && !hasPlayerOwnedMoreCards()) {
 		    reinforceBtn.setEnabled(false);
@@ -1411,21 +1515,23 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	addTerritoryADropDown();
 
     }
-
+    /**
+     * This Method is used for fortification for Bot Player.
+     */
     public void setBotFortification() {
 	players.setCurrentPhase("Fortification");
 	observerSubject.setPlayerLog();
 	fortifyBtn.setEnabled(false);
 	fortifySkipBtn.setEnabled(false);
 	boolean tempFlag = true;
-	if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM")){
+	if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE)){
 	    int rand = new Random().nextInt(5)+1;
 	    tempFlag = rand  >= 2 ? true : false;
 	}
 	if(!tempFlag) {
 	    LOGGER.info("No Fortification");
 	}
-	if (!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("HUMAN") && tempFlag) {
+	if (!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE) && tempFlag) {
 	    context = new Context(players);
 	    context.executeBotFortification(players.getPlayerList().get(playerTurn), territory);
 	    observerSubject.setFortificationMessage(players.getFortificationMsg());
@@ -1435,7 +1541,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    }
 	    changePlayerTurn();
 	} 
-	if(players.getPlayerList().size() >= 1 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("RANDOM") && tempFlag) {
+	if(players.getPlayerList().size() >= 1 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE) && tempFlag) {
 	    setBotFortification();
 	}
 
@@ -1451,50 +1557,65 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * Method is used to change the Turn of player when End Turn Button is Clicked.
      */
     public void changePlayerTurn() {
-	if(!gameWon) {
-	    endTurnBtn.setEnabled(false);
-	    playerTurn++;
-	    playerTurn = playerTurn < players.getPlayerList().size() ? playerTurn : 0;
-	    playerHasTerritory();
-	    if(players.getPlayerList().contains("Neutral Player")) {
-		playerTurn = players.getPlayerList().get(playerTurn).equalsIgnoreCase("Neutral Player") ? 0 : playerTurn;
-	    }
-	    if(players.isWonCard() ) {
-		LOGGER.info("You Have Won 1 Card");
-	    } 
+	endTurnBtn.setEnabled(false);
+	playerTurn++;
+	playerTurn = playerTurn < players.getPlayerList().size() ? playerTurn : 0;
+	playerHasTerritory();
+	if(players.getPlayerList().contains("Neutral Player")) {
+	    playerTurn = players.getPlayerList().get(playerTurn).equalsIgnoreCase("Neutral Player") ? 0 : playerTurn;
+	}
+	if(players.isWonCard() ) {
+	    LOGGER.info("You Have Won 1 Card");
+	} 
 
-	    players.setWonCard(false);
-	    context = new Context(players);
-	    if(players.getPlayerList().size() >= 1) {
-		context.executeReinforcementArmy(players.getPlayerList().get(playerTurn),continent);
-	    }
-	    removeElements();
-	    updateTerritoryAList();
-	    updateContinentInfoList();    
-	    enableReinforcementBtn();
-	    observerSubject.setPlayerLog();
-	    try {
-		gamePanel.remove(2);
-		gamePanel.invalidate();
-		gamePanel.validate();
-	    } catch (Exception e) {
-	    }
-
-	    if(players.getPlayerPlaying().size() >= 1 && players.getCards().containsValue(players.getPlayerPlaying().get(playerTurn))) {
-		gamePanel.add(countryScreen("tradeIn"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
-	    } else {
-		gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
-	    }
+	players.setWonCard(false);
+	context = new Context(players);
+	if(players.getPlayerList().size() >= 1) {
+	    context.executeReinforcementArmy(players.getPlayerList().get(playerTurn),continent);
+	}
+	removeElements();
+	updateTerritoryAList();
+	updateContinentInfoList();    
+	enableReinforcementBtn();
+	observerSubject.setPlayerLog();
+	try {
+	    gamePanel.remove(2);
 	    gamePanel.invalidate();
 	    gamePanel.validate();
-	    playerOwnedCards();
-	    if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("HUMAN")) {
-		setBotReinforcement();    
+	} catch (Exception e) {
+	}
+
+	if(players.getPlayerList().size() >= 1 && players.getCards().containsValue(players.getPlayerList().get(playerTurn))) {
+	    gamePanel.add(countryScreen("tradeIn"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	} else {
+	    gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+	}
+	gamePanel.invalidate();
+	gamePanel.validate();
+	playerOwnedCards();
+	if(players.getPlayerList().size() > 0 && !players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
+	    checkTurnNumber();
+	} else if(players.getPlayerList().size() > 0 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)){
+	    observerSubject.setReinforcementMsg("Reinforcement Phase Started");
+	}
+    }
+    /**
+     * This method is used to check whether game is draw or not. If it's draw, it will go for playing game with map otherwise it will continue with current game only.
+     */
+    public void checkTurnNumber() {
+	if(tournamentModeOn) {
+	    turnNumber++;
+	    if(turnNumber >= noOfTurnsDropDown.getItemAt(noOfTurnsDropDown.getSelectedIndex())) {
+		mapResult.put(gameTurn, "Draw");
+		gameTurn++;
+		LOGGER.info("********** DRAW ***************");
+		turnNumber = 0;
+		tournamentEnd();
 	    } else {
-		observerSubject.setReinforcementMsg("Reinforcement Phase Started");
+		setBotReinforcement();
 	    }
 	} else {
-	    setFrameValidate(mainMenu(frame));
+	    setBotReinforcement();
 	}
     }
     /**
@@ -1515,9 +1636,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		cardCount++;
 	    }
 	}
-	if(cardCount >= 5 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("HUMAN")) {
+	if(cardCount >= 5 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 	    JOptionPane.showMessageDialog(frame, players.getPlayerList().get(playerTurn) +" you need to Trade in Some Cards", "Need Card Trade In", JOptionPane.ERROR_MESSAGE);
-	} else if (players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("AGGRESSIVE") && cardCount >=3) {
+	} else if (players.getPlayerList().size() > 0 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(AGGRESSIVE_TYPE) && cardCount >=3) {
 	    observerSubject.setBotTradeInMsg("Started Trading A Card");
 	}
     }
@@ -1540,7 +1661,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	observerSubject.setAttackMsg("Attack Phase End ");
 	observerSubject.setFortificationMessage("Fortification Phase Started");
 
-	if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("human")) {
+	if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 	    setBotFortification();
 	}
 	else {
@@ -1580,7 +1701,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     public void checkFortificationStatus() {
 	boolean flag = false;
 	for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
-	    if(entry.getValue().equalsIgnoreCase(players.getPlayerPlaying().get(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
+	    if(entry.getValue().equalsIgnoreCase(players.getPlayerList().get(playerTurn)) && territory.getTerritoryArmy().get(entry.getKey()) > 1) {
 		flag = true;
 		break;
 	    }
@@ -1663,7 +1784,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      */
     public void addTerritoryADropDown() {
 	for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
-	    if(entry.getValue().equals(players.getPlayerPlaying().get(playerTurn))){
+	    if(entry.getValue().equals(players.getPlayerList().get(playerTurn))){
 		territoryADropDown.addItem(entry.getKey());
 	    }
 	}
@@ -1678,9 +1799,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	if(StringUtils.isNotEmpty(dropDownAValue)) {
 	    for(int i = 0 ; i < territory.getAdjacentTerritory().get(dropDownAValue).size() ; i++) {
 		String terrName = territory.getAdjacentTerritory().get(dropDownAValue).get(i);
-		if(players.getPlayerPlaying().get(playerTurn).equals(territory.getTerritoryUser().get(terrName)) && phase.equalsIgnoreCase("fortification")) {
+		if(players.getPlayerList().get(playerTurn).equals(territory.getTerritoryUser().get(terrName)) && phase.equalsIgnoreCase("fortification")) {
 		    territoryBDropDown.addItem(terrName);
-		} else if(!players.getPlayerPlaying().get(playerTurn).equals(territory.getTerritoryUser().get(terrName)) && phase.equalsIgnoreCase("attack")) {
+		} else if(!players.getPlayerList().get(playerTurn).equals(territory.getTerritoryUser().get(terrName)) && phase.equalsIgnoreCase("attack")) {
 		    territoryBDropDown.addItem(terrName);
 		}
 	    }
@@ -1768,9 +1889,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    logArea.append("Current Phase : " + players.getCurrentPhase()+"\n");
 	    logArea.append("Type : " + players.getPlayerType().get(players.getPlayerList().get(playerTurn)));
 	    LOGGER.info("Current Player : " + players.getPlayerList().get(playerTurn));
-	    LOGGER.info("Current Armies : " + players.getPlayerArmy(players.getPlayerList().get(playerTurn)));
-	    LOGGER.info("Current Phase : " + players.getCurrentPhase()+"\n");
-	    LOGGER.info("Type : " + players.getPlayerType().get(players.getPlayerList().get(playerTurn)));
 	}
     }
     @Override
@@ -1855,11 +1973,11 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		territoryCDropDown.removeAllItems();
 		territoryADropDown.addItem("");
 		for(Entry<String, String> entry : players.getCards().entrySet()) {
-		    if(players.getPlayerPlaying().get(playerTurn).equalsIgnoreCase(entry.getValue())) {
+		    if(players.getPlayerList().get(playerTurn).equalsIgnoreCase(entry.getValue())) {
 			territoryADropDown.addItem(players.getTerritoryCards().get(entry.getKey())+" -- "+entry.getKey());
 		    }
 		}
-		if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("human")) {
+		if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 		    JOptionPane.showMessageDialog(frame, "Trade In Completed Successfully. You Got "+army+" armies", "Armies Generated",JOptionPane.INFORMATION_MESSAGE);    
 		}
 		LOGGER.info("Trade In Completed Successfully. You Got "+army+" armies");
@@ -1939,7 +2057,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		}
 	    }
 	}
-	if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase("human")){
+	if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)){
 	    return list.isEmpty() ? true : false;
 	}  else {
 	    return count == 3 ? true : false;
@@ -1951,12 +2069,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	log.append(observerSubject.getTradeInMsg() + "\n");
 	ArrayList<String> cardList= new ArrayList<>();
 	for(Entry<String, String> entry : players.getTerritoryCards().entrySet()) {
-	    System.out.println(entry.getKey()+" "+territory.getTerritoryUser().get(entry.getKey().trim()) + " ---> "+players.getPlayerList().get(playerTurn));
 	    if(territory.getTerritoryUser().get(entry.getKey().trim()).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
 		cardList.add(entry.getValue()+"-"+entry.getKey());   
 	    }
 	}
-	System.out.println("BOT Trade in : " + cardList);
 	if(checkTradeInCard(cardList)) {
 	    String[] card1 = cardList.get(0).split("-");
 	    String[] card2 = cardList.get(1).split("-");
