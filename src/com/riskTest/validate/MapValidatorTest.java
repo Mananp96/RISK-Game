@@ -1,9 +1,11 @@
 package com.riskTest.validate;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.risk.controller.BoardData;
 import com.risk.exception.InvalidMapException;
 import com.risk.models.Continent;
 import com.risk.models.Territory;
@@ -14,6 +16,12 @@ import com.risk.validate.MapValidator;
  *
  */
 public class MapValidatorTest {
+	BoardData boardDataOne;
+	BoardData boardDataTwo;
+	BoardData boardDataThree;
+	String invalidMapFileOne = "maps/incorrectMapOne.map";
+	String invalidMapFileThree = "maps/Twin Volcano.map";
+	String invalidMapFileTwo = "maps/incorrectMapThree.map";
 	boolean isMapValid;
 	MapValidator mapValidator;
 	Continent continent;
@@ -35,6 +43,11 @@ public class MapValidatorTest {
 		continent.addContinentTerritory("Northern Africa", "Algeria");
 		continent.addContinentTerritory("Western Africa", "Western Sahara");
 		continent.addContinentTerritory("Western Africa", "Mauritania");
+
+		territory.addTerritory("Morocco");
+		territory.addTerritory("Algeria");
+		territory.addTerritory("Western Sahara");
+		territory.addTerritory("Mauritania");
 
 		territory.addAdjacentTerritory("Morocco", "Algeria");
 		territory.addAdjacentTerritory("Morocco", "Western Sahara");
@@ -120,4 +133,59 @@ public class MapValidatorTest {
 		assertTrue(mapValidator.isGraphConnected());
 	}
 
+	/**
+	 * This method is used to test
+	 * {@link com.risk.validate.MapValidator#isContinentConnected()} method of MapValidator.java.
+	 * @throws InvalidMapException 
+	 * 							subgraph is not Connected.
+	 */
+	@Test
+	public void testIsContinentConnected() throws InvalidMapException {
+		mapValidator = new MapValidator(continent, territory);
+		assertTrue(mapValidator.isContinentConnected());
+	}
+
+	/**
+	 * This method reads Invalid map file1.(Unconnected graph) 
+	 * @throws InvalidMapException graph is not connected.
+	 */
+	@Test
+	public void readingIncorrectMapOne() throws InvalidMapException {
+		boardDataOne = new BoardData(invalidMapFileOne);
+		assertFalse(boardDataOne.generateBoardData());
+
+	}
+
+	/**
+	 * This method reads Invalid map file2.Graph is not connected.
+	 * @throws InvalidMapException duplicate continent.
+	 */
+	@Test
+	public void readingIncorrectMapTwo() throws InvalidMapException {
+		boardDataTwo = new BoardData(invalidMapFileTwo);
+		assertFalse(boardDataTwo.generateBoardData());
+
+	}
+
+	/**
+	 * This method reads Invalid map file3(Twin Volcano.map).
+	 * @throws InvalidMapException Incorrect adjacent territory
+	 */
+	@Test
+	public void readingIncorrectMapThree() throws InvalidMapException {
+		boardDataThree = new BoardData(invalidMapFileThree);
+		assertFalse(boardDataThree.generateBoardData());
+	}
+
+	/**
+	 * This method reads valid map file.(World.map & 3DCliff.map)
+	 * @throws InvalidMapException InvalidMapException
+	 */
+	@Test
+	public void readingValidMap() throws InvalidMapException {
+		boardDataThree = new BoardData("maps/World.map");
+		assertTrue(boardDataThree.generateBoardData());
+		boardDataThree = new BoardData("maps/3D Cliff.map");
+		assertTrue(boardDataThree.generateBoardData());
+	}
 }

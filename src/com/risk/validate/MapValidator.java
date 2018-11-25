@@ -209,7 +209,9 @@ public class MapValidator extends GamePanels {
 				if(count==0) {
 					this.isMapValid = false;
 					throw new InvalidMapException("Unconnected Continent");
-				}	
+				}else {
+					this.isMapValid = true;
+				}
 			}
 		}
 		return isMapValid;
