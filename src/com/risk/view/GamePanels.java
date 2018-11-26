@@ -14,8 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,12 +55,9 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.risk.controller.InitializeData;
+import com.risk.controller.SaveAndLoadGame;
 import com.risk.models.ArmiesSelection;
 import com.risk.models.Continent;
 import com.risk.models.Players;
@@ -744,6 +739,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		defenderDiceDropDown.addItem(defenderDie);
 		defenderDiceDropDown.setEnabled(false);
 		context = new Context(players);
+		if(attackerDie > 0 && defenderDie >0)
 		context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, AGGRESSIVE_TYPE);	
 		observerSubject.setAttackMsg(players.getAttackerMsg());
 		if(players.isAttackWon()) {
@@ -754,7 +750,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		attackPanelReset();
 	    } else {
 		if(checkPlayerWonGame()) {
-			changeGame();
+		    changeGame();
 		} else {
 		    setBotAttackPanelReset();    
 		}
@@ -1102,7 +1098,19 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    if (randomMap && !tournamentModeOn) {
 		startPlayingGame();
 	    } else if(tournamentModeOn){
-		startPlayingGame();
+		boolean tempFlag = true;
+		for(int i= 0;i< mapFilePath.length;i++) {
+		    ArmiesSelection armies = new ArmiesSelection(playerPlaying);
+		    InitializeData initializeData = new InitializeData( mapFilePath[i].getPath(), playerPlaying , armies.getPlayerArmies(), players);
+		    boolean isEditMapValid = initializeData.generateData();
+		    if (!isEditMapValid) {
+			tempFlag = false;
+			break;
+		    } 
+		}
+		if(tempFlag) {
+		    startPlayingGame();   
+		}
 	    } else {
 		if (StringUtils.isNotEmpty(existingMapFilePath)) {
 		    for(int i = 0;i<players.getPlayerList().size();i++) {
@@ -1155,56 +1163,22 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	} else if (actionName.equals("tradeCardBtn")) {
 	    observerSubject.setTradeInMsg("Started Trading A Card");
 	} else if (actionName.equalsIgnoreCase(saveBtnName)) {
-
-	    JSONObject game = new JSONObject();
-	    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	    String playerString = gson.toJson(players);
-	    String continentString = gson.toJson(continent);
-	    String territoryString = gson.toJson(territory);
-
-	    game.put("player", playerString);
-	    game.put("continent", continentString);
-	    game.put("territory", territoryString);
-	    game.put("playerTurn", playerTurn);
-
-	    String gameString = gson.toJson(game);
-
-	    try {
-		FileWriter fileWriter = new FileWriter("riskGame_1.json");
-		fileWriter.write(gameString);
-		fileWriter.flush();
-		JOptionPane.showMessageDialog(frame, "File created successfully.");
-	    } catch (IOException e) {
-		e.printStackTrace();
+	    SaveAndLoadGame saveAndLoadGame = new SaveAndLoadGame(players, continent, territory, playerTurn);
+	    if(saveAndLoadGame.saveGame()) {
+		JOptionPane.showMessageDialog(frame, "Game Saved", "Game Saved", JOptionPane.INFORMATION_MESSAGE);
+	    } else {
+		JOptionPane.showMessageDialog(frame, "Unable to Save Game", "Game Save", JOptionPane.ERROR_MESSAGE);
 	    }
-
 	} else if (actionName.equals(loadSavedGameName)) {
-	    try {
-		JSONParser parser = new JSONParser();
-		Gson gson = new Gson();
-
-		Object obj = parser.parse(new FileReader("riskGame_1.json"));
-		JSONObject jsonObject = (JSONObject) obj;
-
-		players = gson.fromJson(String.valueOf(jsonObject.get("player")), Players.class);
-		continent = gson.fromJson(String.valueOf(jsonObject.get("continent")), Continent.class);
-		territory = gson.fromJson(String.valueOf(jsonObject.get("territory")), Territory.class);
-		playerTurn = (int) (long) jsonObject.get("playerTurn");
-
-		if (playerTurn == 0) {
-		    observerSubject.setState(MANAN_PLAYER, true);
-		} else if (playerTurn == 1) {
-		    observerSubject.setState(SHALIN_PLAYER, true);
-		} else if (playerTurn == 2) {
-		    observerSubject.setState(KHYATI_PLAYER, true);
-		} else if (playerTurn == 3) {
-		    observerSubject.setState(VAISHAKHI_PLAYER, true);
-		} else if (playerTurn == 4) {
-		    observerSubject.setState(HIMEN_PLAYER, true);
-		}
-
+	    SaveAndLoadGame saveAndLoadGame = new SaveAndLoadGame();
+	    if(saveAndLoadGame.loadGame()) {
+		players = saveAndLoadGame.getPlayers();
+		continent = saveAndLoadGame.getContinent();
+		territory = saveAndLoadGame.getTerritory();
+		playerTurn = saveAndLoadGame.getPlayerTurn();
 		setFrameValidate(gameView());
-
+		observerSubject.setPlayerLog();
+		displayTerritoryDetails();
 		if (players.getCurrentPhase().equalsIgnoreCase("reinforcement")) {
 		    reinforceBtn.setEnabled(true);
 		    fortifyBtn.setEnabled(false);
@@ -1212,7 +1186,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		    attackBtn.setEnabled(false);
 		    attackSkipBtn.setEnabled(false);
 		    observerSubject.setReinforcementMsg("Reinforcement Force Started");
-
 		} else if (players.getCurrentPhase().equalsIgnoreCase("attack")) {
 		    reinforceBtn.setEnabled(false);
 		    fortifyBtn.setEnabled(false);
@@ -1241,10 +1214,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		    gamePanel.validate();
 		    startFortificationPhase();
 		}
-	    } catch (Exception e) {
-		JOptionPane.showMessageDialog(frame, "No previously saved file.");
+	    } else {
+		JOptionPane.showMessageDialog(frame, "Unable to Load Save Game", "Load Save Game", JOptionPane.ERROR_MESSAGE);
 	    }
-
 	}
     }
     /**

@@ -1,7 +1,11 @@
 package com.risk.controller;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.Random;
 
 import com.risk.models.ArmiesSelection;
@@ -15,10 +19,13 @@ import com.risk.view.GamePanels;
  *
  */
 public class StartUpPhase extends GamePanels {
+    private static final Logger LOGGER = Logger.getLogger(StartUpPhase.class.getName());
     Players players;
     Continent continent;
     Territory territory;
     ArmiesSelection armies;
+    private FileHandler fileHandler;
+    private SimpleFormatter simpleFormatter;
 
     /**
      * This constructor is used to set the model object continent, players, territory.
@@ -39,6 +46,7 @@ public class StartUpPhase extends GamePanels {
      * 
      */
     public void initialStartUpPhase() {
+	createLogs();
 	int playerSize = players.getPlayerList().size();
 	if (players.getPlayerList().get(2).equals("Neutral Player")){
 	    armies = new ArmiesSelection(2);
@@ -50,6 +58,7 @@ public class StartUpPhase extends GamePanels {
 	    players.setCurrentPhase("StartUp Phase");
 	    players.addPlayerContinent(playerName, new Continent());
 	    players.initialArmy(playerName, armies.getPlayerArmies());
+	    LOGGER.info(playerName +" got " + armies.getPlayerArmies());
 	}
 	Map<String, String> territoryContinent = territory.getTerritoryCont();
 	int playerCount = 0;
@@ -61,6 +70,7 @@ public class StartUpPhase extends GamePanels {
 		Continent tempContinent = players.getPlayerContinent(playerName);
 		tempContinent.addContinentOwnedTerritory(territoryContinent.get(randomTerritory), randomTerritory.toString(), true);
 		territoryContinent.remove(randomTerritory);
+		LOGGER.info(playerName +" has put 1 in "+ randomTerritory.toString());
 		territory.updateTerritoryArmy(randomTerritory.toString(), 1, "ADD");
 		territory.updateTerritoryUser(playerName, randomTerritory.toString());
 		players.updateArmy(playerName, 1, "Remove");
@@ -81,6 +91,7 @@ public class StartUpPhase extends GamePanels {
 		do {
 		    for(Entry<String, String> entry : territory.getTerritoryUser().entrySet()) {
 			if(entry.getValue().equalsIgnoreCase(name) &&  players.getPlayerArmy(name) > 0) {
+			    LOGGER.info(territory.getTerritoryUser().get(entry.getKey()) + " has put 1 in  "+entry.getKey());
 			    territory.updateTerritoryArmy(entry.getKey(), 1, "ADD");
 			    players.updateArmy(name, 1, "DELETE");
 			}
@@ -91,5 +102,16 @@ public class StartUpPhase extends GamePanels {
 	    }
 
 	}
+    }
+
+    private void createLogs() {
+	try {
+	    fileHandler = new FileHandler("./startUpPhase.log");
+	    simpleFormatter = new SimpleFormatter();
+	    LOGGER.addHandler(fileHandler);
+	    fileHandler.setFormatter(simpleFormatter);
+	} catch (SecurityException | IOException e) {
+	    e.printStackTrace();
+	}	
     }
 }

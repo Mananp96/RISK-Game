@@ -598,7 +598,7 @@ public class Players implements Strategy {
 		    }
 		}
 		setAttackerMsg(message3.toString());
-		if(tempFlag) {
+		if(tempFlag && currentTerritory.getTerritoryCard().size() > 0) {
 		    int rand = 0;
 
 		    rand = new Random().nextInt(currentTerritory.getTerritoryCard().keySet().toArray().length)+1;
