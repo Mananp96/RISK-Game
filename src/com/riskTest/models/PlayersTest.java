@@ -1,15 +1,23 @@
 package com.riskTest.models;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
@@ -35,6 +43,8 @@ public class PlayersTest {
 	int defenderDice = 2;
 	Map<String, String> territoryCard;
 	Map<String, String> territoryUser;
+	private String gameString;
+	private JSONObject game;
 	
 	/**
 	 * This method is invoked at the start of all the test methods.
@@ -70,6 +80,7 @@ public class PlayersTest {
 		players.addPlayerContinent("prince", continent);
 		territory.addTerritoryCard(quebec, "cardName");
 		players.setPlayerList(playerList);
+		
 		
 	}
 
@@ -199,4 +210,6 @@ public class PlayersTest {
 		players.generateReinforcementArmy("john", continent);
 		assertEquals(4,players.value.intValue());	
 	}
+	
+	
 }
