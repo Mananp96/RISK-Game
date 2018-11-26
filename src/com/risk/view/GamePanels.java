@@ -292,7 +292,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	gamePanel.add(displayLog(),setGridBagConstraints(new Insets(25, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_START, 0.5, 0.5, 0, 0));
 	gamePanel.add(eventScreen(),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.CENTER, 0.5, 0.5, 1, 0));
 	gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
-	if(!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
+	if(!players.getPlayerList().isEmpty() && !players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 	    setBotReinforcement();
 	}
 	return gamePanel;
@@ -310,10 +310,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    observerSubject.setReinforcementMsg(players.getReinforcementMsg());
 	}
 	observerSubject.setReinforcementMsg("Reinforcement Phase End");
-	territoryAModel.removeAllElements();
-	territoryBModel.removeAllElements();
-	territoryInfoModel.removeAllElements();
-	continentInfoModel.removeAllElements();
+	removeModelElement();
 	updateTerritoryAList();
 	updateContinentInfoList();
 	enableReinforcementBtn();
@@ -788,6 +785,15 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    mapResult.put(gameTurn,players.getPlayerList().get(playerTurn));
 	    gameTurn++;
 	    tournamentEnd();
+	} else {
+	    logArea.setText(players.getPlayerList().get(playerTurn)+" Won Game");
+	    reinforceBtn.setEnabled(false);
+		attackBtn.setEnabled(false);
+		attackSkipBtn.setEnabled(false);
+		fortifyBtn.setEnabled(false);
+		fortifySkipBtn.setEnabled(false);
+		endTurnBtn.setEnabled(false);
+		saveBtn.setEnabled(false);
 	}
 	setFrameValidate(mainMenu(frame));
     }
@@ -809,8 +815,8 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     public void setBotAttackPanelReset() {
 	attackBtn.setEnabled(false);
 	attackSkipBtn.setEnabled(false);
-	fortifyBtn.setEnabled(true);
-	fortifySkipBtn.setEnabled(true);
+	fortifyBtn.setEnabled(false);
+	fortifySkipBtn.setEnabled(false);
 
 	if(!checkPlayerWonGame()) {
 	    goForFortification();
@@ -824,7 +830,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    gamePanel.invalidate();
 	    gamePanel.validate();
 	}
-	endTurnBtn.setEnabled(true);
+	endTurnBtn.setEnabled(false);
     }
     /**
      * Display list of territory and it's adjacent territory of current Player 
@@ -980,7 +986,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	} else{
 	    noOfGames = new JLabel("No of Games");
 	    noOfGamesDropDown = new JComboBox<>();
-	    for(int i=1;i<=5;i++) {
+	    for(int i=1;i<=4;i++) {
 		noOfGamesDropDown.addItem(i);
 	    }
 
@@ -1277,9 +1283,25 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		gameTurn=0;
 	    } 
 	    if(fileTurn >= mapFilePath.length) {
+		reinforceBtn.setEnabled(false);
+		attackBtn.setEnabled(false);
+		attackSkipBtn.setEnabled(false);
+		fortifyBtn.setEnabled(false);
+		fortifySkipBtn.setEnabled(false);
+		endTurnBtn.setEnabled(false);
+		saveBtn.setEnabled(false);
+		logArea.setText("");
+		
+		territoryDetails.setText("");
 		for(Entry<Integer, Map<Integer, String>> entry : tournamentResult.entrySet()) {
+		    territoryDetails.append("*************************\n");
+		    territoryDetails.append("Map " + (entry.getKey()+1));
+		    territoryDetails.append("\n*************************\n");
+
 		    for(Entry<Integer, String> newEntry : entry.getValue().entrySet()) {
-			LOGGER.info("Map " + entry.getKey() + " : " + newEntry.getKey() + " : "+ players.getPlayerType().get(newEntry.getValue()));
+			String temp = players.getPlayerType().get(newEntry.getValue()) != null ? players.getPlayerType().get(newEntry.getValue()) : "Draw"; 
+			territoryDetails.append(" : Game " + (newEntry.getKey()+1) + " : "+ temp+"\n");
+			LOGGER.info("Map " + (entry.getKey()+1) + " : Game " + (newEntry.getKey()+1) + " : "+ temp);
 		    }
 		}
 		setFrameValidate(mainMenu(frame));
@@ -1379,10 +1401,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	territoryBDropDown.setEnabled(true);
 	attackerDiceDropDown.setEnabled(true);
 	defenderDiceDropDown.setEnabled(true);
-	territoryAModel.removeAllElements();
-	territoryBModel.removeAllElements();
-	territoryInfoModel.removeAllElements();
-	continentInfoModel.removeAllElements();
+	removeModelElement();
 	updateTerritoryAList();
 	updateContinentInfoList();
 	territoryADropDown.removeAllItems();
@@ -1398,6 +1417,12 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	displayTerritoryDetails();
 	setBotAttackPanel();
 
+    }
+    private void removeModelElement() {
+	territoryAModel.removeAllElements();
+	territoryBModel.removeAllElements();
+	territoryInfoModel.removeAllElements();
+	continentInfoModel.removeAllElements();	
     }
     /**
      * method used to do reinforcement on territory.
@@ -1416,10 +1441,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		    context = new Context(players);
 		    context.executeReinforcement(name,terrName[0].trim(),Integer.parseInt(output),territory);
 		    observerSubject.setReinforcementMsg("Army Placed on   " + terrName[0]  + " is "+ output);
-		    territoryAModel.removeAllElements();
-		    territoryBModel.removeAllElements();
-		    territoryInfoModel.removeAllElements();
-		    continentInfoModel.removeAllElements();
+		    removeModelElement();
 		    updateTerritoryAList();
 		    updateContinentInfoList();
 		    enableReinforcementBtn();
@@ -1516,11 +1538,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	if(players.getPlayerList().size() >= 1 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE) && tempFlag) {
 	    setBotFortification();
 	}
-
-	territoryAModel.removeAllElements();
-	territoryBModel.removeAllElements();
-	territoryInfoModel.removeAllElements();
-	continentInfoModel.removeAllElements();
+	removeModelElement();
 	updateTerritoryAList();
 	updateContinentInfoList();
     }
@@ -1533,7 +1551,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	playerTurn++;
 	playerTurn = playerTurn < players.getPlayerList().size() ? playerTurn : 0;
 	playerHasTerritory();
-	if(players.getPlayerList().contains("Neutral Player")) {
+	if(!players.getPlayerList().isEmpty() && players.getPlayerList().contains("Neutral Player")) {
 	    playerTurn = players.getPlayerList().get(playerTurn).equalsIgnoreCase("Neutral Player") ? 0 : playerTurn;
 	}
 	if(players.isWonCard() ) {
@@ -1594,7 +1612,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * This Method Check Whether Player has Territories or not.
      */
     public void playerHasTerritory() {
-	if(!territory.getTerritoryUser().containsValue(players.getPlayerList().get(playerTurn))) {
+	if(!players.getPlayerList().isEmpty() && !territory.getTerritoryUser().containsValue(players.getPlayerList().get(playerTurn))) {
 	    changePlayerTurn();
 	} 
     }
@@ -1619,10 +1637,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      * This method remove elements from  territoryAModel, territoryBModel, territoryInfoModel, continentInfoModel, territoryADropDown and territoryBDropDown
      */
     public void removeElements() {
-	territoryAModel.removeAllElements();
-	territoryBModel.removeAllElements();
-	territoryInfoModel.removeAllElements();
-	continentInfoModel.removeAllElements();
+	removeModelElement();
 	territoryADropDown.removeAllItems();
 	territoryBDropDown.removeAllItems();
     }
@@ -1682,10 +1697,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    fortifyBtn.setEnabled(false);
 	}
 	else {
-	    territoryAModel.removeAllElements();
-	    territoryBModel.removeAllElements();
-	    territoryInfoModel.removeAllElements();
-	    continentInfoModel.removeAllElements();
+	    removeModelElement();
 	    updateTerritoryAList();
 	    updateContinentInfoList(); 
 	    startFortificationPhase();
@@ -1865,16 +1877,14 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     }
     @Override
     public void reinforcementUpdate() {
-	log.append(observerSubject.getReinforcementMsg()+"\n");   
-	LOGGER.info(observerSubject.getReinforcementMsg());
+	setLogMessage(observerSubject.getReinforcementMsg());
     }
     /**
      * This Method print action done by player during fortification phase
      */
     @Override
     public void fortificationUpdate() {
-	log.append(observerSubject.getFortificationMessage() + "\n");
-	LOGGER.info(observerSubject.getFortificationMessage());
+	setLogMessage(observerSubject.getFortificationMessage());
 	displayTerritoryDetails();
     }
     /**
@@ -1912,22 +1922,16 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		int army = tradeInArmy();
 		players.setTradeInArmies(army);
 		players.setTradeIn();
-		log.append("\nTraded Cards are " +card1[0].trim()+  " " +card1[1].trim()+"\n");
-		log.append("Traded Cards are " +card2[0].trim()+  " " +card2[1].trim()+"\n");
-		log.append("Traded Cards are " +card3[0].trim()+  " " +card3[1].trim()+"\n");
-		log.append("Number of Trade In : "+players.getTradeIn()+"\n");
-		log.append("You Got " + army+" Amies\n");
-		LOGGER.info("Traded Cards are " +card1[0].trim()+  " " +card1[1].trim());
-		LOGGER.info("Traded Cards are " +card2[0].trim()+  " " +card2[1].trim());
-		LOGGER.info("Traded Cards are " +card3[0].trim()+  " " +card3[1].trim());
-		LOGGER.info("Number of Trade In : "+players.getTradeIn());
-		LOGGER.info("You Got " + army+" Amies");
+		setLogMessage("\nTraded Cards are " +card1[0].trim()+  " " +card1[1].trim());
+		setLogMessage("Traded Cards are " +card2[0].trim()+  " " +card2[1].trim());
+		setLogMessage("Traded Cards are " +card3[0].trim()+  " " +card3[1].trim());
+		setLogMessage("Number of Trade In : "+players.getTradeIn());
+		setLogMessage("You Got " + army+" Amies");
 		players.updateArmy(players.getPlayerList().get(playerTurn), army, "ADD");
 		for (int i = 0; i < cardTerrList.size(); i++) {
 		    if(!cardList.get(i).equalsIgnoreCase("Wild Card") && territory.getTerritoryUser().get(cardTerrList.get(i)).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
 			players.updateArmy(players.getPlayerList().get(playerTurn), 2, "ADD");
-			log.append("You Got Additional 2 Amies\n");
-			LOGGER.info("You Got Additional 2 Amies");
+			setLogMessage("You Got Additional 2 Amies");
 			break;
 		    }
 		}
@@ -1955,16 +1959,13 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		LOGGER.info("Trade In Completed Successfully. You Got "+army+" armies");
 		observerSubject.setPlayerLog();
 		displayTerritoryDetails();
-		log.append("Trade In Done\n");
-		LOGGER.info("Trade In Done");
+		setLogMessage("Trade In Done");
 	    } else {
-		log.append("Select proper Combination of Cards\n");
-		LOGGER.info("Select proper Combination of Cards");
+		setLogMessage("Select proper Combination of Cards");
 	    }
 
 	} else {
-	    log.append("Select proper Combination of Cards\n");
-	    LOGGER.info("Select proper Combination of Cards");
+	    setLogMessage("Select proper Combination of Cards");
 	}
     }
     /**
@@ -2061,22 +2062,16 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    int army = tradeInArmy();
 	    players.setTradeInArmies(army);
 	    players.setTradeIn();
-	    log.append("\nTraded Cards are " +card1[0].trim()+  " " +card1[1].trim()+"\n");
-	    log.append("Traded Cards are " +card2[0].trim()+  " " +card2[1].trim()+"\n");
-	    log.append("Traded Cards are " +card3[0].trim()+  " " +card3[1].trim()+"\n");
-	    log.append("Number of Trade In : "+players.getTradeIn()+"\n");
-	    log.append("You Got " + army+" Amies\n");
-	    LOGGER.info("Traded Cards are " +card1[0].trim()+  " " +card1[1].trim());
-	    LOGGER.info("Traded Cards are " +card2[0].trim()+  " " +card2[1].trim());
-	    LOGGER.info("Traded Cards are " +card3[0].trim()+  " " +card3[1].trim());
-	    LOGGER.info("Number of Trade In : "+players.getTradeIn());
-	    LOGGER.info("You Got " + army+" Amies");
+	    setLogMessage("\nTraded Cards are " +card1[0].trim()+  " " +card1[1].trim());
+	    setLogMessage("Traded Cards are " +card2[0].trim()+  " " +card2[1].trim());
+	    setLogMessage("Traded Cards are " +card3[0].trim()+  " " +card3[1].trim());
+	    setLogMessage("Number of Trade In : "+players.getTradeIn());
+	    setLogMessage("You Got " + army+" Amies");
 	    players.updateArmy(players.getPlayerList().get(playerTurn), army, "ADD");
 	    for (int i = 0; i < cardTerrList.size(); i++) {
 		if(!cardList.get(i).equalsIgnoreCase("Wild Card") && territory.getTerritoryUser().get(cardTerrList.get(i)).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
 		    players.updateArmy(players.getPlayerList().get(playerTurn), 2, "ADD");
-		    log.append("You Got Additional 2 Amies\n");
-		    LOGGER.info("You Got Additional 2 Amies");
+		    setLogMessage("You Got Additional 2 Amies");
 		    break;
 		}
 	    }
@@ -2091,11 +2086,14 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    territory.getTerritoryCard().put(card3[1].trim(), card3[0].trim());
 	    observerSubject.setPlayerLog();
 	    displayTerritoryDetails();
-	    log.append("Trade In Done\n");
-	    LOGGER.info("Trade In Done");
+	    setLogMessage("Trade In Done");
 	} else {
-	    log.append("Select proper Combination of Cards\n");
-	    LOGGER.info("Select proper Combination of Cards");
+	    setLogMessage("Select proper Combination of Cards");
 	}
+    }
+    
+    public void setLogMessage(String message) {
+	    log.append(message+"\n");
+	    LOGGER.info(message);
     }
 }

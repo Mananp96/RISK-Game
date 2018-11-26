@@ -174,7 +174,6 @@ public class MapValidator extends GamePanels {
 	 */
 	public boolean isGraphConnected() throws InvalidMapException {
 		ConnectedGraph graph = new ConnectedGraph(territoryNumber.size());
-		System.out.println(territoryNumber);
 		for(Entry<String,ArrayList<String>> entry : adjcentTerritories.entrySet()) {
 			for(int i = 0; i<entry.getValue().size() ; i++) {
 				graph.addConnectionLine(territoryNumber.get(entry.getKey()),

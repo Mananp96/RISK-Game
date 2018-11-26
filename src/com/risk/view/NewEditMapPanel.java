@@ -597,7 +597,6 @@ public class NewEditMapPanel implements ActionListener{
      * @param value Value of Continent
      */
     private void updateContinent(String oldContinent, String newContinent, String value) {
-	System.out.println("Continent Selected is + " + oldContinent + " new one is " + newContinent + " value "+ value);
 	if(StringUtils.isNotEmpty(oldContinent) && StringUtils.isNotEmpty(newContinent) && StringUtils.isNotEmpty(value) && StringUtils.isNumeric(value) && Integer.parseInt(value) > 0) {
 	    continent.updateContinentValue(oldContinent, newContinent, Integer.parseInt(value));
 	    territory.updateTerritoryContinent(oldContinent, newContinent);
@@ -622,7 +621,6 @@ public class NewEditMapPanel implements ActionListener{
      * @param adjacent Adjacent Territory
      */
     private void addAdjacentTerritory( String territoryStr, String adjacent) {
-	System.out.println("Continent is Territory " + territoryStr + " and Adjacent of Terriory is " + adjacent);
 	if( StringUtils.isNotEmpty(territoryStr) && StringUtils.isNotEmpty(adjacent) && !territoryStr.equalsIgnoreCase(adjacent)) {
 	    if(territory.getAdjacentTerritory().containsKey(territoryStr) && !territory.getAdjacentTerritory().get(territoryStr).contains(adjacent) && territory.getAdjacentTerritory().get(territoryStr).size() < 10 ) {
 		territory.addAdjacentTerritory(territoryStr, adjacent);
@@ -658,7 +656,6 @@ public class NewEditMapPanel implements ActionListener{
      * @param territoryStr Territory Name
      */
     private void addTerritory(String continentStr, String territoryStr) {
-	System.out.println("Continent selected is " + continentStr + " with Territory " + territoryStr);
 	if(StringUtils.isNotEmpty(continentStr) && StringUtils.isNotEmpty(territoryStr) && !territory.getTerritoryCont().containsKey(territoryStr)) {
 	    territory.addTerritoryCont(territoryStr, continentStr);
 	    territory.addTerritory(territoryStr);
@@ -683,7 +680,6 @@ public class NewEditMapPanel implements ActionListener{
      * @param value Value of Continent
      */
     public void addContinent(String continentStr, String value) {
-	System.out.println("Continent Enter is " + continentStr + " with value " + value);
 	if(StringUtils.isNotEmpty(continentStr) && StringUtils.isNotEmpty(value) && StringUtils.isNumeric(value) && Integer.parseInt(value) > 0) {
 	    if(!continent.getContinentValue().containsKey(continentStr)) {
 		continent.setContinentValue(continentStr, Integer.parseInt(value));
