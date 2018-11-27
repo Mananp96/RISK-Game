@@ -12,20 +12,32 @@ public abstract class Observer {
     public abstract void update();
 
     /**
-     * this method update fortification changes 
+     * This method update to print events taken during fortification phase
      */
     public abstract void fortificationUpdate();
 
     /**
-     * this method update attack changes 
+     * This method update to print events taken during attack phase
      */
     public abstract void attackUpdate();
 
     /**
-     * this method update card changes 
+     * This method update card changes
      */
     public abstract void tradeInCardUpdate();
+
+    /**
+     * This method update card changes for bot player
+     */
     public abstract void botTradeInCardUpdate();
+
+    /**
+     * This method update to print events taken during reinforcement phase
+     */
     public abstract void reinforcementUpdate();
+
+    /**
+     * This method is used to print player details
+     */
     public abstract void playerLogUpdate();
 }

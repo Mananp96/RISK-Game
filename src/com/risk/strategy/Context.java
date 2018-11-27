@@ -97,7 +97,7 @@ public class Context {
     /**
      * Strategy pattern for fortification for Bot Player
      * @param currentPlayer player Name
-     * @param currentTerritory Terriotry Object
+     * @param currentTerritory Territory Object
      */
     public  void executeBotFortification(String currentPlayer, Territory currentTerritory) {
 	strategy.doBotForitification(currentPlayer,currentTerritory);

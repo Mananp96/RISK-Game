@@ -87,6 +87,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     public static final String BENEVOLENT_TYPE = "Benevolent";
     public static final String RANDOM_TYPE = "Random";
     public static final String CHEATER_TYPE = "Cheater";
+    public static final String REINFORCEMENT_MSG = "Reinforcement Phase Started";
 
     JFrame frame;
     Players players;
@@ -303,7 +304,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     public void setBotReinforcement() {
 	players.setCurrentPhase("Reinforcement");
 	observerSubject.setPlayerLog();
-	observerSubject.setReinforcementMsg("Reinforcement Phase Started");
+	observerSubject.setReinforcementMsg(REINFORCEMENT_MSG);
 	if (!players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 	    context = new Context(players);
 	    context.executeBotReinforcement(players.getPlayerList().get(playerTurn), territory);
@@ -683,11 +684,15 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			defenderDiceDropDown.addItem(numberOfDie);
 			defenderDiceDropDown.setEnabled(false);
 			allOutDropDown.setEnabled(false);
-
 		    } else {
-			for(int i=1;i<=numberOfDie;i++) {
-			    defenderDiceDropDown.addItem(i);
+			if(!players.getPlayerType().get(territory.getTerritoryUser().get(terrName)).equalsIgnoreCase(HUMAN_TYPE)) {
+			    defenderDiceDropDown.addItem(numberOfDie);
+			} else {
+			    for(int i=1;i<=numberOfDie;i++) {
+				defenderDiceDropDown.addItem(i);
+			    }
 			}
+
 		    }
 		}
 
@@ -737,7 +742,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		defenderDiceDropDown.setEnabled(false);
 		context = new Context(players);
 		if(attackerDie > 0 && defenderDie >0)
-		context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, AGGRESSIVE_TYPE);	
+		    context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, AGGRESSIVE_TYPE);	
 		observerSubject.setAttackMsg(players.getAttackerMsg());
 		if(players.isAttackWon()) {
 		    if(checkPlayerWonGame()) {
@@ -787,25 +792,37 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    tournamentEnd();
 	} else {
 	    logArea.setText(players.getPlayerList().get(playerTurn)+" Won Game");
-	    reinforceBtn.setEnabled(false);
-		attackBtn.setEnabled(false);
-		attackSkipBtn.setEnabled(false);
-		fortifyBtn.setEnabled(false);
-		fortifySkipBtn.setEnabled(false);
-		endTurnBtn.setEnabled(false);
-		saveBtn.setEnabled(false);
+	    setButtonEnable(false, false, false, false, false);
+	    endTurnBtn.setEnabled(false);
+	    saveBtn.setEnabled(false);
 	}
 	setFrameValidate(mainMenu(frame));
     }
+    /**
+     * This method is used to get Game Result
+     * @return mapResult
+     */
     public Map<Integer, String> getMapResult() {
 	return mapResult;
     }
+    /**
+     * This method is used to set game result
+     * @param mapResult store game result for particular map
+     */
     public void setMapResult(Map<Integer, String> mapResult) {
 	this.mapResult = mapResult;
     }
+    /**
+     * This method is used to get Tournament Result
+     * @return mapResult
+     */
     public Map<Integer, Map<Integer, String>> getTournamentResult() {
 	return tournamentResult;
     }
+    /**
+     * This method is used to set Tournament Result
+     * @param tournamentResult tournament result
+     */
     public void setTournamentResult(Map<Integer, Map<Integer, String>> tournamentResult) {
 	this.tournamentResult = tournamentResult;
     }
@@ -928,6 +945,19 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     public JPanel userInfoPanel(int count){
 	frame.setBounds(0, 0, 300, 500);
 	playersListDropDown = new ArrayList<>();
+	if(tournamentModeOn) {
+	    player1DropDown = new JComboBox<>(new String[] {AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	    player2DropDown = new JComboBox<>(new String[] {AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	    player3DropDown = new JComboBox<>(new String[] {AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	    player4DropDown = new JComboBox<>(new String[] {AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	    player5DropDown = new JComboBox<>(new String[] {AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE}); 
+	} else {
+	    player1DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	    player2DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	    player3DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	    player4DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	    player5DropDown = new JComboBox<>(new String[] {HUMAN_TYPE,AGGRESSIVE_TYPE, BENEVOLENT_TYPE, RANDOM_TYPE, CHEATER_TYPE});
+	}
 	playersListDropDown.add(player1DropDown);
 	playersListDropDown.add(player2DropDown);
 	playersListDropDown.add(player3DropDown);
@@ -1131,7 +1161,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 			territory = initializeData.getTerritory();
 			observerSubject.setPlayerLog();
 			if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
-			    observerSubject.setReinforcementMsg("Reinforcement Phase Started");
+			    observerSubject.setReinforcementMsg(REINFORCEMENT_MSG);
 			}
 			setFrameValidate(gameView());
 		    } else {
@@ -1186,18 +1216,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		observerSubject.setPlayerLog();
 		displayTerritoryDetails();
 		if (players.getCurrentPhase().equalsIgnoreCase("reinforcement")) {
-		    reinforceBtn.setEnabled(true);
-		    fortifyBtn.setEnabled(false);
-		    fortifySkipBtn.setEnabled(false);
-		    attackBtn.setEnabled(false);
-		    attackSkipBtn.setEnabled(false);
+		    setButtonEnable(true, false, false, false, false);
 		    observerSubject.setReinforcementMsg("Reinforcement Force Started");
 		} else if (players.getCurrentPhase().equalsIgnoreCase("attack")) {
-		    reinforceBtn.setEnabled(false);
-		    fortifyBtn.setEnabled(false);
-		    fortifySkipBtn.setEnabled(false);
-		    attackBtn.setEnabled(true);
-		    attackSkipBtn.setEnabled(true);
+		    setButtonEnable(false, true, true, false, false);
 		    observerSubject.setAttackMsg("Attack Phase Started");
 		    gamePanel.remove(2);
 		    gamePanel.invalidate();
@@ -1206,11 +1228,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		    gamePanel.invalidate();
 		    gamePanel.validate();
 		} else if (players.getCurrentPhase().equalsIgnoreCase("fortification")) {
-		    reinforceBtn.setEnabled(false);
-		    fortifyBtn.setEnabled(true);
-		    fortifySkipBtn.setEnabled(true);
-		    attackBtn.setEnabled(false);
-		    attackSkipBtn.setEnabled(false);
+		    setButtonEnable(false, false, false, true, true);
 		    observerSubject.setFortificationMessage("Fortification Phase Started ");
 		    gamePanel.remove(2);
 		    gamePanel.invalidate();
@@ -1260,7 +1278,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		territory = initializeData.getTerritory();
 		observerSubject.setPlayerLog();
 		if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
-		    observerSubject.setReinforcementMsg("Reinforcement Phase Started");
+		    observerSubject.setReinforcementMsg(REINFORCEMENT_MSG);
 		}
 		setFrameValidate(gameView());
 	    } else {
@@ -1283,15 +1301,11 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		gameTurn=0;
 	    } 
 	    if(fileTurn >= mapFilePath.length) {
-		reinforceBtn.setEnabled(false);
-		attackBtn.setEnabled(false);
-		attackSkipBtn.setEnabled(false);
-		fortifyBtn.setEnabled(false);
-		fortifySkipBtn.setEnabled(false);
+		setButtonEnable(false, false, false, false, false);
 		endTurnBtn.setEnabled(false);
 		saveBtn.setEnabled(false);
 		logArea.setText("");
-		
+
 		territoryDetails.setText("");
 		for(Entry<Integer, Map<Integer, String>> entry : tournamentResult.entrySet()) {
 		    territoryDetails.append("*************************\n");
@@ -1465,14 +1479,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    String name = players.getPlayerList().get(playerTurn);
 	    if(StringUtils.isNotEmpty(name)) {
 		if(players.getPlayerArmy(name) == 0 && !hasPlayerOwnedMoreCards()) {
-		    reinforceBtn.setEnabled(false);
 		    players.setCurrentPhase("Attack");
 		    observerSubject.setPlayerLog();
 		    observerSubject.setAttackMsg("Attack Phase Started");
-		    attackBtn.setEnabled(true);
-		    attackSkipBtn.setEnabled(true);
-		    fortifyBtn.setEnabled(false);
-		    fortifySkipBtn.setEnabled(false);
+		    setButtonEnable(false, true, true, false, false);
 		    gamePanel.remove(2);
 		    gamePanel.invalidate();
 		    gamePanel.validate();
@@ -1507,7 +1517,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	attackBtn.setEnabled(false);
 	attackSkipBtn.setEnabled(false);
 	addTerritoryADropDown();
-
     }
     /**
      * This Method is used for fortification for Bot Player.
@@ -1557,7 +1566,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	if(players.isWonCard() ) {
 	    LOGGER.info("You Have Won 1 Card");
 	} 
-
 	players.setWonCard(false);
 	context = new Context(players);
 	if(players.getPlayerList().size() >= 1) {
@@ -1586,7 +1594,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	if(players.getPlayerList().size() > 0 && !players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)) {
 	    checkTurnNumber();
 	} else if(players.getPlayerList().size() > 0 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(HUMAN_TYPE)){
-	    observerSubject.setReinforcementMsg("Reinforcement Phase Started");
+	    observerSubject.setReinforcementMsg(REINFORCEMENT_MSG);
 	}
     }
     /**
@@ -1615,6 +1623,12 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	if(!players.getPlayerList().isEmpty() && !territory.getTerritoryUser().containsValue(players.getPlayerList().get(playerTurn))) {
 	    changePlayerTurn();
 	} 
+    }
+    /**
+     * This Method Check Whether Player has Territories or not for Junit.
+     */
+    public boolean testPlayerHasTerritory() {
+	return players.getPlayerList().isEmpty() && !territory.getTerritoryUser().containsValue(players.getPlayerList().get(playerTurn)) ? false : true;
     }
     /**
      * This Method check whether player has more than 5 cards
@@ -1864,6 +1878,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    observerSubject.setMessageFlag(false);
 	}
     }
+    /**
+     * This method is used to print current player detail in Log Area
+     */
     @Override
     public void playerLogUpdate() {
 	if(players.getPlayerList().size() >= 1) {
@@ -1875,6 +1892,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    LOGGER.info("Current Player : " + players.getPlayerList().get(playerTurn));
 	}
     }
+    /**
+     * This Method print action done by player during reinforcement phase
+     */
     @Override
     public void reinforcementUpdate() {
 	setLogMessage(observerSubject.getReinforcementMsg());
@@ -1929,7 +1949,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		setLogMessage("You Got " + army+" Amies");
 		players.updateArmy(players.getPlayerList().get(playerTurn), army, "ADD");
 		for (int i = 0; i < cardTerrList.size(); i++) {
-		    if(!cardList.get(i).equalsIgnoreCase("Wild Card") && territory.getTerritoryUser().get(cardTerrList.get(i)).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
+		    if(!cardList.get(i).equalsIgnoreCase(WILD_CARD) && territory.getTerritoryUser().get(cardTerrList.get(i)).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
 			players.updateArmy(players.getPlayerList().get(playerTurn), 2, "ADD");
 			setLogMessage("You Got Additional 2 Amies");
 			break;
@@ -2037,6 +2057,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	}
 
     }
+    /**
+     * This method is used to Trade a card for BOT Player
+     */
     @Override
     public void botTradeInCardUpdate() {
 	log.append(observerSubject.getTradeInMsg() + "\n");
@@ -2069,7 +2092,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    setLogMessage("You Got " + army+" Amies");
 	    players.updateArmy(players.getPlayerList().get(playerTurn), army, "ADD");
 	    for (int i = 0; i < cardTerrList.size(); i++) {
-		if(!cardList.get(i).equalsIgnoreCase("Wild Card") && territory.getTerritoryUser().get(cardTerrList.get(i)).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
+		if(!cardList.get(i).equalsIgnoreCase(WILD_CARD) && territory.getTerritoryUser().get(cardTerrList.get(i)).equalsIgnoreCase(players.getPlayerList().get(playerTurn))) {
 		    players.updateArmy(players.getPlayerList().get(playerTurn), 2, "ADD");
 		    setLogMessage("You Got Additional 2 Amies");
 		    break;
@@ -2091,9 +2114,27 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    setLogMessage("Select proper Combination of Cards");
 	}
     }
-    
+    /**
+     * This method is used to print message in log area as well as in LOGGER
+     * @param message message which need to print in log and LOGGER
+     */
     public void setLogMessage(String message) {
-	    log.append(message+"\n");
-	    LOGGER.info(message);
+	log.append(message+"\n");
+	LOGGER.info(message);
+    }
+    /**
+     *  This method is used to disable or enable reinforce, attack, skip attack, fortify and skip fortify button
+     * @param reinforce enable reinforce button
+     * @param attack enable attack button
+     * @param attackSkip enable skip attack button
+     * @param fortify enable fortify button
+     * @param fortifySkip enable fortify skip button
+     */
+    public void setButtonEnable(boolean reinforce, boolean attack, boolean attackSkip, boolean fortify, boolean fortifySkip) {
+	reinforceBtn.setEnabled(reinforce);
+	attackBtn.setEnabled(attack);
+	attackSkipBtn.setEnabled(attackSkip);
+	fortifyBtn.setEnabled(fortify);
+	fortifySkipBtn.setEnabled(fortifySkip);
     }
 }

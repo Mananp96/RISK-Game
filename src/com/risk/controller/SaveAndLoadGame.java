@@ -14,17 +14,36 @@ import com.risk.models.Continent;
 import com.risk.models.Players;
 import com.risk.models.Territory;
 import com.risk.validate.MapValidator;
-
+/**
+ * This SaveAndLoadGame class which is used to save the game and load save game.
+ * @author Himen Sidhpura
+ *
+ */
 public class SaveAndLoadGame {
-
+    /*
+     * @param players player object
+     * @param continent continent object
+     * @param territory territory object
+     * @param playerTurn current player turn
+     */
     Players players;
     Continent continent;
     Territory territory;
     int playerTurn;
     private FileWriter fileWriter;
+    /**
+     * Default Constructor
+     */
     public SaveAndLoadGame() {
 
     }
+    /**
+     * This method is to initialize territory, player and continent object as well as playerTurn Variable
+     * @param players player object
+     * @param continent continent object
+     * @param territory territory object
+     * @param playerTurn current player turn
+     */
     public SaveAndLoadGame(Players players, Continent continent, Territory territory, int playerTurn) {
 	super();
 	this.players = players;
@@ -89,27 +108,59 @@ public class SaveAndLoadGame {
 	return false;
 
     }
+    /**
+     * This method is used to get continent object
+     * @return continent object
+     */
     public Continent getContinent() {
 	return continent;
     }
+    /**
+     * This method is used to set continent object
+     * @param continent continent object
+     */
     public void setContinent(Continent continent) {
 	this.continent = continent;
     }
+    /**
+     * This method is used to get territory object
+     * @return territory object
+     */
     public Territory getTerritory() {
 	return territory;
     }
+    /**
+     * This method is used to set Territory object
+     * @param territory territory object
+     */
     public void setTerritory(Territory territory) {
 	this.territory = territory;
     }
+    /**
+     * This method is used to get player object
+     * @return player turn
+     */
     public int getPlayerTurn() {
 	return playerTurn;
     }
+    /**
+     * This method is used to set player turn
+     * @param playerTurn current player turn
+     */
     public void setPlayerTurn(int playerTurn) {
 	this.playerTurn = playerTurn;
     }
+    /**
+     * This method is used to get player object
+     * @return player object
+     */
     public Players getPlayers() {
 	return players;
     }
+    /**
+     * This method is used to set player object
+     * @param players player object
+     */
     public void setPlayers(Players players) {
 	this.players = players;
     }

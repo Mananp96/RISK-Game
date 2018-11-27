@@ -492,7 +492,9 @@ public class Players implements Strategy {
 	currentTerritory.updateTerritoryArmy(fromTerritory, armies, "DELETE");
 	currentTerritory.updateTerritoryArmy(toTerritory, armies, "ADD");
     }
-
+    /**
+     * This method is used to perform reinforcement phase for BOT player
+     */
     @Override
     public void doBotReinforcement(String currentPlayer, Territory currentTerritory) {
 	String tempTerritory = "";
@@ -552,7 +554,9 @@ public class Players implements Strategy {
 	}
 
     }
-
+    /**
+     * This method is used to perform attack phase for BOT Player
+     */
     @Override
     public void doBotAttack(Territory currentTerritory, String fromTerritory, String toTerritory, int attackerDie,
 	    int defenderDie, String type) {
@@ -620,7 +624,9 @@ public class Players implements Strategy {
 	}
 
     }
-
+    /**
+     * THis Method is used to perform fortification for BOT Player
+     */
     @Override
     public void doBotForitification(String currentPlayer, Territory currentTerritory) {
 	ArrayList<String> tempTerritory = new ArrayList<>();
