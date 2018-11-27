@@ -41,18 +41,31 @@ public class Players implements Strategy {
     String defenderMsg = "";
     String fortificationMsg ="";
     String reinforcementMsg ="";
+    /**
+     * This method use to get message when event performed in reinforcement phase
+     * @return reinforcementMsg
+     */
     public String getReinforcementMsg() {
 	return reinforcementMsg;
     }
-
+    /**
+     * This method use to set message when event performed in reinforcement phase
+     * @param reinforcementMsg text which is print in logs
+     */
     public void setReinforcementMsg(String reinforcementMsg) {
 	this.reinforcementMsg = reinforcementMsg;
     }
-
+    /**
+     * This method use to get message when event performed in fortification phase
+     * @return fortificationMsg
+     */
     public String getFortificationMsg() {
 	return fortificationMsg;
     }
-
+    /**
+     * This method use to set message when event performed in fortification phase
+     * @param fortificationMsg text which is print in logs
+     */
     public void setFortificationMsg(String fortificationMsg) {
 	this.fortificationMsg = fortificationMsg;
     }
@@ -62,11 +75,17 @@ public class Players implements Strategy {
     Map<String, String> territoryCards;
     public Double value;
     Map<String,String> playerType;
-
+    /**
+     * This method is used to get Type of players
+     * @return playerType
+     */
     public Map<String, String> getPlayerType() {
 	return playerType;
     }
-
+    /**
+     * This method is used to set Type of players
+     * @param playerType Type of players
+     */
     public void setPlayerType(Map<String, String> playerType) {
 	this.playerType = playerType;
     }
@@ -83,7 +102,11 @@ public class Players implements Strategy {
 	territoryCards = new HashMap<>();
 	playerType = new HashMap<>();
     }
-
+    /**
+     * This method is used to put player name and its type in playerType Map
+     * @param playerName player Name
+     * @param type player type
+     */
     public void addPlayerType(String playerName,String type) {
 	playerType.put(playerName, type);
     }
@@ -151,11 +174,16 @@ public class Players implements Strategy {
     public ArrayList<String> getPlayerPlaying() {
 	return playerPlaying;
     }
-
+    /**
+     * This method is used to get number of trade in performed in game
+     * @return tradeIn
+     */
     public int getTradeIn() {
 	return tradeIn;
     }
-
+    /**
+     *  This method increment number of trade in whenever player trade in their cards
+     */
     public void setTradeIn() {
 	this.tradeIn += 1;
     }
