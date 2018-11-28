@@ -84,7 +84,6 @@ public class PlayersTest {
      */
     @Test
     public void testUpdateArmy() {
-
 	players.updateArmy("manan", 1, "add");
 	assertEquals(playerArmy, players.updateArmy("prince", 1, "delete"));
     }
@@ -154,14 +153,20 @@ public class PlayersTest {
      */
     @Test
     public void testEndOfGame() {
+	ArrayList<String> territoryList = new ArrayList<>();
+	territoryList.add(quebec);
+	territoryList.add(ontario);
+	territory.setTerritoryList(territoryList);
 	territory.updateTerritoryArmy(quebec, 4, "add");
 	territory.updateTerritoryArmy(ontario, 2, "add");
 	territoryArmy.put(quebec, 1);
 	territoryArmy.put(ontario, 3);
 	players.doAttack(territory, quebec, ontario, attackerDice, defenderDice);
+	gamePanels.setPlayers(players);
+	gamePanels.setTerritory(territory);
 	if(players.isAttackWon()) {
 	    players.moveArmyAfterAttack("manan",territory, quebec, ontario, 3);
-	    assertTrue(gamePanels.checkTestWonGame());
+	    assertTrue(gamePanels.checkPlayerWonGame());
 
 	}	
     }
@@ -225,13 +230,11 @@ public class PlayersTest {
 	continentTerrValue.put("NA", 2);
 	continentTerrValue.put("SA", 1);
 	continent.setContTerrValue(continentTerrValue);
-
 	for(int i = 0;i<12;i++) {
 	    continent.addContinentTerritory("NA", "halifax"+i);
 	    continent.addContinentOwnedTerritory("NA", "halifax"+i, true);
 	    territory.updateTerritoryUser("john", "halifax"+i);
 	}
-
 	players.addPlayerContinent("john", continent);
 	players.setPlayerList(playerList);
 	players.generateReinforcementArmy("john", continent);
@@ -298,4 +301,15 @@ public class PlayersTest {
 	gamePanels.setPlayers(players);
 	assertTrue(gamePanels.hasPlayerOwnedMoreCards());
     }
+    /**
+     * This method to test armies which are generated when cards are trade in.
+     */
+    @Test
+    public void testTradeInArmy() {
+	gamePanels.setPlayers(players);
+	players.setTradeInArmies(gamePanels.tradeInArmy());
+	boolean flag = players.getTradeInArmies() == 4 ? true : false;
+	assertTrue(flag);
+    }
+    
 }

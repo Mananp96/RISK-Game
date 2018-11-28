@@ -1306,6 +1306,20 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		logArea.setText("");
 
 		territoryDetails.setText("");
+		for(int i=0;i<mapFilePath.length;i++) {
+		    territoryDetails.append("Map  "+(i+1)+" : " + mapFilePath[i].getPath()+" \n");
+		    LOGGER.info("Map  "+(i+1)+" : " + mapFilePath[i].getPath());
+		}
+		for(Entry<String, String> entry : players.getPlayerType().entrySet()) {
+		    territoryDetails.append(entry.getKey()+" : "+ entry.getValue()+"\n");
+		    LOGGER.info(entry.getKey()+" : "+ entry.getValue());
+		}
+		territoryDetails.append("Game : " + noOfGamesDropDown.getItemAt(noOfGamesDropDown.getSelectedIndex())+" \n");
+		territoryDetails.append("Turns : " + noOfTurnsDropDown.getItemAt(noOfTurnsDropDown.getSelectedIndex())+" \n");
+		LOGGER.info("Game : " + noOfGamesDropDown.getItemAt(noOfGamesDropDown.getSelectedIndex()));
+		LOGGER.info("Turns : " + noOfTurnsDropDown.getItemAt(noOfTurnsDropDown.getSelectedIndex()));
+		
+		    
 		for(Entry<Integer, Map<Integer, String>> entry : tournamentResult.entrySet()) {
 		    territoryDetails.append("*************************\n");
 		    territoryDetails.append("Map " + (entry.getKey()+1));
@@ -1685,15 +1699,6 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    }    
 	}
 
-    }
-    /**
-     * This Method check whether player has won game or not for Test
-     * @return true if player won game.
-     */
-    public boolean checkTestWonGame() {
-	int totalTerritory = 2;
-	int totalterritorySize = 2;
-	return (totalTerritory*100)/totalterritorySize == 100 ? true : false;
     }
     /**
      * method used to check whether current player can go for fortification phase more or not.
