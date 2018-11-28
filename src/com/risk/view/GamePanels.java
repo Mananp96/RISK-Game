@@ -113,10 +113,9 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     String existingMapFilePath;
 
     boolean tournamentModeOn = false;
-
-    private String editMapBtnName = "Edit Button";
+	private String editMapBtnName = "Edit Button";
     private File[] mapFilePath;
-    int  playerPlaying;
+	int  playerPlaying;
     private GridLayout mainLayout;
     private JButton reinforceBtn;
     private JButton attackBtn;
@@ -2137,4 +2136,37 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	fortifyBtn.setEnabled(fortify);
 	fortifySkipBtn.setEnabled(fortifySkip);
     }
+    
+    /**
+     * return file path
+     * @return mapFilePath
+     */
+    public File[] getMapFilePath() {
+		return mapFilePath;
+	}
+    
+    /**
+     * set file path
+     * @param mapFilePath
+     */
+	public void setMapFilePath(File[] mapFilePath) {
+		this.mapFilePath = mapFilePath;
+	}
+	
+	/**
+	 * return true if tournament mode is on
+	 * @return true if tournament mode is on
+	 */
+	public boolean isTournamentModeOn() {
+		return tournamentModeOn;
+	}
+	
+	/**
+	 * set tournament mode 
+	 * @param tournamentModeOn true/false
+	 */
+	public void setTournamentModeOn(boolean tournamentModeOn) {
+		this.tournamentModeOn = tournamentModeOn;
+	}
+	
 }

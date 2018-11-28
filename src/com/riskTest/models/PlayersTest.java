@@ -282,6 +282,7 @@ public class PlayersTest {
 	assertTrue(gamePanels.checkTradeInCard(cardList1));
 	assertFalse(gamePanels.checkTradeInCard(cardList2));
     }
+    
     /**
      * This method is used to check whether player has more than 5 cards or not
      */
