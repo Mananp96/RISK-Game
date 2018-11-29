@@ -842,13 +842,13 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    goForFortification();
 	}
 	if (gamePanel.getComponents().length > 2) {
-	    gamePanel.remove(2);
+	   /* gamePanel.remove(2);
 	    gamePanel.invalidate();
-	    gamePanel.validate();
-	    gamePanel.add(countryScreen("fortification"), setGridBagConstraints(new Insets(5, 5, 5, 5),
+	    gamePanel.validate();*/
+/*	    gamePanel.add(countryScreen("fortification"), setGridBagConstraints(new Insets(5, 5, 5, 5),
 		    GridBagConstraints.BOTH, GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
 	    gamePanel.invalidate();
-	    gamePanel.validate();
+	    gamePanel.validate();*/
 	}
 	endTurnBtn.setEnabled(false);
     }
@@ -1221,6 +1221,16 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		if (players.getCurrentPhase().equalsIgnoreCase("reinforcement")) {
 		    setButtonEnable(true, false, false, false, false);
 		    observerSubject.setReinforcementMsg("Reinforcement Force Started");
+		    gamePanel.remove(2);
+		    gamePanel.invalidate();
+		    gamePanel.validate();
+		    if(players.getPlayerList().size() >= 1 && players.getCards().containsValue(players.getPlayerList().get(playerTurn))) {
+			    gamePanel.add(countryScreen("tradeIn"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+			} else {
+			    gamePanel.add(countryScreen("No Phase"),setGridBagConstraints(new Insets(5, 5, 5, 5), GridBagConstraints.BOTH,GridBagConstraints.LINE_END, 0.5, 0.5, 2, 0));
+			}
+		    gamePanel.invalidate();
+		    gamePanel.validate();
 		} else if (players.getCurrentPhase().equalsIgnoreCase("attack")) {
 		    setButtonEnable(false, true, true, false, false);
 		    observerSubject.setAttackMsg("Attack Phase Started");
