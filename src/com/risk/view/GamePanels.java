@@ -113,9 +113,10 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
     String existingMapFilePath;
 
     boolean tournamentModeOn = false;
-	private String editMapBtnName = "Edit Button";
+
+    private String editMapBtnName = "Edit Button";
     private File[] mapFilePath;
-	int  playerPlaying;
+    int  playerPlaying;
     private GridLayout mainLayout;
     private JButton reinforceBtn;
     private JButton attackBtn;
@@ -740,15 +741,18 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		defenderDiceDropDown.addItem(defenderDie);
 		defenderDiceDropDown.setEnabled(false);
 		context = new Context(players);
-		if(attackerDie > 0 && defenderDie >0)
-		    context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, AGGRESSIVE_TYPE);	
+		if(attackerDie > 0 && defenderDie >0 && !players.getPlayerList().isEmpty())
+		    context.executeBotAttack(territory,tempAttackTerr,tempdefenderTerr,attackerDie,defenderDie, players.getPlayerList().get(playerTurn));	
 		observerSubject.setAttackMsg(players.getAttackerMsg());
 		if(players.isAttackWon()) {
 		    if(checkPlayerWonGame()) {
 			changeGame();
 		    }
+		}if(!players.getPlayerList().isEmpty() && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE)) {
+		    attackPanelReset();
+		} else {
+		    setBotAttackPanelReset();    
 		}
-		attackPanelReset();
 	    } else {
 		if(checkPlayerWonGame()) {
 		    changeGame();
@@ -770,7 +774,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    }
 	} else if(players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(CHEATER_TYPE)) {
 	    context = new Context(players);
-	    context.executeBotAttack(territory,players.getPlayerList().get(playerTurn),"",0,0, CHEATER_TYPE);	
+	    context.executeBotAttack(territory,players.getPlayerList().get(playerTurn),"",0,0,  players.getPlayerList().get(playerTurn));	
 	    observerSubject.setAttackMsg(players.getAttackerMsg());
 	    if(checkPlayerWonGame()) {
 		changeGame();
@@ -1304,7 +1308,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		endTurnBtn.setEnabled(false);
 		saveBtn.setEnabled(false);
 		logArea.setText("");
-
+		fileTurn = 0;
 		territoryDetails.setText("");
 		for(int i=0;i<mapFilePath.length;i++) {
 		    territoryDetails.append("Map  "+(i+1)+" : " + mapFilePath[i].getPath()+" \n");
@@ -1557,9 +1561,12 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	    }
 	    changePlayerTurn();
 	} 
-	if(players.getPlayerList().size() >= 1 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE) && tempFlag) {
-	    setBotFortification();
+	if(!tempFlag) {
+	    changePlayerTurn();
 	}
+	/*if(players.getPlayerList().size() >= 1 && players.getPlayerType().get(players.getPlayerList().get(playerTurn)).equalsIgnoreCase(RANDOM_TYPE) && tempFlag) {
+	    setBotFortification();
+	}*/
 	removeModelElement();
 	updateTerritoryAList();
 	updateContinentInfoList();
@@ -1689,6 +1696,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 		    context.executeFortification(territory,fromTerritory, toTerritory, getArmySelect);
 		    String tempMsg = "Armies moved from "+fromTerritory+" to "+toTerritory + "\n"+"Armies at :"+fromTerritory+" : "+territory.getTerritoryArmy().get(fromTerritory)+"\nArmies at :"+toTerritory+" : "+territory.getTerritoryArmy().get(toTerritory)+"\n";
 		    observerSubject.setFortificationMessage(tempMsg);
+		    fortifyBtn.setEnabled(false);
 		    fortErrorMsg.setText("You can Move upto " + (territory.getTerritoryArmy().get(fromTerritory)-1) + " Army");
 		} else {
 		    JOptionPane.showMessageDialog(frame, "Armies unable to move from " + fromTerritory + " to " + toTerritory +". Please enter no. of  Armies again", "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -2148,7 +2156,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
      */
     public File[] getMapFilePath() {
 		return mapFilePath;
-	}
+}
     
     /**
      * set file path
