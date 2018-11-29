@@ -90,6 +90,7 @@ public class SaveAndLoadGameTest {
      */
     @Test
     public void testLoadGame() {
+    saveAndLoadGame.saveGame();
 	saveAndLoadGame.loadGame();
 	assertEquals(players.getCurrentPhase(), saveAndLoadGame.getPlayers().getCurrentPhase());
 	assertEquals(continent.getContinentTerritory(), saveAndLoadGame.getContinent().getContinentTerritory());

@@ -48,7 +48,6 @@ public class Risk {
 	 */
 	private void initialize() {
 		Subject observerSubject = new Subject();
-
 		gamePanels = new GamePanels(observerSubject);
 		frame = new JFrame();
 		frame.setTitle("Risk");
@@ -58,8 +57,5 @@ public class Risk {
 		frame.setResizable(false);
 		frame.add(gamePanels.mainMenu(frame));
 		frame.pack();
-
 	}
-
-
 }

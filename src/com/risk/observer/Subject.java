@@ -90,7 +90,7 @@ public class Subject {
     }
 
     /**
-     *  set method for state
+     * set method for state
      * @param state state
      * @param flag flag boolean
      */
@@ -208,16 +208,28 @@ public class Subject {
 	    observer.tradeInCardUpdate();
 	}
     }
+    
+    /**
+     * notifyForBotTradeIn
+     */
     public void notifyForBotTradeIn() {
 	for (Observer observer : observers) {
 	    observer.botTradeInCardUpdate();
 	}
     }
+    
+    /**
+     * notifyForReinforcment
+     */
     public void notifyForReinforcment() {
 	for (Observer observer : observers) {
 	    observer.reinforcementUpdate();
 	}
     }
+    
+    /**
+     * notifyForLogUpdate
+     */
     public void notifyForLogUpdate() {
 	for (Observer observer : observers) {
 	    observer.playerLogUpdate();
