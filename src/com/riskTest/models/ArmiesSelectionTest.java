@@ -21,7 +21,7 @@ public class ArmiesSelectionTest {
 	ArmiesSelection threePlayer;
 	ArmiesSelection fourPlayer;
 	ArmiesSelection fivePlayer;
-	
+
 	/**
 	 * This method is invoked at the start of all the test methods.
 	 */
@@ -31,7 +31,7 @@ public class ArmiesSelectionTest {
 		this.fourPlayer = new ArmiesSelection(4);
 		this.fivePlayer = new ArmiesSelection(5);
 	}
-	
+
 	/**
 	 * This method is to test the selection of Number of initial armies according to Player.
 	 * 

@@ -16,11 +16,9 @@ import com.risk.models.Territory;
 import com.risk.validate.MapValidator;
 /**
  * This SaveAndLoadGame class which is used to save the game and load save game.
- * @author Himen Sidhpura
- *
  */
 public class SaveAndLoadGame {
-    /*
+    /**
      * @param players player object
      * @param continent continent object
      * @param territory territory object

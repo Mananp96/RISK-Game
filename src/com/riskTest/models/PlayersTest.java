@@ -29,8 +29,6 @@ import com.risk.view.GamePanels;
  *
  */
 public class PlayersTest {
-
-
 	Players players;
 	Continent continent;
 	Territory territory;

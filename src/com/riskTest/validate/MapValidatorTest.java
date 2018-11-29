@@ -178,7 +178,7 @@ public class MapValidatorTest {
 	}
 
 	/**
-	 * This method reads valid map file.(World.map & 3DCliff.map)
+	 * This method reads valid map file.(World.map and 3DCliff.map)
 	 * @throws InvalidMapException InvalidMapException
 	 */
 	@Test

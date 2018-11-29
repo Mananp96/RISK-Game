@@ -1695,6 +1695,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 	}
 	/**
 	 * This Method Check Whether Player has Territories or not for Junit.
+	 * @return playerList
 	 */
 	public boolean testPlayerHasTerritory() {
 		return players.getPlayerList().isEmpty() && !territory.getTerritoryUser().containsValue(players.getPlayerList().get(playerTurn)) ? false : true;
@@ -2211,7 +2212,7 @@ public class GamePanels extends Observer implements ActionListener, ListSelectio
 
 	/**
 	 * set file path
-	 * @param mapFilePath
+	 * @param mapFilePath mapFilePath
 	 */
 	public void setMapFilePath(File[] mapFilePath) {
 		this.mapFilePath = mapFilePath;

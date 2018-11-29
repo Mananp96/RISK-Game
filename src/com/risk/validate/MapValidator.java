@@ -160,7 +160,7 @@ public class MapValidator extends GamePanels {
 					throw new InvalidMapException("adjacent territories should not be null");
 				}
 			}
-			
+
 			this.isGraphConnected();
 		}	
 		return isMapValid;
@@ -189,7 +189,7 @@ public class MapValidator extends GamePanels {
 		}
 		return isMapValid;
 	}
-	
+
 	/**
 	 * This method checks that continent's subgraph is connected or not.
 	 * @return true if subgraph is connected else false;
@@ -215,5 +215,5 @@ public class MapValidator extends GamePanels {
 		}
 		return isMapValid;
 	}
-	
+
 }

@@ -8,7 +8,7 @@ import java.util.LinkedList;
  * Java Program to check if Graph is connected or not.
  */
 public class ConnectedGraph { 
-	private int noOfterritory;   // No. of vertices 
+	private int noOfterritory;
 	private LinkedList<Integer> adjacencyList[];
 
 	/**
@@ -90,6 +90,6 @@ public class ConnectedGraph {
 		}
 		return true; 
 	}
-	
-	
+
+
 }
